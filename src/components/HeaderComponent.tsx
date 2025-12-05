@@ -29,7 +29,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           onPress={() => navigation.goBack()}
           style={styles.iconButton}
         >
-          <Ionicons name="chevron-back-outline" size={28} color={COLORS.white} />
+          <Ionicons name="chevron-back-outline" size={32} color={COLORS.white} />
         </Pressable>
       ) : (
         <View style={styles.iconPlaceholder} />
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.carbonBlack,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.gray700,
+    
   },
   title: {
     flex: 1,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 40,
     height: 40,
+    //position:'relative',
     justifyContent: 'center',
     alignItems: 'center',
   },

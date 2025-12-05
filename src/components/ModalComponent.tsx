@@ -40,8 +40,10 @@ const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.7)', // Blur backdrop effect
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    justifyContent: 'flex-start',   // ← align to top
+    alignItems: 'flex-start',
   },
   modalContent: {
     backgroundColor: COLORS.carbonBlack,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 import { COLORS } from '../theme/colors';
-import { RADIUS, SHADOW, SPACING, TYPOGRAPHY } from '../theme/styles';
+import { RADIUS, SPACING, TYPOGRAPHY } from '../theme/styles';
 
 interface AppButtonProps {
   title: string;
@@ -32,7 +32,7 @@ const AppButton: React.FC<AppButtonProps> = ({
         ];
       case 'primary':
       default:
-        return [styles.primaryButton, { backgroundColor: COLORS.ultraViolet, ...SHADOW.default }];
+        return [styles.primaryButton, { backgroundColor: COLORS.ultraViolet,  }];
     }
   };
 
