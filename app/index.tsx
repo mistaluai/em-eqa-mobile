@@ -1,4 +1,4 @@
-import { Redirect } from 'expo-router';
+import OnboardingScreen from '@/src/features/OnboardingScreen';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Loader from '../src/components/LoaderComponent';
@@ -9,14 +9,14 @@ const getInitialRoute = async () => {
   // In a real app, this would check AsyncStorage/SecureStore/Auth status
   const isLoggedIn = false;
   const onboardingDone = false; // Set to false to force Onboarding for first view
-  
+
   if (!onboardingDone) {
-    return 'src/features/OnboardingScreen';
+    return '../src/features/OnboardingScreen.tsx';
   }
   if (isLoggedIn) {
-    return 'src/features/HomeScreen';
+    return '../src/features/HomeScreen';
   }
-  return 'src/features/LoginScreen';
+  return '../src/features/LoginScreen';
 };
 
 const Index = () => {
@@ -34,7 +34,8 @@ const Index = () => {
     );
   }
 
-  return <Redirect href= '../OnboeardingScreen'/>;
+  // return <Redirect href='../src/features/OnboardingScreen.tsx' />;
+  return <OnboardingScreen />
 };
 
 const styles = StyleSheet.create({
