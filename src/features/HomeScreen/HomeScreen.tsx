@@ -1,18 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
 import AppModal from '../../components/ModalComponent';
-import { COLORS } from '../../theme/colors';
-import { SCREEN, WELCOME } from '../../theme/styles';
+import { SCREEN } from '../../theme/styles';
 import { ChatContainer } from './components/ChatContainer';
 import { DrawerContent } from './components/DrawerContent';
 import { EvidenceModal } from './components/EvidenceModal';
@@ -44,7 +41,12 @@ const HomeScreen: React.FC = () => {
       {/* Header stays OUTSIDE the keyboard view so it doesn't get pushed off */}
       <AppHeader
         title="EM-EQA"
-        showBack={false}
+
+        // Left Side: The Menu Button
+        leftIconName="menu-outline"
+        onLeftIconPress={() => setIsDrawerOpen(true)}
+
+        // Right Side: The Profile Button
         rightIconName="person-circle-outline"
         onRightIconPress={() => navigation.navigate('ProfileSettings' as never)}
       />
@@ -92,12 +94,6 @@ const HomeScreen: React.FC = () => {
         <DrawerContent onClose={() => setIsDrawerOpen(false)} />
       </AppModal>
 
-      <Pressable
-        onPress={() => setIsDrawerOpen(true)}
-        style={WELCOME.menuButtonOverride}
-      >
-        <Ionicons name="menu-outline" size={32} color={COLORS.white} />
-      </Pressable>
     </SafeAreaView>
   );
 };

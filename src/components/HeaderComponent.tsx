@@ -7,41 +7,71 @@ import { SPACING, TYPOGRAPHY } from '../theme/styles';
 
 interface AppHeaderProps {
   title: string;
+
+  // Left Side Props
   showBack?: boolean;
+  leftIconName?: keyof typeof Ionicons.glyphMap; // NEW: Allow custom left icon
+  onLeftIconPress?: () => void;                  // NEW: Allow custom action
+
+  // Right Side Props
   rightIconName?: keyof typeof Ionicons.glyphMap;
   onRightIconPress?: () => void;
-  // This prop is used by the AppNavigator, but we keep it generic here
+
   style?: StyleProp<ViewStyle>;
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({
   title,
-  showBack = true,
+  showBack = false, // Changed default to false to be explicit
+  leftIconName,
+  onLeftIconPress,
   rightIconName,
   onRightIconPress,
 }) => {
   const navigation = useNavigation();
 
+  // Logic: 
+  // 1. If explicit leftIconName is provided, use it.
+  // 2. Else if showBack is true, use the chevron.
+  const finalLeftIcon = leftIconName
+    ? leftIconName
+    : (showBack ? 'chevron-back-outline' : undefined);
+
+  // Logic:
+  // 1. If explicit handler is provided, use it.
+  // 2. Else if showBack is true, use goBack().
+  const handleLeftPress = onLeftIconPress
+    ? onLeftIconPress
+    : (showBack ? () => navigation.goBack() : undefined);
+
   return (
     <View style={styles.header}>
-      {showBack ? (
+      {/* LEFT ICON AREA */}
+      {finalLeftIcon && handleLeftPress ? (
         <Pressable
-          onPress={() => navigation.goBack()}
+          onPress={handleLeftPress}
           style={styles.iconButton}
+          hitSlop={8} // Makes it easier to tap
         >
-          <Ionicons name="chevron-back-outline" size={32} color={COLORS.white} />
+          <Ionicons name={finalLeftIcon} size={32} color={COLORS.white} />
         </Pressable>
       ) : (
         <View style={styles.iconPlaceholder} />
       )}
 
+      {/* CENTER TITLE */}
       <Text style={[TYPOGRAPHY.HeadlineM, styles.title]} numberOfLines={1}>
         {title}
       </Text>
 
+      {/* RIGHT ICON AREA */}
       {rightIconName && onRightIconPress ? (
-        <Pressable onPress={onRightIconPress} style={styles.iconButton}>
-          <Ionicons name={rightIconName} size={24} color={COLORS.white} />
+        <Pressable
+          onPress={onRightIconPress}
+          style={styles.iconButton}
+          hitSlop={8}
+        >
+          <Ionicons name={rightIconName} size={28} color={COLORS.white} />
         </Pressable>
       ) : (
         <View style={styles.iconPlaceholder} />
@@ -55,22 +85,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 56,
+    height: 60, // Slightly increased for better touch targets
     paddingHorizontal: SPACING.s16,
     backgroundColor: COLORS.carbonBlack,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.gray700,
-    
   },
   title: {
     flex: 1,
     textAlign: 'center',
-    marginHorizontal: SPACING.s12,
+    // marginHorizontal ensures title doesn't overlap icons
+    marginHorizontal: SPACING.s8,
+    color: COLORS.white,
   },
   iconButton: {
     width: 40,
     height: 40,
-    //position:'relative',
     justifyContent: 'center',
     alignItems: 'center',
   },
