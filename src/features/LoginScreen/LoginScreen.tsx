@@ -20,7 +20,8 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    // UI CHANGE: Screen background from dark to backgroundLight
+    <SafeAreaView style={[SCREEN.safeArea, { backgroundColor: COLORS.backgroundLight }]}>
       <ScrollView contentContainerStyle={SCREEN.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={{ flex: 1, minHeight: 60 }} />
 
@@ -28,7 +29,8 @@ const LoginScreen: React.FC = () => {
 
         <View style={{ height: SPACING.s32 + 8 }} />
 
-        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>Login</Text>
+        {/* UI CHANGE: Title text color from white/light to textPrimary */}
+        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title, { color: COLORS.textPrimary }]}>Login</Text>
 
         <View style={{ height: SPACING.s32 + 16 }} />
 
@@ -48,7 +50,8 @@ const LoginScreen: React.FC = () => {
           />
           <View style={{ height: SPACING.s12 }} />
           <Pressable onPress={() => console.log('Forgot Password')}>
-            <Text style={[TYPOGRAPHY.Caption, FORM.forgotPassword]}>Forgot Password?</Text>
+            {/* UI CHANGE: Forgot Password link text color from softGray/white to textSecondary */}
+            <Text style={[TYPOGRAPHY.Caption, FORM.forgotPassword, { color: COLORS.textSecondary }]}>Forgot Password?</Text>
           </Pressable>
         </View>
 
@@ -59,17 +62,20 @@ const LoginScreen: React.FC = () => {
         <View style={{ height: SPACING.s32 }} />
 
         <Pressable onPress={() => navigation.navigate('Signup' as never)}>
-          <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
+          {/* UI CHANGE: Signup prompt text color from white/softGray to textPrimary */}
+          <Text style={[TYPOGRAPHY.BodyM, TEXT.signup, { color: COLORS.textPrimary }]}>
             Don't have an account?{' '}
-            <Text style={{ color: COLORS.desertSand, fontWeight: '700' }}>Sign Up</Text>
+            {/* UI CHANGE: Link color from desertSand to primary */}
+            <Text style={{ color: COLORS.primary, fontWeight: '700' }}>
+              Sign up
+            </Text>
           </Text>
         </Pressable>
 
-        <View style={{ flex: 1, minHeight: 40 }} />
+        <View style={{ height: SPACING.s32 * 2 }} />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 export default LoginScreen;
-

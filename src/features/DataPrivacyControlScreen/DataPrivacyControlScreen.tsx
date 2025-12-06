@@ -1,3 +1,4 @@
+// DataPrivacyControlScreen.tsx
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -51,7 +52,8 @@ const DataPrivacyControlScreen: React.FC = () => {
         <AppButton
           title="Delete All My Data"
           onPress={() => setIsDeleteModalVisible(true)}
-          variant="danger"
+          // Variant remains 'danger', but its colors will be handled by the internal AppButton styles using COLORS.secondary
+          variant="danger" 
           style={styles.deleteButton}
         />
       </View>
@@ -62,14 +64,16 @@ const DataPrivacyControlScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // Background color is now white/light
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     flex: 1,
     padding: SPACING.s24,
   },
   sectionTitle: {
-    color: COLORS.white,
+    // Text color is now dark
+    color: COLORS.textPrimary,
     marginTop: SPACING.s32,
     marginBottom: SPACING.s16,
     fontWeight: '700',
@@ -81,4 +85,3 @@ const styles = StyleSheet.create({
 });
 
 export default DataPrivacyControlScreen;
-

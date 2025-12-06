@@ -46,26 +46,30 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.default,
   },
   userBubble: {
-    backgroundColor: COLORS.ultraViolet,
+    // UI CHANGE: Background from ultraViolet to primary
+    backgroundColor: COLORS.primary,
     borderBottomRightRadius: SPACING.s4,
   },
   aiBubble: {
-    backgroundColor: `${COLORS.lightLavender}33`,
+    // UI CHANGE: Background from lightLavender to backgroundNeutral
+    backgroundColor: COLORS.backgroundNeutral,
     borderBottomLeftRadius: SPACING.s4,
   },
   userText: {
-    color: COLORS.white,
+    // UI CHANGE: Text color for contrast on primary (still white)
+    color: COLORS.backgroundLight,
   },
   aiText: {
-    color: COLORS.softGray,
+    // UI CHANGE: Text color from softGray to textPrimary (dark)
+    color: COLORS.textPrimary,
   },
   evidenceButton: {
     marginTop: SPACING.s8,
     alignSelf: 'flex-end',
   },
   evidenceText: {
-    color: COLORS.desertSand,
+    // UI CHANGE: Text color from desertSand to secondary
+    color: COLORS.secondary,
     textDecorationLine: 'underline',
   },
 });
-

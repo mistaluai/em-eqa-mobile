@@ -9,17 +9,18 @@ interface LogoPlaceholderProps {
 
 export const LogoPlaceholder: React.FC<LogoPlaceholderProps> = ({ size }) => (
   <View style={[styles.logoPlaceholder, { width: size, height: size }]}>
-    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.white, fontWeight: '800' }]}>Logo</Text>
+    {/* UI CHANGE: Text color from white to textPrimary */}
+    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary, fontWeight: '800' }]}>Logo</Text>
   </View>
 );
 
 const styles = StyleSheet.create({
   logoPlaceholder: {
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.gray700,
+    // UI CHANGE: Background color from gray700 to backgroundNeutral
+    backgroundColor: COLORS.backgroundNeutral,
     justifyContent: 'center',
     alignItems: 'center',
     ...SHADOW.default,
   },
 });
-

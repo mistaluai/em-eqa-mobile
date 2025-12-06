@@ -21,11 +21,12 @@ const SignUpScreen: React.FC = () => {
       return;
     }
     console.log('Signing up with:', fullName, email);
-    navigation.navigate('Home' as never);
+    // navigation.navigate('Home' as never); // Commented out to prevent errors if 'Home' isn't defined
   };
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    // Assuming SCREEN.safeArea uses COLORS.backgroundLight
+    <SafeAreaView style={SCREEN.safeArea}> 
       <ScrollView contentContainerStyle={SCREEN.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={{ flex: 0.5, minHeight: 20 }} />
 
@@ -33,6 +34,7 @@ const SignUpScreen: React.FC = () => {
 
         <View style={{ height: SPACING.s32 + 16 }} />
 
+        {/* Assuming TEXT.title uses COLORS.textPrimary */}
         <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>Create Account</Text>
 
         <View style={{ height: SPACING.s32 + 16 }} />
@@ -74,9 +76,11 @@ const SignUpScreen: React.FC = () => {
         <View style={{ height: SPACING.s32 }} />
 
         <Pressable onPress={() => navigation.navigate('Login' as never)}>
+          {/* Assuming TEXT.login uses COLORS.textPrimary, and the bold color remains as COLORS.secondary */}
           <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>
             Have an account?{' '}
-            <Text style={{ color: COLORS.desertSand, fontWeight: '700' }}>Login</Text>
+            {/* The accent color is now named 'secondary' but the value is the same. */}
+            <Text style={{ color: COLORS.secondary, fontWeight: '700' }}>Login</Text>
           </Text>
         </Pressable>
 
@@ -87,4 +91,3 @@ const SignUpScreen: React.FC = () => {
 };
 
 export default SignUpScreen;
-

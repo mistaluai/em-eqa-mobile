@@ -75,7 +75,7 @@ const OnboardingScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Replaced COLORS.carbonBlack
   },
   header: {
     height: 48,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.s8,
   },
   skipText: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, // Replaced COLORS.softGray
     fontWeight: '600',
   },
   bottomContainer: {
@@ -99,17 +99,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Replaced COLORS.carbonBlack
     borderTopLeftRadius: RADIUS.large,
     borderTopRightRadius: RADIUS.large,
     ...SHADOW.default,
   },
   guestText: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, // Replaced COLORS.softGray
     textAlign: 'center',
     textDecorationLine: 'underline',
   },
 });
 
 export default OnboardingScreen;
-

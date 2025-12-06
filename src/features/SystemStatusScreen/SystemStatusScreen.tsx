@@ -23,7 +23,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="mic-outline"
           statusText="Active"
           detailText="Timer: 00:12:20"
-          statusColor={COLORS.ultraViolet}
+          statusColor={COLORS.primary} // Using primary alias for ultraViolet
         />
 
         <StatusBarCard
@@ -31,7 +31,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="cloud-upload-outline"
           statusText="3/10 Clips"
           detailText="Remaining: 7 Clips"
-          statusColor={COLORS.ultraViolet}
+          statusColor={COLORS.primary} // Using primary alias for ultraViolet
           progress={75}
         />
 
@@ -40,7 +40,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="aperture-outline"
           statusText="Processed: 2 Clips"
           detailText="Pending: 5 Clips"
-          statusColor={COLORS.ultraViolet}
+          statusColor={COLORS.primary} // Using primary alias for ultraViolet
         />
 
         <StatusBarCard
@@ -48,7 +48,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="watch-outline"
           statusText="Connected"
           detailText="Device: EM-01"
-          statusColor={COLORS.ultraViolet}
+          statusColor={COLORS.primary} // Using primary alias for ultraViolet
         />
 
         <StatusBarCard
@@ -56,7 +56,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="server-outline"
           statusText="28 GB used"
           detailText="Available: 100 GB"
-          statusColor={COLORS.desertSand}
+          statusColor={COLORS.secondary} // Using secondary alias for desertSand
         />
 
         <View style={{ height: SPACING.s32 }} />
@@ -68,7 +68,8 @@ const SystemStatusScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // UI CHANGE: Switch main background to light color
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     padding: SPACING.s24,
@@ -77,4 +78,3 @@ const styles = StyleSheet.create({
 });
 
 export default SystemStatusScreen;
-

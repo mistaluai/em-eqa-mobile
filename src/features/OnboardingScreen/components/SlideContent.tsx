@@ -21,7 +21,7 @@ interface SlideContentProps {
 
 const Placeholder: React.FC<{ children: React.ReactNode; size: number }> = ({ children, size }) => (
   <View style={[styles.placeholderBase, { width: size, height: size }]}>
-    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.gray700 }]}>{children}</Text>
+    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary }]}>{children}</Text>
   </View>
 );
 
@@ -32,18 +32,18 @@ export const SlideContent: React.FC<SlideContentProps> = ({ item }) => {
         return (
           <>
             <Placeholder size={width * 0.4}>
-              <Ionicons name="sparkles" size={50} color={COLORS.gray700} />
+              <Ionicons name="sparkles" size={50} color={COLORS.textSecondary} />
             </Placeholder>
             <Text style={[TYPOGRAPHY.HeadlineL, styles.slideTitle, { marginTop: SPACING.s32 }]}>{item.title}</Text>
           </>
         );
       case 'illustration':
-        return <Placeholder size={width * 0.6}><Ionicons name="camera-outline" size={80} color={COLORS.gray700} /></Placeholder>;
+        return <Placeholder size={width * 0.6}><Ionicons name="camera-outline" size={80} color={COLORS.textSecondary} /></Placeholder>;
       case 'speech':
         return (
           <>
-            <Placeholder size={width * 0.5}><Text style={{ color: COLORS.gray700 }}>"Where did I put my keys?"</Text></Placeholder>
-            <View style={styles.mockClip}><Text style={{ color: COLORS.gray700 }}>Short Clip Mock</Text></View>
+            <Placeholder size={width * 0.5}><Text style={{ color: COLORS.textSecondary }}>"Where did I put my keys?"</Text></Placeholder>
+            <View style={styles.mockClip}><Text style={{ color: COLORS.textSecondary }}>Short Clip Mock</Text></View>
           </>
         );
       case 'cards':
@@ -58,14 +58,14 @@ export const SlideContent: React.FC<SlideContentProps> = ({ item }) => {
           <View style={styles.privacyList}>
             {['Audio Off', 'Auto-Delete', 'Local-Only'].map((text, i) => (
               <View key={i} style={styles.privacyItem}>
-                <Ionicons name="checkmark-circle" size={24} color={COLORS.lightLavender} />
-                <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.white, marginLeft: SPACING.s8 }]}>{text}</Text>
+                <Ionicons name="checkmark-circle" size={24} color={COLORS.primaryLight} />
+                <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginLeft: SPACING.s8 }]}>{text}</Text>
               </View>
             ))}
           </View>
         );
       case 'reminder':
-        return <Placeholder size={width * 0.6}><Ionicons name="medkit-outline" size={80} color={COLORS.gray700} /></Placeholder>;
+        return <Placeholder size={width * 0.6}><Ionicons name="medkit-outline" size={80} color={COLORS.textSecondary} /></Placeholder>;
       default:
         return null;
     }
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   placeholderBase: {
     borderRadius: RADIUS.large,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Replaced COLORS.gray700
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.s24,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   mockClip: {
     width: width * 0.35,
     height: 50,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Replaced COLORS.gray700
     borderRadius: RADIUS.default,
     marginTop: SPACING.s8,
     justifyContent: 'center',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   mockCard: {
     width: width * 0.6,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Replaced COLORS.gray700
     borderRadius: RADIUS.default,
     padding: SPACING.s12,
     justifyContent: 'center',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   mockCardText: {
     ...TYPOGRAPHY.BodyM,
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, // Replaced COLORS.softGray
   },
   privacyList: {
     alignItems: 'flex-start',
@@ -156,20 +156,19 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s12,
   },
   slideTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, // Replaced COLORS.white
     textAlign: 'center',
     marginBottom: SPACING.s12,
     fontWeight: '800',
   },
   slideSubtitle: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, // Replaced COLORS.softGray
     textAlign: 'center',
     marginBottom: SPACING.s24,
   },
   slideDescription: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, // Replaced COLORS.softGray
     textAlign: 'center',
     lineHeight: 22,
   },
 });
-

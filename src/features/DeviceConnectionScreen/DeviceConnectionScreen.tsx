@@ -53,7 +53,8 @@ const DeviceConnectionScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // Switched background from COLORS.carbonBlack to COLORS.backgroundLight
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     flex: 1,
@@ -66,4 +67,3 @@ const styles = StyleSheet.create({
 });
 
 export default DeviceConnectionScreen;
-

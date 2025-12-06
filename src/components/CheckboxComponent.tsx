@@ -29,8 +29,10 @@ const AppCheckbox: React.FC<AppCheckboxProps> = ({
       style={({ pressed }) => [styles.container, disabled && styles.disabled, pressed && styles.pressed]}
     >
       <View style={[styles.checkbox, checked && styles.checkedBox]}>
-        {checked && <Ionicons name="checkmark" size={18} color={COLORS.white} />}
+        {/* Checkmark color is white (backgroundLight) */}
+        {checked && <Ionicons name="checkmark" size={18} color={COLORS.backgroundLight} />}
       </View>
+      {/* Label color is dark (textPrimary) */}
       <Text style={[TYPOGRAPHY.BodyM, styles.label]}>{label}</Text>
     </Pressable>
   );
@@ -47,17 +49,21 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: RADIUS.default / 2,
     borderWidth: 2,
-    borderColor: COLORS.gray700,
+    // Border uses medium dark gray (textSecondary)
+    borderColor: COLORS.textSecondary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SPACING.s12,
   },
   checkedBox: {
-    backgroundColor: COLORS.ultraViolet,
-    borderColor: COLORS.ultraViolet,
+    // Checked background uses the primary color
+    backgroundColor: COLORS.primary,
+    // Checked border uses the primary color
+    borderColor: COLORS.primary,
   },
   label: {
-    color: COLORS.white,
+    // Label uses the primary text color
+    color: COLORS.textPrimary,
   },
   disabled: {
     opacity: 0.5,

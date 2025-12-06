@@ -10,7 +10,8 @@ interface VideoPlaceholderProps {
 
 export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ onPress }) => (
   <View style={styles.container}>
-    <Ionicons name="play-circle-outline" size={80} color={COLORS.softGray} />
+    {/* UI Change: Icon color switched from COLORS.softGray to COLORS.textSecondary */}
+    <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
   </View>
 );
 
@@ -18,7 +19,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     aspectRatio: 16 / 9,
-    backgroundColor: COLORS.gray700,
+    // UI Change: Background color switched from COLORS.gray700 to COLORS.backgroundNeutral
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,
     justifyContent: 'center',
     alignItems: 'center',
@@ -26,4 +28,3 @@ const styles = StyleSheet.create({
     ...SHADOW.default,
   },
 });
-

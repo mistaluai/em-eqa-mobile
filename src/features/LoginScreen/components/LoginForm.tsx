@@ -45,6 +45,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onForgotPassword,
           <Text style={[TYPOGRAPHY.Caption, styles.forgotPassword]}>Forgot Password?</Text>
         </Pressable>
       )}
+
+      <View style={{ height: SPACING.s32 }} />
+      
+      {/* Assuming AppButton is used here in the main screen, but keeping it generic for component re-use */}
+      {/* <AppButton title="Login" onPress={handleLogin} /> */}
+
+      {onSignUp && (
+        <Pressable onPress={onSignUp} style={{ marginTop: SPACING.s32, alignSelf: 'center' }}>
+          <Text style={[TYPOGRAPHY.BodyM, styles.signUpLink]}>
+            Don't have an account?{' '}
+            <Text style={{ color: COLORS.primary, fontWeight: '700' }}>Sign up</Text>
+          </Text>
+        </Pressable>
+      )}
+
     </View>
   );
 };
@@ -54,9 +69,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   forgotPassword: {
-    color: COLORS.desertSand,
+    // UI CHANGE: Text color from softGray/white to textSecondary
+    color: COLORS.textSecondary,
     textAlign: 'right',
-    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  signUpLink: {
+    marginTop: SPACING.s32,
+    alignSelf: 'center',
+    // UI CHANGE: Text color from white/softGray to textPrimary
+    color: COLORS.textPrimary,
   },
 });
-

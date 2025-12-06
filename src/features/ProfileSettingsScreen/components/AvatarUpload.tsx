@@ -11,7 +11,7 @@ interface AvatarUploadProps {
 export const AvatarUpload: React.FC<AvatarUploadProps> = ({ onPress }) => (
   <View style={styles.avatarContainer}>
     <Pressable onPress={onPress} style={styles.avatar}>
-      <Ionicons name="person-circle-outline" size={100} color={COLORS.desertSand} />
+      <Ionicons name="person-circle-outline" size={100} color={COLORS.secondary} />
     </Pressable>
   </View>
 );
@@ -27,11 +27,10 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: COLORS.desertSand,
-    backgroundColor: `${COLORS.ultraViolet}33`,
+    borderColor: COLORS.secondary,
+    backgroundColor: `${COLORS.primary}33`,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
   },
 });
-

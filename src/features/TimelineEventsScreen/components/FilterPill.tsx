@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { Filter } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
 import { RADIUS, SPACING, TYPOGRAPHY } from '../../../theme/styles';
-import { Filter } from '../../../shared/types';
 
 interface FilterPillProps {
   filter: Filter;
@@ -33,17 +33,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.s16,
     paddingVertical: SPACING.s8,
     borderRadius: RADIUS.large,
-    backgroundColor: COLORS.gray700,
+    // UI CHANGE: Inactive pill background is now a soft gray/neutral background
+    backgroundColor: COLORS.backgroundNeutral,
   },
   activeFilterPill: {
-    backgroundColor: COLORS.ultraViolet,
+    // UI CHANGE: Active pill uses the primary color (ultraViolet alias)
+    backgroundColor: COLORS.primary,
   },
   filterText: {
-    color: COLORS.softGray,
+    // UI CHANGE: Inactive pill text is now medium gray (gray700 alias)
+    color: COLORS.textSecondary,
     fontWeight: '600',
   },
   activeFilterText: {
-    color: COLORS.white,
+    // UI CHANGE: Active pill text is now white (on the primary color)
+    color: COLORS.backgroundLight,
   },
 });
-

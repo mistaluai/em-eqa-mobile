@@ -53,7 +53,8 @@ const EventDetailsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // UI Change: Switched background from COLORS.carbonBlack to COLORS.backgroundLight
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     padding: SPACING.s24,
@@ -61,4 +62,3 @@ const styles = StyleSheet.create({
 });
 
 export default EventDetailsScreen;
-

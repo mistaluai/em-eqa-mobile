@@ -12,14 +12,19 @@ interface EventMetadataProps {
 
 export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, location }) => (
   <>
+    {/* UI Change: Event Title color switched from COLORS.white to COLORS.textPrimary */}
     <Text style={[TYPOGRAPHY.HeadlineL, styles.eventTitle]}>{title}</Text>
     <View style={styles.pillsContainer}>
       <View style={styles.pill}>
-        <Ionicons name="time-outline" size={16} color={COLORS.desertSand} />
+        {/* UI Change: Icon color switched from COLORS.desertSand to COLORS.secondary */}
+        <Ionicons name="time-outline" size={16} color={COLORS.secondary} />
+        {/* UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary */}
         <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{time}</Text>
       </View>
       <View style={styles.pill}>
-        <Ionicons name="location-outline" size={16} color={COLORS.desertSand} />
+        {/* UI Change: Icon color switched from COLORS.desertSand to COLORS.secondary */}
+        <Ionicons name="location-outline" size={16} color={COLORS.secondary} />
+        {/* UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary */}
         <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{location}</Text>
       </View>
     </View>
@@ -28,7 +33,8 @@ export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, locat
 
 const styles = StyleSheet.create({
   eventTitle: {
-    color: COLORS.white,
+    // UI Change: Event Title color switched from COLORS.white to COLORS.textPrimary
+    color: COLORS.textPrimary,
     marginBottom: SPACING.s16,
     fontWeight: '800',
   },
@@ -41,15 +47,16 @@ const styles = StyleSheet.create({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: `${COLORS.desertSand}30`,
+    // UI Change: Background color switched from COLORS.desertSand to COLORS.secondary (maintaining transparency)
+    backgroundColor: `${COLORS.secondary}30`,
     paddingHorizontal: SPACING.s12,
     paddingVertical: SPACING.s8,
     borderRadius: RADIUS.large,
   },
   pillText: {
-    color: COLORS.desertSand,
+    // UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary
+    color: COLORS.secondary,
     marginLeft: SPACING.s4,
     fontWeight: '600',
   },
 });
-

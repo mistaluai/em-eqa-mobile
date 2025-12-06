@@ -3,9 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
+import { Event } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
 import { RADIUS, SPACING, TYPOGRAPHY } from '../../../theme/styles';
-import { Event } from '../../../shared/types';
 
 interface EventCardProps {
   event: Event;
@@ -21,16 +21,20 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
     >
       <AppCard style={styles.eventCard}>
         <View style={styles.timeTitleRow}>
+          {/* Accent color for time */}
           <Text style={[TYPOGRAPHY.BodyM, styles.eventTime]}>{event.time}</Text>
+          {/* UI CHANGE: Primary dark text for event title */}
           <Text style={[TYPOGRAPHY.BodyL, styles.eventTitle]} numberOfLines={1}>{event.title}</Text>
         </View>
         <View style={styles.summaryRow}>
           <View style={styles.summaryBox}>
-            <Text style={[TYPOGRAPHY.Caption, { color: COLORS.softGray }]}>{event.summary}</Text>
+            {/* UI CHANGE: Secondary gray text for summary */}
+            <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{event.summary}</Text>
           </View>
           {event.videoThumbnail && (
             <View style={styles.videoThumbnail}>
-              <Ionicons name="videocam" size={24} color={COLORS.gray700} />
+              {/* UI CHANGE: Icon color is now secondary gray text */}
+              <Ionicons name="videocam" size={24} color={COLORS.textSecondary} />
             </View>
           )}
         </View>
@@ -45,7 +49,8 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     padding: SPACING.s16,
-    backgroundColor: COLORS.gray700,
+    // UI CHANGE: Card background is now white (or light neutral)
+    backgroundColor: COLORS.backgroundLight, 
   },
   timeTitleRow: {
     flexDirection: 'row',
@@ -53,12 +58,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   eventTime: {
-    color: COLORS.desertSand,
+    // UI CHANGE: Use the secondary alias (desertSand value)
+    color: COLORS.secondary,
     fontWeight: '700',
     marginRight: SPACING.s16,
   },
   eventTitle: {
-    color: COLORS.white,
+    // UI CHANGE: Primary dark text for the title
+    color: COLORS.textPrimary,
     fontWeight: '700',
     flex: 1,
   },
@@ -74,10 +81,10 @@ const styles = StyleSheet.create({
   videoThumbnail: {
     width: 80,
     height: 50,
-    backgroundColor: COLORS.gray200,
+    // UI CHANGE: Background is now borderLight (gray200 alias)
+    backgroundColor: COLORS.borderLight,
     borderRadius: RADIUS.default / 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
-

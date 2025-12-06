@@ -1,3 +1,4 @@
+// DeletionConfirmationModal.tsx
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -19,16 +20,20 @@ export const DeletionConfirmationModal: React.FC<DeletionConfirmationModalProps>
 }) => (
   <AppModal isVisible={isVisible} onClose={onClose} position='center'>
     <View style={styles.container}>
-      <Ionicons name="warning-outline" size={50} color={COLORS.desertSand} style={{ marginBottom: SPACING.s16 }} />
-      <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s8 }]}>
+      {/* Warning icon uses the accent/secondary color */}
+      <Ionicons name="warning-outline" size={50} color={COLORS.secondary} style={{ marginBottom: SPACING.s16 }} />
+      {/* Headline text uses primary dark text */}
+      <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary, marginBottom: SPACING.s8 }]}>
         Confirm Deletion
       </Text>
-      <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray, textAlign: 'center', marginBottom: SPACING.s24 }]}>
+      {/* Body text uses secondary dark text */}
+      <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center', marginBottom: SPACING.s24 }]}>
         Are you sure you want to delete ALL your recorded data? This cannot be undone.
       </Text>
       <AppButton
         title="Delete Forever"
         onPress={onConfirm}
+        // variant="danger" will use the internal secondary/danger color
         variant="danger"
         style={{ width: '100%', marginBottom: SPACING.s12 }}
       />
@@ -36,7 +41,8 @@ export const DeletionConfirmationModal: React.FC<DeletionConfirmationModalProps>
         title="Cancel"
         onPress={onClose}
         variant="secondary"
-        style={{ width: '100%', borderColor: COLORS.gray700 }}
+        // Secondary button border uses a medium-dark neutral color
+        style={{ width: '100%', borderColor: COLORS.textSecondary }}
       />
     </View>
   </AppModal>
@@ -47,4 +53,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-

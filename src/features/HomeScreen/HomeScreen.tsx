@@ -9,6 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
 import AppModal from '../../components/ModalComponent';
+import { COLORS } from '../../theme/colors';
 import { SCREEN } from '../../theme/styles';
 import { ChatContainer } from './components/ChatContainer';
 import { DrawerContent } from './components/DrawerContent';
@@ -17,6 +18,7 @@ import { InputBar } from './components/InputBar';
 import { mockChatHistory } from './constants';
 
 const { width } = Dimensions.get('window');
+
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -34,9 +36,10 @@ const HomeScreen: React.FC = () => {
     setIsModalVisible(true);
   };
 
+  //const KeyboardAvoidingComponent = () => {
   return (
     // FIX 1: Ensure SafeAreaView takes full height
-    <SafeAreaView style={[SCREEN.safeArea, { flex: 1 }]}>
+    <SafeAreaView style={[SCREEN.safeArea, { flex: 1, backgroundColor: COLORS.backgroundLight }]}>
 
       {/* Header stays OUTSIDE the keyboard view so it doesn't get pushed off */}
       <AppHeader
@@ -53,10 +56,10 @@ const HomeScreen: React.FC = () => {
 
       {/* FIX 2: KeyboardAvoidingView fills the space between Header and Bottom */}
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ flex: 1 , height:'20%'}}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         // Tweak this number if input is still slightly hidden (try 60-100)
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+        keyboardVerticalOffset={ Platform.OS === 'ios' ? 10 : 0 }
       >
 
         {/* FIX 3: THE FLEX CHAIN FIX 
@@ -70,10 +73,12 @@ const HomeScreen: React.FC = () => {
           />
         </View>
 
-        <InputBar
-          onVoiceInput={() => console.log('Voice Input')}
-          onSend={handleSendMessage}
-        />
+        <View style={{ marginBottom: 10 , paddingBottom:15 }}>
+          <InputBar
+            onVoiceInput={() => console.log('Voice Input')}
+            onSend={handleSendMessage}
+          />
+        </View>
 
       </KeyboardAvoidingView>
 
@@ -89,13 +94,12 @@ const HomeScreen: React.FC = () => {
       <AppModal
         isVisible={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        modalWidth={width * 0.85}
+        modalWidth={width * 0.8}
       >
         <DrawerContent onClose={() => setIsDrawerOpen(false)} />
       </AppModal>
-
     </SafeAreaView>
   );
-};
+  };
 
 export default HomeScreen;

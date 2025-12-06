@@ -10,8 +10,8 @@ interface AppHeaderProps {
 
   // Left Side Props
   showBack?: boolean;
-  leftIconName?: keyof typeof Ionicons.glyphMap; // NEW: Allow custom left icon
-  onLeftIconPress?: () => void;                  // NEW: Allow custom action
+  leftIconName?: keyof typeof Ionicons.glyphMap; 
+  onLeftIconPress?: () => void; 
 
   // Right Side Props
   rightIconName?: keyof typeof Ionicons.glyphMap;
@@ -22,7 +22,7 @@ interface AppHeaderProps {
 
 const AppHeader: React.FC<AppHeaderProps> = ({
   title,
-  showBack = false, // Changed default to false to be explicit
+  showBack = false, 
   leftIconName,
   onLeftIconPress,
   rightIconName,
@@ -51,15 +51,17 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         <Pressable
           onPress={handleLeftPress}
           style={styles.iconButton}
-          hitSlop={8} // Makes it easier to tap
+          hitSlop={8}
         >
-          <Ionicons name={finalLeftIcon} size={32} color={COLORS.white} />
+          {/* Left Icon color is now dark (textPrimary) */}
+          <Ionicons name={finalLeftIcon} size={32} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
         <View style={styles.iconPlaceholder} />
       )}
 
       {/* CENTER TITLE */}
+      {/* Title color is now dark (textPrimary) */}
       <Text style={[TYPOGRAPHY.HeadlineM, styles.title]} numberOfLines={1}>
         {title}
       </Text>
@@ -71,7 +73,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           style={styles.iconButton}
           hitSlop={8}
         >
-          <Ionicons name={rightIconName} size={28} color={COLORS.white} />
+          {/* Right Icon color is now dark (textPrimary) */}
+          <Ionicons name={rightIconName} size={28} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
         <View style={styles.iconPlaceholder} />
@@ -85,18 +88,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 60, // Slightly increased for better touch targets
+    height: 60,
     paddingHorizontal: SPACING.s16,
-    backgroundColor: COLORS.carbonBlack,
+    // Header background is now white (backgroundLight)
+    backgroundColor: COLORS.backgroundLight,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    // Border uses a subtle light border color
+    borderBottomColor: COLORS.borderLight,
   },
   title: {
     flex: 1,
     textAlign: 'center',
-    // marginHorizontal ensures title doesn't overlap icons
     marginHorizontal: SPACING.s8,
-    color: COLORS.white,
+    // Title text color is now dark (textPrimary)
+    color: COLORS.textPrimary,
   },
   iconButton: {
     width: 40,

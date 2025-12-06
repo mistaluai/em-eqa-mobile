@@ -24,21 +24,26 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose
   >
     <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
       <Pressable onPress={onClose} hitSlop={10}>
-        <Ionicons name="close-circle-outline" size={32} color={COLORS.softGray} />
+        {/* UI CHANGE: Close icon color from softGray to textSecondary */}
+        <Ionicons name="close-circle-outline" size={32} color={COLORS.textSecondary} />
       </Pressable>
     </View>
 
-    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s16, textAlign: 'center' }]}>
+    {/* UI CHANGE: Headline color from white to textPrimary */}
+    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary, marginBottom: SPACING.s16, textAlign: 'center' }]}>
       Evidence Clip
     </Text>
 
     <View style={styles.videoPlaceholder}>
-      <Ionicons name="play-circle-outline" size={80} color={COLORS.softGray} />
+      {/* UI CHANGE: Video placeholder icon color from softGray to textSecondary */}
+      <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
     </View>
 
     <AppCard style={{ marginTop: SPACING.s16 }}>
-      <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s8 }]}>Summary</Text>
-      <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray }]}>
+      {/* UI CHANGE: Summary Headline color from white to textPrimary */}
+      <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary, marginBottom: SPACING.s8 }]}>Summary</Text>
+      {/* UI CHANGE: Summary Body text color from softGray to textSecondary */}
+      <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary }]}>
         Clip timestamp: 14:32 - 14:45. Confirmed commitment to draft the pitch deck.
       </Text>
     </AppCard>
@@ -50,7 +55,8 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose
 
 const styles = StyleSheet.create({
   videoPlaceholder: {
-    backgroundColor: COLORS.gray700,
+    // UI CHANGE: Placeholder background from gray700 to backgroundNeutral
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.default,
     height: 200,
     justifyContent: 'center',
@@ -58,4 +64,3 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s16,
   },
 });
-

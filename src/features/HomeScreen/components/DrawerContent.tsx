@@ -31,12 +31,13 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
   return (
     <View style={styles.drawerContainer}>
       <View style={styles.drawerHeader}>
-        {/* Added explicit color: 'white' to debug theme issues */}
-        <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white || 'white' }]}>
+        {/* UI CHANGE: Text color from white to textPrimary */}
+        <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary }]}>
           EM-EQA Menu
         </Text>
         <Pressable onPress={onClose} style={{ padding: SPACING.s8 }}>
-          <Ionicons name="close-outline" size={32} color={COLORS.white || 'white'} />
+          {/* UI CHANGE: Icon color from white to textPrimary */}
+          <Ionicons name="close-outline" size={32} color={COLORS.textPrimary} />
         </Pressable>
       </View>
 
@@ -52,14 +53,14 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
           <Ionicons
             name={item.icon as any}
             size={24}
-            // Fallback to white if COLORS.lightLavender is undefined
-            color={COLORS.lightLavender || 'white'}
+            // UI CHANGE: Icon color from lightLavender to primary
+            color={COLORS.primary}
           />
           <Text style={[
             TYPOGRAPHY.BodyM,
             styles.drawerItemText,
-            // Ensure color is applied even if style fails
-            { color: COLORS.white || 'white' }
+            // UI CHANGE: Text color from white to textPrimary
+            { color: COLORS.textPrimary }
           ]}>
             {item.name}
           </Text>
@@ -70,10 +71,12 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
       <View style={{ marginTop: 20 }} />
 
       <Pressable onPress={() => navigation.navigate('Login' as never)} style={styles.drawerItem}>
-        <Ionicons name="log-out-outline" size={24} color={COLORS.desertSand || 'red'} />
+        {/* UI CHANGE: Icon color from desertSand to secondary */}
+        <Ionicons name="log-out-outline" size={24} color={COLORS.secondary} />
         <Text style={[
           TYPOGRAPHY.BodyM,
-          { color: COLORS.desertSand || 'red', marginLeft: SPACING.s12 }
+          // UI CHANGE: Text color from desertSand to secondary
+          { color: COLORS.secondary, marginLeft: SPACING.s12 }
         ]}>
           Log Out
         </Text>
@@ -84,9 +87,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
 
 const styles = StyleSheet.create({
   drawerContainer: {
-    // REMOVED flex: 1. This prevents the modal from collapsing or clipping.
     width: '100%',
-    backgroundColor: COLORS.carbonBlack || '#121212', // Fallback color
+    backgroundColor: COLORS.backgroundLight,
     padding: SPACING.s24,
   },
   drawerHeader: {
@@ -102,10 +104,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: SPACING.s16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700 || '#333',
+    // UI CHANGE: Border color from gray700 to borderLight
+    borderBottomColor: COLORS.borderDark,
   },
   drawerItemText: {
-    color: COLORS.white || 'white',
+    // UI CHANGE: Text color from white to textPrimary
+    color: COLORS.textPrimary,
     marginLeft: SPACING.s12,
     fontWeight: '600',
   },

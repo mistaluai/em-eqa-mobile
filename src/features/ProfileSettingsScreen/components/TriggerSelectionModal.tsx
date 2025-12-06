@@ -33,13 +33,13 @@ export const TriggerSelectionModal: React.FC<TriggerSelectionModalProps> = ({
             onPress={() => onToggleTrigger(trigger)}
             style={styles.triggerItem}
           >
-            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.white }]}>{trigger}</Text>
+            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary }]}>{trigger}</Text>
             <View style={[
               styles.checkbox,
               selectedTriggers.includes(trigger) && styles.checkboxSelected
             ]}>
               {selectedTriggers.includes(trigger) && (
-                <Ionicons name="checkmark" size={16} color={COLORS.white} />
+                <Ionicons name="checkmark" size={16} color={COLORS.textPrimary} />
               )}
             </View>
           </Pressable>
@@ -52,12 +52,12 @@ export const TriggerSelectionModal: React.FC<TriggerSelectionModalProps> = ({
 
 const styles = StyleSheet.create({
   modalContent: {
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight,
     borderRadius: RADIUS.large,
     padding: SPACING.s24,
   },
   modalTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     textAlign: 'center',
     marginBottom: SPACING.s24,
     fontWeight: '700',
@@ -72,20 +72,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: SPACING.s12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    borderBottomColor: COLORS.borderLight, // Used borderLight for separator
   },
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: RADIUS.full,
     borderWidth: 2,
-    borderColor: COLORS.softGray,
+    borderColor: COLORS.textSecondary, // Subtle border
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: COLORS.ultraViolet,
-    borderColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
 });
-

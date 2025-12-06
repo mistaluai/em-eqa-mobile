@@ -23,13 +23,15 @@ export const StatusBarCard: React.FC<StatusBarCardProps> = ({
   progress,
 }) => (
   <View>
+    {/* UI CHANGE: Switch section title text color to primary dark text */}
     <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>{title}</Text>
     <AppCard style={styles.statusCard}>
       <View style={styles.cardContent}>
         <Ionicons name={iconName as any} size={32} color={statusColor} style={{ marginRight: SPACING.s20 }} />
         <View style={styles.textBlock}>
           <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }]}>{statusText}</Text>
-          <Text style={[TYPOGRAPHY.Caption, { color: COLORS.softGray }]}>{detailText}</Text>
+          {/* UI CHANGE: Switch detail text color to secondary gray text for contrast */}
+          <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{detailText}</Text>
         </View>
         {progress !== undefined && (
           <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700', marginLeft: 'auto' }]}>
@@ -48,12 +50,14 @@ export const StatusBarCard: React.FC<StatusBarCardProps> = ({
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    color: COLORS.white,
+    // UI CHANGE: Switch section title text color to primary dark text
+    color: COLORS.textPrimary, 
     marginBottom: SPACING.s12,
     fontWeight: '700',
   },
   statusCard: {
-    backgroundColor: `${COLORS.lightLavender}33`,
+    // Card background is a transparent light color, which works well on white background.
+    backgroundColor: `${COLORS.primaryLight}33`,
     padding: SPACING.s16,
     borderRadius: RADIUS.large,
   },
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     height: SPACING.s4,
-    backgroundColor: `${COLORS.lightLavender}30`,
+    backgroundColor: `${COLORS.primaryLight}30`,
     borderRadius: RADIUS.full,
     marginTop: SPACING.s12,
     overflow: 'hidden',
@@ -77,4 +81,3 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
   },
 });
-

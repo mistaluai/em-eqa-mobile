@@ -1,5 +1,7 @@
 // src/theme/styles.ts
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
+// Note: Assuming the COLORS file is now logically configured for Light UI
+// e.g., COLORS.textPrimary = '#1A1A1A', COLORS.backgroundLight = '#FFFFFF'
 import { COLORS } from './colors';
 
 // ──────────────────────────────────────────────────
@@ -32,42 +34,42 @@ export const TYPOGRAPHY = {
     fontFamily: 'Inter-SemiBold',
     fontSize: 32,
     fontWeight: '600' as const,
-    color: COLORS.white,
+    color: COLORS.textPrimary, 
     lineHeight: 40,
   },
   HeadlineL: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 28,
     fontWeight: '600' as const,
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     lineHeight: 36,
   },
   HeadlineM: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 24,
     fontWeight: '600' as const,
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     lineHeight: 32,
   },
   BodyL: {
     fontFamily: 'Inter-Regular',
     fontSize: 18,
     fontWeight: '400' as const,
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     lineHeight: 28,
   },
   BodyM: {
     fontFamily: 'Inter-Regular',
     fontSize: 16,
     fontWeight: '400' as const,
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     lineHeight: 24,
   },
   Caption: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     fontWeight: '400' as const,
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     lineHeight: 20,
   },
 } satisfies Record<string, TextStyle>;
@@ -98,7 +100,7 @@ export const SHADOW = {
 export const SCREEN = {
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Light UI background
   } as ViewStyle,
   container: {
     flex: 1,
@@ -122,19 +124,19 @@ export const SCREEN = {
 // ──────────────────────────────────────────────────
 export const SECTION = {
   title: {
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     marginTop: SPACING.s32,
     marginBottom: SPACING.s16,
     fontWeight: '700' as const,
   } as TextStyle,
   titleWithTopMargin: {
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     marginTop: SPACING.s32,
     marginBottom: SPACING.s16,
     fontWeight: '700' as const,
   } as TextStyle,
   titleNoTopMargin: {
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     marginBottom: SPACING.s12,
     fontWeight: '700' as const,
   } as TextStyle,
@@ -145,7 +147,7 @@ export const SECTION = {
 // ──────────────────────────────────────────────────
 export const CARD = {
   default: {
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Soft gray card background
     padding: SPACING.s16,
     borderRadius: RADIUS.large,
   } as ViewStyle,
@@ -157,22 +159,22 @@ export const CARD = {
     ...SHADOW.default,
   } as ViewStyle,
   status: {
-    backgroundColor: `${COLORS.lightLavender}33`,
+    backgroundColor: COLORS.backgroundNeutral, // Soft gray card background
     padding: SPACING.s16,
     borderRadius: RADIUS.large,
   } as ViewStyle,
   clip: {
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral,
     marginBottom: SPACING.s12,
     padding: SPACING.s16,
     borderRadius: RADIUS.large,
   } as ViewStyle,
   event: {
     padding: SPACING.s16,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral,
   } as ViewStyle,
   summary: {
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral,
   } as ViewStyle,
   trigger: {
     padding: SPACING.s16,
@@ -199,19 +201,19 @@ export const CARD = {
 export const PROGRESS = {
   track: {
     height: SPACING.s8,
-    backgroundColor: `${COLORS.lightLavender}30`,
+    backgroundColor: COLORS.borderLight, // Light gray track
     borderRadius: RADIUS.large,
     marginTop: SPACING.s8,
     overflow: 'hidden' as const,
   } as ViewStyle,
   fill: {
     height: '100%',
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     borderRadius: RADIUS.large,
   } as ViewStyle,
   trackSmall: {
     height: SPACING.s4,
-    backgroundColor: `${COLORS.lightLavender}30`,
+    backgroundColor: COLORS.borderLight, // Light gray track
     borderRadius: RADIUS.full,
     marginTop: SPACING.s12,
     overflow: 'hidden' as const,
@@ -229,7 +231,7 @@ export const PILL = {
   default: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    backgroundColor: `${COLORS.desertSand}30`,
+    backgroundColor: COLORS.borderLight, // Subtle background
     paddingHorizontal: SPACING.s12,
     paddingVertical: SPACING.s8,
     borderRadius: RADIUS.large,
@@ -238,15 +240,15 @@ export const PILL = {
     paddingHorizontal: SPACING.s16,
     paddingVertical: SPACING.s8,
     borderRadius: RADIUS.large,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral,
   } as ViewStyle,
   filterActive: {
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
   } as ViewStyle,
   trigger: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    backgroundColor: `${COLORS.ultraViolet}20`,
+    backgroundColor: `${COLORS.primaryLight}50`, 
     paddingVertical: SPACING.s8,
     paddingLeft: SPACING.s12,
     paddingRight: SPACING.s8,
@@ -259,16 +261,16 @@ export const PILL = {
     gap: SPACING.s12,
   } as ViewStyle,
   text: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary, // Accent color for text
     marginLeft: SPACING.s4,
     fontWeight: '600' as const,
   } as TextStyle,
   filterText: {
-    color: COLORS.softGray,
+    color: COLORS.textPrimary, // Dark text
     fontWeight: '600' as const,
   } as TextStyle,
   filterTextActive: {
-    color: COLORS.white,
+    color: COLORS.backgroundLight, // White text on primary background
   } as TextStyle,
 } as const;
 
@@ -287,7 +289,7 @@ export const BUTTON = {
     padding: SPACING.s8,
   } as ViewStyle,
   send: {
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     width: 48,
     height: 48,
     borderRadius: RADIUS.full,
@@ -295,7 +297,7 @@ export const BUTTON = {
     alignItems: 'center' as const,
   } as ViewStyle,
   add: {
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     width: 40,
     height: 40,
     borderRadius: RADIUS.full,
@@ -325,12 +327,12 @@ export const FORM = {
     alignItems: 'center' as const,
   } as ViewStyle,
   forgotPassword: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary, 
     textAlign: 'right' as const,
     fontWeight: '600' as const,
   } as TextStyle,
   link: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary, 
     textDecorationLine: 'underline' as const,
     fontWeight: '600' as const,
   } as TextStyle,
@@ -345,12 +347,12 @@ export const INPUT_BAR = {
     alignItems: 'center' as const,
     padding: SPACING.s16,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: COLORS.gray700,
+    borderTopColor: COLORS.borderLight, // Light border
   } as ViewStyle,
   pill: {
     flex: 1,
     height: 48,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Soft gray input background
     borderRadius: RADIUS.large,
     marginHorizontal: SPACING.s12,
     justifyContent: 'center' as const,
@@ -372,8 +374,8 @@ export const AVATAR = {
     borderRadius: RADIUS.full,
     borderWidth: 2,
     borderStyle: 'dashed' as const,
-    borderColor: COLORS.desertSand,
-    backgroundColor: `${COLORS.ultraViolet}33`,
+    borderColor: COLORS.secondary,
+    backgroundColor: `${COLORS.primaryLight}80`, 
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     overflow: 'hidden' as const,
@@ -390,7 +392,7 @@ export const AVATAR = {
     position: 'absolute' as const,
     bottom: SPACING.s24,
     right: SPACING.s24,
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     width: 64,
     height: 64,
     borderRadius: RADIUS.full,
@@ -427,25 +429,25 @@ export const CHAT = {
     borderRadius: RADIUS.default,
   } as ViewStyle,
   bubbleUser: {
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     borderBottomRightRadius: SPACING.s4,
   } as ViewStyle,
   bubbleAI: {
-    backgroundColor: `${COLORS.lightLavender}33`,
+    backgroundColor: COLORS.backgroundNeutral, // Light bubble background
     borderBottomLeftRadius: SPACING.s4,
   } as ViewStyle,
   textUser: {
-    color: COLORS.white,
+    color: COLORS.backgroundLight, // White text on primary bubble
   } as TextStyle,
   textAI: {
-    color: COLORS.softGray,
+    color: COLORS.textPrimary, // Dark text on light bubble
   } as TextStyle,
   evidenceButton: {
     marginTop: SPACING.s8,
     alignSelf: 'flex-end' as const,
   } as ViewStyle,
   evidenceText: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary,
     textDecorationLine: 'underline' as const,
   } as TextStyle,
 } as const;
@@ -456,7 +458,7 @@ export const CHAT = {
 export const DRAWER = {
   container: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Light drawer background
     padding: SPACING.s24,
   } as ViewStyle,
   header: {
@@ -471,10 +473,10 @@ export const DRAWER = {
     alignItems: 'center' as const,
     paddingVertical: SPACING.s16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    borderBottomColor: COLORS.borderLight, // Light border
   } as ViewStyle,
   itemText: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, // Dark text
     marginLeft: SPACING.s12,
     fontWeight: '600' as const,
   } as TextStyle,
@@ -485,12 +487,12 @@ export const DRAWER = {
 // ──────────────────────────────────────────────────
 export const MODAL = {
   content: {
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Light modal background
     borderRadius: RADIUS.large,
     padding: SPACING.s24,
   } as ViewStyle,
   title: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, // Dark title
     textAlign: 'center' as const,
     marginBottom: SPACING.s24,
     fontWeight: '700' as const,
@@ -505,23 +507,23 @@ export const MODAL = {
     alignItems: 'center' as const,
     paddingVertical: SPACING.s12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    borderBottomColor: COLORS.borderLight, // Light border
   } as ViewStyle,
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: RADIUS.full,
     borderWidth: 2,
-    borderColor: COLORS.softGray,
+    borderColor: COLORS.textSecondary,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
   } as ViewStyle,
   checkboxSelected: {
-    backgroundColor: COLORS.ultraViolet,
-    borderColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   } as ViewStyle,
   videoPlaceholder: {
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.borderLight, // Light background for placeholder
     borderRadius: RADIUS.default,
     height: 200,
     justifyContent: 'center' as const,
@@ -540,7 +542,7 @@ export const VIDEO = {
   placeholder: {
     width: '100%',
     aspectRatio: 16 / 9,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.borderLight, // Light background for placeholder
     borderRadius: RADIUS.large,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -550,7 +552,7 @@ export const VIDEO = {
   preview: {
     width: '90%',
     aspectRatio: 16 / 9,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.borderLight, // Light background for placeholder
     borderRadius: RADIUS.large,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -560,7 +562,7 @@ export const VIDEO = {
   thumbnail: {
     width: 80,
     height: 50,
-    backgroundColor: COLORS.gray200,
+    backgroundColor: COLORS.backgroundNeutral, // Soft gray background
     borderRadius: RADIUS.default / 2,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -587,7 +589,7 @@ export const STATUS = {
     marginRight: SPACING.s8,
   } as ViewStyle,
   deviceName: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary,
     marginLeft: SPACING.s16,
     flex: 1,
     textAlign: 'right' as const,
@@ -625,12 +627,12 @@ export const LIST = {
     paddingRight: SPACING.s16,
   } as ViewStyle,
   eventTime: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary, 
     fontWeight: '700' as const,
     marginRight: SPACING.s16,
   } as TextStyle,
   eventTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, 
     fontWeight: '700' as const,
     flex: 1,
   } as TextStyle,
@@ -655,7 +657,7 @@ export const ONBOARDING = {
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight, // Light container background
     borderTopLeftRadius: RADIUS.large,
     borderTopRightRadius: RADIUS.large,
     ...SHADOW.default,
@@ -682,7 +684,7 @@ export const ONBOARDING = {
   } as ViewStyle,
   placeholderBase: {
     borderRadius: RADIUS.large,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.borderLight, 
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginBottom: SPACING.s24,
@@ -690,7 +692,7 @@ export const ONBOARDING = {
   mockClip: {
     width: '35%',
     height: 50,
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.borderLight, 
     borderRadius: RADIUS.default,
     marginTop: SPACING.s8,
     justifyContent: 'center' as const,
@@ -706,7 +708,7 @@ export const ONBOARDING = {
   } as ViewStyle,
   mockCard: {
     width: '60%',
-    backgroundColor: COLORS.gray700,
+    backgroundColor: COLORS.backgroundNeutral, // Soft gray card
     borderRadius: RADIUS.default,
     padding: SPACING.s12,
     justifyContent: 'center' as const,
@@ -714,7 +716,7 @@ export const ONBOARDING = {
   } as ViewStyle,
   mockCardText: {
     ...TYPOGRAPHY.BodyM,
-    color: COLORS.softGray,
+    color: COLORS.textPrimary,
   } as TextStyle,
   privacyList: {
     alignItems: 'flex-start' as const,
@@ -726,27 +728,27 @@ export const ONBOARDING = {
     marginBottom: SPACING.s12,
   } as ViewStyle,
   slideTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, 
     textAlign: 'center' as const,
     marginBottom: SPACING.s12,
     fontWeight: '800' as const,
   } as TextStyle,
   slideSubtitle: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     textAlign: 'center' as const,
     marginBottom: SPACING.s24,
   } as TextStyle,
   slideDescription: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     textAlign: 'center' as const,
     lineHeight: 22,
   } as TextStyle,
   skipText: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     fontWeight: '600' as const,
   } as TextStyle,
   guestText: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     textAlign: 'center' as const,
     textDecorationLine: 'underline' as const,
   } as TextStyle,
@@ -759,14 +761,14 @@ export const WELCOME = {
   area: {
     padding: SPACING.s24,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    borderBottomColor: COLORS.borderLight, // Light border
   } as ViewStyle,
   text: {
     marginBottom: SPACING.s16,
     fontWeight: '800' as const,
   } as TextStyle,
   menuButtonOverride: {
-    position:  'absolute'as const,
+    position: 'absolute' as const,
     top: 0,
     left: SPACING.s16,
     width: 40,
@@ -782,25 +784,25 @@ export const WELCOME = {
 // ──────────────────────────────────────────────────
 export const TEXT = {
   title: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, 
     alignSelf: 'flex-start' as const,
     fontWeight: '800' as const,
   } as TextStyle,
   signup: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     textAlign: 'center' as const,
   } as TextStyle,
   login: {
-    color: COLORS.softGray,
+    color: COLORS.textSecondary, 
     textAlign: 'center' as const,
   } as TextStyle,
   eventTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary, 
     marginBottom: SPACING.s16,
     fontWeight: '800' as const,
   } as TextStyle,
   retryAll: {
-    color: COLORS.desertSand,
+    color: COLORS.secondary, 
     textDecorationLine: 'underline' as const,
     textAlign: 'right' as const,
     marginTop: SPACING.s8,

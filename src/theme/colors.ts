@@ -1,10 +1,21 @@
 export const COLORS = {
-  carbonBlack: '#1A1A1A',
-  ultraViolet: '#3023CE',
-  lightLavender: '#C5BAFF',
-  softGray: '#F2F2F7',
-  white: '#FFFFFF',
-  desertSand: '#F5DEB3', // Custom color for links/accents based on UI requirements
-  gray700: '#3A3A3A',
-  gray200: '#EAEAEA',
+  // Primary/Action Colors (These are fine as they are meant to contrast)
+  primary: '#3023CE',         // ultraViolet
+  primaryLight: '#C5BAFF',    // lightLavender
+
+  // Secondary/Accent Color
+  secondary: '#F5DEB3',       // desertSand
+
+  // Background Colors (For a Light UI)
+  backgroundLight: '#FFFFFF', // UI CHANGE: Main canvas (White)
+  backgroundNeutral: '#F2F2F7', // UI CHANGE: Secondary surface (Soft Gray)
+  backgroundDark: '#1A1A1A', // Used for dark components (like a modal in dark mode, or not used in light mode)
+
+  // Text/Content Colors (For a Light UI)
+  textPrimary: '#1A1A1A',     // UI CHANGE: Dark text for readability (carbonBlack)
+  textSecondary: '#3A3A3A',   // UI CHANGE: Medium gray for captions/subtle text (gray700)
+
+  // Border/Separator Colors
+  borderLight: '#EAEAEA',     // UI CHANGE: Light border on light background (gray200)
+  borderDark: '#3A3A3A',      // Darker border if needed
 } as const;

@@ -10,14 +10,16 @@ interface SummaryCardProps {
 
 export const SummaryCard: React.FC<SummaryCardProps> = ({ summary }) => (
   <AppCard style={styles.summaryCard}>
-    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s8 }]}>Summary</Text>
-    <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray }]}>{summary}</Text>
+    {/* UI Change: Title text color switched from COLORS.white to COLORS.textPrimary */}
+    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary, marginBottom: SPACING.s8 }]}>Summary</Text>
+    {/* UI Change: Body text color switched from COLORS.softGray to COLORS.textSecondary */}
+    <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary }]}>{summary}</Text>
   </AppCard>
 );
 
 const styles = StyleSheet.create({
   summaryCard: {
-    backgroundColor: COLORS.gray700,
+    // UI Change: Card background switched from COLORS.gray700 to COLORS.backgroundNeutral
+    backgroundColor: COLORS.backgroundNeutral,
   },
 });
-

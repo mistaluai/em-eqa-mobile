@@ -1,3 +1,4 @@
+// RecordingPermissionCard.tsx
 import React from 'react';
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
@@ -15,15 +16,19 @@ export const RecordingPermissionCard: React.FC<RecordingPermissionCardProps> = (
 }) => (
   <AppCard style={styles.card}>
     <View style={styles.row}>
-      <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.white }]}>Audio Recording</Text>
+      {/* Text color is now primary dark text */}
+      <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary }]}>Audio Recording</Text>
       <Switch
-        trackColor={{ false: COLORS.gray700, true: COLORS.lightLavender }}
-        thumbColor={isRecordingEnabled ? COLORS.ultraViolet : COLORS.softGray}
+        // Track colors updated for light theme semantics
+        trackColor={{ false: COLORS.borderLight, true: COLORS.primaryLight }}
+        // Thumb colors updated for light theme semantics
+        thumbColor={isRecordingEnabled ? COLORS.primary : COLORS.textSecondary}
         onValueChange={onToggle}
         value={isRecordingEnabled}
       />
     </View>
-    <Text style={[TYPOGRAPHY.Caption, { color: COLORS.softGray, marginTop: SPACING.s4 }]}>
+    {/* Caption color is now secondary dark text */}
+    <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary, marginTop: SPACING.s4 }]}>
       {isRecordingEnabled ? 'Audio is currently being recorded.' : 'Audio recording is disabled.'}
     </Text>
   </AppCard>
@@ -31,7 +36,8 @@ export const RecordingPermissionCard: React.FC<RecordingPermissionCardProps> = (
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.gray700,
+    // Card background is now the neutral surface color
+    backgroundColor: COLORS.backgroundNeutral,
   },
   row: {
     flexDirection: 'row',
@@ -39,4 +45,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-

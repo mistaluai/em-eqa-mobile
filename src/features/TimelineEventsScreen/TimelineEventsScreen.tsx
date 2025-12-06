@@ -41,7 +41,8 @@ const TimelineEventsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // UI CHANGE: Switch main background to light color
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     flex: 1,
@@ -53,4 +54,3 @@ const styles = StyleSheet.create({
 });
 
 export default TimelineEventsScreen;
-

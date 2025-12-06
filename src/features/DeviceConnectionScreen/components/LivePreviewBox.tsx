@@ -5,20 +5,23 @@ import { COLORS } from '../../../theme/colors';
 import { RADIUS, SHADOW, SPACING, TYPOGRAPHY } from '../../../theme/styles';
 
 interface LivePreviewBoxProps {
-  width?: number;
+  width?: number | string;
 }
 
 export const LivePreviewBox: React.FC<LivePreviewBoxProps> = ({ width = '90%' }) => (
-  <View style={[styles.container, typeof width === 'number' ? { width } : { width }]}>
-    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.gray700 }]}>Live Preview Placeholder (16:9)</Text>
-    <Ionicons name="videocam-outline" size={60} color={COLORS.gray700} style={{ marginTop: SPACING.s12 }} />
+  // Switched the background color from a dark color to COLORS.backgroundNeutral (F2F2F7)
+  <View style={[styles.container, typeof width === 'number' ? { width } : { width: width as any }]}>
+    {/* Switched the text/icon color from a gray color to COLORS.textSecondary (3A3A3A) */}
+    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary }]}>Live Preview Placeholder (16:9)</Text>
+    <Ionicons name="videocam-outline" size={60} color={COLORS.textSecondary} style={{ marginTop: SPACING.s12 }} />
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
     aspectRatio: 16 / 9,
-    backgroundColor: COLORS.gray700,
+    // Used the new neutral background color
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,
     justifyContent: 'center',
     alignItems: 'center',
@@ -26,4 +29,3 @@ const styles = StyleSheet.create({
     ...SHADOW.default,
   },
 });
-

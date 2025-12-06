@@ -7,7 +7,11 @@ interface LoaderProps {
   color?: string;
 }
 
-const Loader: React.FC<LoaderProps> = ({ size = 'large', color = COLORS.ultraViolet }) => {
+const Loader: React.FC<LoaderProps> = ({ 
+  size = 'large', 
+  // Default color is now the semantic primary color
+  color = COLORS.primary 
+}) => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size={size} color={color} />

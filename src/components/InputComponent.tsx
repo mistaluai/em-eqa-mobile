@@ -27,14 +27,18 @@ const AppInput: React.FC<AppInputProps> = ({
 
   return (
     <View style={styles.container}>
+      {/* Label Text: Primary text color */}
       <Text style={[TYPOGRAPHY.BodyM, styles.label]}>{label}</Text>
+      
+      {/* Input Wrapper: Uses neutral background for surface */}
       <View style={[styles.inputWrapper, !!error && styles.errorBorder]}>
         <TextInput
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={COLORS.gray700}
+          // Placeholder Text: Secondary text color
+          placeholderTextColor={COLORS.textSecondary}
           secureTextEntry={isSecure}
           keyboardType={keyboardType}
           autoCapitalize={keyboardType === 'email-address' ? 'none' : 'sentences'}
@@ -44,11 +48,13 @@ const AppInput: React.FC<AppInputProps> = ({
             <Ionicons
               name={isSecure ? 'eye-off-outline' : 'eye-outline'}
               size={24}
-              color={COLORS.gray700}
+              // Toggle Icon: Secondary text color
+              color={COLORS.textSecondary}
             />
           </Pressable>
         )}
       </View>
+      {/* Error Text: Secondary/Accent color */}
       {error && <Text style={[TYPOGRAPHY.Caption, styles.errorText]}>{error}</Text>}
     </View>
   );
@@ -59,14 +65,16 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    color: COLORS.white,
+    // Label Text color is now dark (textPrimary)
+    color: COLORS.textPrimary,
     marginBottom: SPACING.s8,
     fontWeight: '600',
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.gray200,
+    // Input Background uses soft gray (backgroundNeutral)
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.default,
     paddingHorizontal: SPACING.s16,
     height: 56,
@@ -74,7 +82,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     ...TYPOGRAPHY.BodyM,
-    color: COLORS.carbonBlack,
+    // Input Text color is now dark (textPrimary)
+    color: COLORS.textPrimary,
     height: '100%',
     paddingVertical: 0,
   },
@@ -83,10 +92,12 @@ const styles = StyleSheet.create({
   },
   errorBorder: {
     borderWidth: 1,
-    borderColor: COLORS.desertSand,
+    // Error Border uses the accent color (secondary)
+    borderColor: COLORS.secondary,
   },
   errorText: {
-    color: COLORS.desertSand,
+    // Error Text uses the accent color (secondary)
+    color: COLORS.secondary,
     marginTop: SPACING.s4,
   },
 });

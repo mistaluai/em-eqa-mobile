@@ -50,16 +50,16 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
         <View style={{ height: SPACING.s16 }} />
 
         <Pressable onPress={() => console.log('Change Password')} style={styles.changePasswordLink}>
-          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.desertSand, textDecorationLine: 'underline', fontWeight: '600' }]}>
+          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.secondary, textDecorationLine: 'underline', fontWeight: '600' }]}>
             Change Password
           </Text>
         </Pressable>
 
         <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Trigger Preferences</Text>
         <View style={styles.triggerHeader}>
-          <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.softGray, fontWeight: '600' }]}>Object Triggers</Text>
+          <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary, fontWeight: '600' }]}>Object Triggers</Text>
           <Pressable onPress={() => setIsModalVisible(true)} style={styles.addButton}>
-            <Text style={{ color: COLORS.white, fontSize: 24, fontWeight: '700' }}>+</Text>
+            <Text style={{ color: COLORS.textPrimary, fontSize: 24, fontWeight: '700' }}>+</Text>
           </Pressable>
         </View>
 
@@ -71,13 +71,13 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
               ))}
             </View>
           ) : (
-            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray, textAlign: 'center' }]}>No triggers selected</Text>
+            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>No triggers selected</Text>
           )}
         </AppCard>
 
         <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Critical Events & Alerts</Text>
         <AppCard style={styles.triggerCard}>
-          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray, textAlign: 'center' }]}>
+          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>
             Configure event alerts here (Future Feature)
           </Text>
         </AppCard>
@@ -91,13 +91,13 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundLight,
   },
   container: {
     padding: SPACING.s24,
   },
   sectionTitle: {
-    color: COLORS.white,
+    color: COLORS.textPrimary,
     marginTop: SPACING.s32,
     marginBottom: SPACING.s16,
     fontWeight: '700',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s16,
   },
   addButton: {
-    backgroundColor: COLORS.ultraViolet,
+    backgroundColor: COLORS.primary,
     width: 40,
     height: 40,
     borderRadius: RADIUS.full,
@@ -133,4 +133,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileRecordingSettingsScreen;
-

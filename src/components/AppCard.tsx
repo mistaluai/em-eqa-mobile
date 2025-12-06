@@ -18,10 +18,12 @@ const AppCard: React.FC<AppCardProps> = ({ children, style }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.gray700,
+    // Card Background uses the neutral surface color
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.default,
     padding: SPACING.s20,
-    //...SHADOW.default,
+    // Note: If you uncomment the line below, ensure SHADOW is imported from styles
+    //...SHADOW.default, 
   },
 });
 

@@ -11,10 +11,10 @@ interface TriggerPillProps {
 
 export const TriggerPill: React.FC<TriggerPillProps> = ({ trigger, onRemove }) => (
   <Pressable onPress={() => onRemove(trigger)} style={styles.triggerPill}>
-    <Text style={[TYPOGRAPHY.Caption, { color: COLORS.ultraViolet, fontWeight: '700', marginRight: SPACING.s4 }]}>
+    <Text style={[TYPOGRAPHY.Caption, { color: COLORS.primary, fontWeight: '700', marginRight: SPACING.s4 }]}>
       {trigger}
     </Text>
-    <Ionicons name="close-circle" size={16} color={COLORS.ultraViolet} />
+    <Ionicons name="close-circle" size={16} color={COLORS.primary} />
   </Pressable>
 );
 
@@ -22,11 +22,10 @@ const styles = StyleSheet.create({
   triggerPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: `${COLORS.ultraViolet}20`,
+    backgroundColor: `${COLORS.primary}20`,
     paddingVertical: SPACING.s8,
     paddingLeft: SPACING.s12,
     paddingRight: SPACING.s8,
     borderRadius: RADIUS.large,
   },
 });
-

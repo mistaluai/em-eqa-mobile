@@ -63,7 +63,12 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
               key={index.toString()}
               style={[
                 styles.dot,
-                { width: dotWidth, opacity, backgroundColor: COLORS.ultraViolet },
+                { 
+                  width: dotWidth, 
+                  opacity, 
+                  // Dot color uses the main primary/action color
+                  backgroundColor: COLORS.primary 
+                },
               ]}
             />
           );
@@ -81,7 +86,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: SPACING.s24 + 220, // Adjusted for Onboarding fixed bottom height
+    // The bottom position might need further adjustment depending on the parent screen layout,
+    // but the rest of the style properties remain appropriate.
+    bottom: SPACING.s24 + 220, 
     left: 0,
     right: 0,
     zIndex: 10,
@@ -90,6 +97,7 @@ const styles = StyleSheet.create({
     height: SPACING.s8,
     borderRadius: RADIUS.full,
     marginHorizontal: SPACING.s4,
+    // The background color is set dynamically above using COLORS.primary
   },
 });
 

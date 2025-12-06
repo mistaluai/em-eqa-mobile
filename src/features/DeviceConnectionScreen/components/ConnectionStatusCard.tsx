@@ -16,7 +16,8 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   deviceName,
   lastCheckTime,
 }) => {
-  const statusColor = status === 'connected' ? COLORS.ultraViolet : COLORS.desertSand;
+  // Switched COLORS.ultraViolet to COLORS.primary and COLORS.desertSand to COLORS.secondary
+  const statusColor = status === 'connected' ? COLORS.primary : COLORS.secondary;
   const statusText = status === 'connected' ? 'Connected' : 'Disconnected';
   const statusIcon = status === 'connected' ? 'wifi' : 'warning';
 
@@ -27,11 +28,13 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
         <Text style={[TYPOGRAPHY.BodyM, { color: statusColor, fontWeight: '700' }]}>
           {statusText}
         </Text>
+        {/* Switched COLORS.softGray to COLORS.textSecondary for subtle text */}
         <Text style={[TYPOGRAPHY.Caption, styles.deviceName]}>{deviceName}</Text>
       </View>
       <View style={styles.statusRow}>
         <Ionicons name={statusIcon as any} size={24} color={statusColor} style={{ marginRight: SPACING.s8 }} />
-        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.softGray }]}>
+        {/* Switched COLORS.softGray to COLORS.textSecondary for general body text */}
+        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary }]}>
           Last Check: {lastCheckTime}
         </Text>
       </View>
@@ -56,10 +59,10 @@ const styles = StyleSheet.create({
     marginRight: SPACING.s8,
   },
   deviceName: {
-    color: COLORS.softGray,
+    // Retaining old style: COLORS.softGray is now COLORS.backgroundNeutral, but using COLORS.textSecondary for text
+    color: COLORS.textSecondary,
     marginLeft: SPACING.s16,
     flex: 1,
     textAlign: 'right',
   },
 });
-

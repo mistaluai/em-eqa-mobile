@@ -82,7 +82,8 @@ const ClipUploadSyncScreen: React.FC = () => {
           title="Failed Uploads"
           clips={failedClips}
           onClipAction={handleClipAction}
-          titleColor={COLORS.desertSand}
+          // Changed non-semantic color (COLORS.desertSand) to semantic accent/error color (COLORS.secondary)
+          titleColor={COLORS.secondary} 
         />
 
         <View style={{ height: SPACING.s32 }} />
@@ -92,4 +93,3 @@ const ClipUploadSyncScreen: React.FC = () => {
 };
 
 export default ClipUploadSyncScreen;
-

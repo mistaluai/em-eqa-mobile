@@ -36,8 +36,8 @@ const AppModal: React.FC<AppModalProps> = ({
     }
     : {
       height: '100%',
-      borderRadius: 0, // Drawers usually don't have rounded corners on the spine
-      borderTopRightRadius: RADIUS.large, // Optional styling for drawer
+      borderRadius: 0, 
+      borderTopRightRadius: RADIUS.large, 
       borderBottomRightRadius: RADIUS.large
     };
 
@@ -73,13 +73,15 @@ const AppModal: React.FC<AppModalProps> = ({
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    // Slightly reduced opacity for a light UI feel (0.7 -> 0.5)
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     // Flex properties are now handled dynamically via 'alignmentStyle'
   },
   modalContent: {
-    backgroundColor: COLORS.carbonBlack,
+    // Modal background is now white (backgroundLight)
+    backgroundColor: COLORS.backgroundLight,
     ...SHADOW.default,
-    overflow: 'hidden', // Ensures content doesn't spill out of rounded corners
+    overflow: 'hidden', 
   },
   modalBody: {
     padding: SPACING.s24,

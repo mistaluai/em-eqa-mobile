@@ -1,10 +1,11 @@
+// ClipItem.tsx
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
+import { Clip } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
 import { CARD, SPACING, TYPOGRAPHY } from '../../../theme/styles';
-import { Clip } from '../../../shared/types';
 import { ProgressBar } from './ProgressBar';
 
 interface ClipItemProps {
@@ -15,21 +16,32 @@ interface ClipItemProps {
 export const ClipItem: React.FC<ClipItemProps> = ({ clip, onAction }) => (
   <AppCard style={CARD.clip}>
     <View style={CARD.row}>
-      <Text style={[TYPOGRAPHY.BodyM, { color: clip.status === 'failed' ? COLORS.desertSand : COLORS.white, flex: 1 }]} numberOfLines={1}>
+      <Text 
+        style={[
+          TYPOGRAPHY.BodyM, 
+          // Text color is primary dark, or secondary (accent) if failed
+          { color: clip.status === 'failed' ? COLORS.secondary : COLORS.textPrimary, flex: 1 }
+        ]} 
+        numberOfLines={1}
+      >
         {clip.name}
       </Text>
       {clip.status === 'completed' && (
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.ultraViolet, fontWeight: '700' }]}>100%</Text>
+        // Progress text uses the primary color
+        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.primary, fontWeight: '700' }]}>100%</Text>
       )}
       {clip.status === 'uploading' && (
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.ultraViolet, fontWeight: '700' }]}>{clip.progress}%</Text>
+        // Progress text uses the primary color
+        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.primary, fontWeight: '700' }]}>{clip.progress}%</Text>
       )}
       {clip.status === 'pending' && (
-        <Ionicons name="sync-circle-outline" size={24} color={COLORS.softGray} />
+        // Pending icon uses secondary dark text/icon color
+        <Ionicons name="sync-circle-outline" size={24} color={COLORS.textSecondary} />
       )}
       {clip.status === 'failed' && (
         <Pressable onPress={onAction}>
-          <Ionicons name="reload-circle-outline" size={24} color={COLORS.desertSand} />
+          {/* Failed icon uses the accent/secondary color */}
+          <Ionicons name="reload-circle-outline" size={24} color={COLORS.secondary} />
         </Pressable>
       )}
     </View>
@@ -38,14 +50,17 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, onAction }) => (
     )}
     {clip.status === 'completed' && (
       <Pressable onPress={onAction}>
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.desertSand, marginTop: SPACING.s8, alignSelf: 'flex-end' }]}>
+        {/* Link text uses the accent/secondary color */}
+        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.secondary, marginTop: SPACING.s8, alignSelf: 'flex-end' }]}>
           Clear Completed
         </Text>
       </Pressable>
     )}
     {clip.status === 'failed' && (
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.desertSand, marginTop: SPACING.s4 }]}>Error: Connection Lost</Text>
+      <Pressable>
+        {/* Error text uses the accent/secondary color */}
+        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.secondary, marginTop: SPACING.s4 }]}>Error: Connection Lost</Text>
+      </Pressable>
     )}
   </AppCard>
 );
-

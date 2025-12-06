@@ -1,9 +1,10 @@
+// ClipSection.tsx
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 import AppButton from '../../../components/AppButton';
+import { Clip } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
 import { SPACING, TEXT, TYPOGRAPHY } from '../../../theme/styles';
-import { Clip } from '../../../shared/types';
 import { ClipItem } from './ClipItem';
 
 interface ClipSectionProps {
@@ -21,10 +22,14 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
   onClipAction,
   onClearAll,
   onPauseAll,
-  titleColor = COLORS.white,
+  // Default title color is now primary dark text
+  titleColor = COLORS.textPrimary, 
 }) => {
   if (clips.length === 0) return null;
 
+  // Note: TEXT.sectionTitle and TEXT.retryAll will need to be updated 
+  // in styles.ts to use the new semantic colors if they contain hardcoded values.
+  
   return (
     <>
       <Text style={[TYPOGRAPHY.HeadlineM, TEXT.sectionTitle, { color: titleColor }]}>{title}</Text>
@@ -33,6 +38,7 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
       ))}
       {onClearAll && (
         <Pressable onPress={onClearAll}>
+          {/* Link text style relies on TEXT.retryAll being updated to use COLORS.secondary */}
           <Text style={[TYPOGRAPHY.Caption, TEXT.retryAll]}>Clear All Completed</Text>
         </Pressable>
       )}
@@ -46,10 +52,10 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
       )}
       {title === 'Failed Uploads' && (
         <Pressable onPress={() => console.log('Retry All')}>
+          {/* Link text style relies on TEXT.retryAll being updated to use COLORS.secondary */}
           <Text style={[TYPOGRAPHY.Caption, TEXT.retryAll]}>Retry All Failed Uploads</Text>
         </Pressable>
       )}
     </>
   );
 };
-
