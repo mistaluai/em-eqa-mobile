@@ -24,8 +24,6 @@ const DeviceConnectionScreen: React.FC = () => {
       <AppHeader
         title="Device Connection"
         showBack={true}
-      // rightIconName="menu-outline"
-      // onRightIconPress={() => console.log('Open Menu')}
       />
 
       <View style={styles.container}>
