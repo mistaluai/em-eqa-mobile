@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SPACING } from '../../../theme/styles';
 import { Filter } from '../../../shared/types';
+import { SPACING } from '../../../theme/styles';
 import { FilterPill } from './FilterPill';
 
 interface FilterBarProps {
@@ -29,7 +29,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginVertical: SPACING.s16,
+    marginHorizontal: 65,
     gap: SPACING.s12,
+    alignContent: 'center',
   },
 });
 

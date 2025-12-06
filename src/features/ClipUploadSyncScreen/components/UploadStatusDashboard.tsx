@@ -15,8 +15,8 @@ export const UploadStatusDashboard: React.FC<UploadStatusDashboardProps> = ({ st
     {/* Completed color uses primary */}
     <ProgressCard iconName="checkmark-circle-outline" title="Completed" count={status.completed} color={COLORS.primary} />
     {/* Pending color uses text secondary */}
-    <ProgressCard iconName="time-outline" title="Pending" count={status.pending} color={COLORS.textSecondary} />
+    <ProgressCard iconName="time-outline" title="Pending" count={status.pending} color={COLORS.secondary} />
     {/* Failed color uses secondary (accent/error) */}
-    <ProgressCard iconName="close-circle-outline" title="Failed" count={status.failed} color={COLORS.secondary} />
+    <ProgressCard iconName="close-circle-outline" title="Failed" count={status.failed} color={COLORS.warning} />
   </View>
 );

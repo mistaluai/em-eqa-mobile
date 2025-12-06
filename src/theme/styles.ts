@@ -156,7 +156,7 @@ export const CARD = {
     padding: SPACING.s16,
     borderRadius: RADIUS.default,
     alignItems: 'center' as const,
-    ...SHADOW.default,
+    //...SHADOW.default,
   } as ViewStyle,
   status: {
     backgroundColor: COLORS.backgroundNeutral, // Soft gray card background
@@ -184,6 +184,7 @@ export const CARD = {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
+    
   } as ViewStyle,
   content: {
     flexDirection: 'row' as const,
@@ -802,7 +803,14 @@ export const TEXT = {
     fontWeight: '800' as const,
   } as TextStyle,
   retryAll: {
-    color: COLORS.secondary, 
+    color: COLORS.warning, 
+    textDecorationLine: 'underline' as const,
+    textAlign: 'right' as const,
+    marginTop: SPACING.s8,
+    fontWeight: '600' as const,
+  } as TextStyle,
+   clearAll: {
+    color: COLORS.primary, 
     textDecorationLine: 'underline' as const,
     textAlign: 'right' as const,
     marginTop: SPACING.s8,
@@ -837,3 +845,94 @@ export const SLIDER = {
     paddingHorizontal: SPACING.s8,
   } as ViewStyle,
 } as const;
+export const sidebarStyles = StyleSheet.create({
+  // The content wrapper inside SafeAreaView
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingTop: 10,
+  },
+  
+  // Header and Search
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  searchBarContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: COLORS.backgroundNeutral, // White background for the search bar itself
+    borderRadius: 20,
+    height: 40,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
+  searchBarInput: {
+    flex: 1,
+    color: COLORS.textPrimary, // Black text inside the white search bar
+    padding: 0,
+    borderColor: COLORS.borderLight,
+  },
+  searchIconPlaceholder: {
+    width: 25,
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchIconText: {
+    fontSize: 18,
+  },
+  newChatText: {
+    color: COLORS.primary, 
+    fontWeight: '600',
+  },
+  
+  // Chat History
+  chatHistoryTitle: {
+    color: COLORS.textPrimary, // Dark text color adapted for light background
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  chatHistoryList: {
+    flex: 1,
+  },
+  chatItem: {
+    backgroundColor:COLORS.backgroundLight, // Light gray background for items on a light drawer
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+  },
+  chatItemText: {
+    color: COLORS.textSecondary, // Dark text color
+    fontSize: 16,
+    borderColor: COLORS.borderLight,
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 8,
+  },
+
+  // User Profile
+  userProfile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.borderDark, // Light border for separation
+  },
+  userPhoto: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: COLORS.secondary, // Vibrant Purple for the photo circle
+    marginRight: 10,
+  },
+  userName: {
+    color: '#333333', // Dark text color
+    fontSize: 16,
+    fontWeight: '500',
+  },
+});

@@ -13,7 +13,7 @@ interface DataRetentionSliderProps {
   retentionOptions?: number[];
 }
 
-const DEFAULT_RETENTION_OPTIONS = [10, 30, 45, 90];
+const DEFAULT_RETENTION_OPTIONS = [10,  45, 90];
 
 export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   retentionDays,
@@ -28,16 +28,16 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
     <AppCard style={styles.card}>
       {/* Title text uses primary dark text */}
       <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary, marginBottom: SPACING.s20 }]}>
-        Retain Clips for: 
+        Retain Clips for  
         {/* Highlight text uses primary color */}
-        <Text style={{ color: COLORS.primary, fontWeight: '700' }}>{retentionDays} Days</Text>
+        <Text style={{ color: COLORS.primary, fontWeight: '700' }}> : {retentionDays} Days</Text>
       </Text>
 
       <Slider
         style={{ width: '100%', height: 40 }}
         minimumValue={10}
         maximumValue={90}
-        step={1}
+        step={10}
         value={retentionDays}
         onValueChange={onRetentionDaysChange}
         onSlidingComplete={handleSlidingComplete}

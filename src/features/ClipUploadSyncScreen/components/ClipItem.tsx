@@ -20,7 +20,7 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, onAction }) => (
         style={[
           TYPOGRAPHY.BodyM, 
           // Text color is primary dark, or secondary (accent) if failed
-          { color: clip.status === 'failed' ? COLORS.secondary : COLORS.textPrimary, flex: 1 }
+          { color: clip.status === 'failed' ? COLORS.textPrimary : COLORS.textSecondary, flex: 1 }
         ]} 
         numberOfLines={1}
       >
@@ -36,30 +36,23 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, onAction }) => (
       )}
       {clip.status === 'pending' && (
         // Pending icon uses secondary dark text/icon color
-        <Ionicons name="sync-circle-outline" size={24} color={COLORS.textSecondary} />
+        <Ionicons name="sync-circle-outline" size={24} color={COLORS.primary} />
       )}
       {clip.status === 'failed' && (
         <Pressable onPress={onAction}>
           {/* Failed icon uses the accent/secondary color */}
-          <Ionicons name="reload-circle-outline" size={24} color={COLORS.secondary} />
+          <Ionicons name="reload-circle-outline" size={24} color={COLORS.warning} />
         </Pressable>
       )}
     </View>
     {(clip.status === 'uploading' || clip.status === 'pending') && (
       <ProgressBar progress={clip.progress} />
     )}
-    {clip.status === 'completed' && (
-      <Pressable onPress={onAction}>
-        {/* Link text uses the accent/secondary color */}
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.secondary, marginTop: SPACING.s8, alignSelf: 'flex-end' }]}>
-          Clear Completed
-        </Text>
-      </Pressable>
-    )}
+
     {clip.status === 'failed' && (
       <Pressable>
         {/* Error text uses the accent/secondary color */}
-        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.secondary, marginTop: SPACING.s4 }]}>Error: Connection Lost</Text>
+        <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary, marginTop: SPACING.s4 }]}>Error: Connection Lost</Text>
       </Pressable>
     )}
   </AppCard>

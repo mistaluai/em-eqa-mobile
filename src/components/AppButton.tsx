@@ -23,16 +23,16 @@ const AppButton: React.FC<AppButtonProps> = ({
       case 'secondary':
         return [
           styles.secondaryButton,
-          { borderColor: COLORS.ultraViolet, borderWidth: 1.5, backgroundColor: 'transparent' },
+          { borderColor: COLORS.primary, borderWidth: 1.5, backgroundColor: 'transparent' },
         ];
       case 'danger':
         return [
           styles.secondaryButton,
-          { borderColor: COLORS.desertSand, borderWidth: 1.5, backgroundColor: 'transparent' },
+          { borderColor: COLORS.secondary, borderWidth: 1.5, backgroundColor: 'transparent' },
         ];
       case 'primary':
       default:
-        return [styles.primaryButton, { backgroundColor: COLORS.ultraViolet,  }];
+        return [styles.primaryButton, { backgroundColor: COLORS.primary,  }];
     }
   };
 
@@ -40,7 +40,7 @@ const AppButton: React.FC<AppButtonProps> = ({
     switch (variant) {
       case 'secondary':
       case 'danger':
-        return [styles.secondaryText, { color: variant === 'danger' ? COLORS.desertSand : COLORS.ultraViolet }];
+        return [styles.secondaryText, { color: variant === 'danger' ? COLORS.textSecondary : COLORS.textPrimary }];
       case 'primary':
       default:
         return [styles.primaryText];
@@ -79,11 +79,12 @@ const styles = StyleSheet.create({
     // border applied inline in getButtonStyles
   },
   primaryText: {
-    color: COLORS.white,
+    color: COLORS.backgroundLight,
     fontWeight: '600',
   },
   secondaryText: {
     fontWeight: '600',
+    color: COLORS.backgroundLight,
     // color applied inline in getTextStyles
   },
   pressed: {

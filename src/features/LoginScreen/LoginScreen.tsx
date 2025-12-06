@@ -25,12 +25,12 @@ const LoginScreen: React.FC = () => {
       <ScrollView contentContainerStyle={SCREEN.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={{ flex: 1, minHeight: 60 }} />
 
-        <LogoPlaceholder size={width * 0.32} />
+        <LogoPlaceholder size={width * 0.5} />
 
         <View style={{ height: SPACING.s32 + 8 }} />
 
         {/* UI CHANGE: Title text color from white/light to textPrimary */}
-        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title, { color: COLORS.textPrimary }]}>Login</Text>
+        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title, { color: COLORS.textPrimary }]}>Welcome</Text>
 
         <View style={{ height: SPACING.s32 + 16 }} />
 
@@ -51,18 +51,20 @@ const LoginScreen: React.FC = () => {
           <View style={{ height: SPACING.s12 }} />
           <Pressable onPress={() => console.log('Forgot Password')}>
             {/* UI CHANGE: Forgot Password link text color from softGray/white to textSecondary */}
-            <Text style={[TYPOGRAPHY.Caption, FORM.forgotPassword, { color: COLORS.textSecondary }]}>Forgot Password?</Text>
+            <Text style={[TYPOGRAPHY.Caption, FORM.forgotPassword, { color: COLORS.textSecondary ,    textDecorationLine: 'underline',
+}]}>Forgot Password?</Text>
           </Pressable>
         </View>
 
-        <View style={{ height: SPACING.s32 }} />
+        <View style={{ height: SPACING.s32,  }} />
 
-        <AppButton title="Login" onPress={handleLogin} />
+        <AppButton title="Login"  onPress={handleLogin} 
+          style={{ width: '90%' ,  backgroundColor: COLORS.primary , }}          
+        />
 
         <View style={{ height: SPACING.s32 }} />
 
         <Pressable onPress={() => navigation.navigate('Signup' as never)}>
-          {/* UI CHANGE: Signup prompt text color from white/softGray to textPrimary */}
           <Text style={[TYPOGRAPHY.BodyM, TEXT.signup, { color: COLORS.textPrimary }]}>
             Don't have an account?{' '}
             {/* UI CHANGE: Link color from desertSand to primary */}

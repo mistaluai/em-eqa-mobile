@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { RADIUS, SHADOW, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { RADIUS, SPACING, TYPOGRAPHY } from '../../../theme/styles';
 
 interface LivePreviewBoxProps {
   width?: number | string;
@@ -19,13 +19,13 @@ export const LivePreviewBox: React.FC<LivePreviewBoxProps> = ({ width = '90%' })
 
 const styles = StyleSheet.create({
   container: {
-    aspectRatio: 16 / 9,
+    aspectRatio: (16 / 9)/1.5,
     // Used the new neutral background color
     backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.s32,
-    ...SHADOW.default,
+    //...SHADOW.default,
   },
 });

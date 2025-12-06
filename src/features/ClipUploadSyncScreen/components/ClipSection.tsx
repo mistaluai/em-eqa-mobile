@@ -1,10 +1,9 @@
 // ClipSection.tsx
 import React from 'react';
 import { Pressable, Text } from 'react-native';
-import AppButton from '../../../components/AppButton';
 import { Clip } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
-import { SPACING, TEXT, TYPOGRAPHY } from '../../../theme/styles';
+import { TEXT, TYPOGRAPHY } from '../../../theme/styles';
 import { ClipItem } from './ClipItem';
 
 interface ClipSectionProps {
@@ -39,16 +38,20 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
       {onClearAll && (
         <Pressable onPress={onClearAll}>
           {/* Link text style relies on TEXT.retryAll being updated to use COLORS.secondary */}
-          <Text style={[TYPOGRAPHY.Caption, TEXT.retryAll]}>Clear All Completed</Text>
+          <Text style={[TYPOGRAPHY.Caption, TEXT.retryAll,]}>Clear All Completed</Text>
         </Pressable>
       )}
       {onPauseAll && (
-        <AppButton
-          title="Pause All Uploads"
-          onPress={onPauseAll}
-          variant="secondary"
-          style={{ marginTop: SPACING.s12 }}
-        />
+        // <AppButton
+        //   title="Pause All Uploads"
+        //   onPress={onPauseAll}
+        //   variant="secondary"
+        //   style={{  alignSelf: 'flex-end', borderRadius : 32 ,}} 
+        // />
+        <Pressable onPress={onClearAll}>
+          {/* Link text style relies on TEXT.retryAll being updated to use COLORS.secondary */}
+          <Text style={[TYPOGRAPHY.Caption, TEXT.clearAll,]}>Pause All Uploads</Text>
+        </Pressable>
       )}
       {title === 'Failed Uploads' && (
         <Pressable onPress={() => console.log('Retry All')}>

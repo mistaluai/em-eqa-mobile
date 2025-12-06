@@ -20,7 +20,7 @@ const TimelineEventsScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <AppHeader
         title="Timeline & Events"
-        showBack={false}
+        showBack={true}
       />
 
       <View style={styles.container}>
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.backgroundLight,
   },
   container: {
+    
     flex: 1,
     paddingHorizontal: SPACING.s24,
   },

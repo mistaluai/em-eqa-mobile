@@ -68,15 +68,15 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
       ))}
 
       {/* Replaced flex: 1 spacer with a fixed margin if needed, or remove it */}
-      <View style={{ marginTop: 20 }} />
+      <View style={{ marginTop: 6 }} />
 
       <Pressable onPress={() => navigation.navigate('Login' as never)} style={styles.drawerItem}>
         {/* UI CHANGE: Icon color from desertSand to secondary */}
-        <Ionicons name="log-out-outline" size={24} color={COLORS.secondary} />
+        <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
         <Text style={[
           TYPOGRAPHY.BodyM,
           // UI CHANGE: Text color from desertSand to secondary
-          { color: COLORS.secondary, marginLeft: SPACING.s12 }
+          { color: COLORS.textPrimary, marginLeft: SPACING.s12 }
         ]}>
           Log Out
         </Text>
@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: COLORS.backgroundLight,
     padding: SPACING.s24,
+   position: 'absolute',
+    direction:'ltr'
   },
   drawerHeader: {
     flexDirection: 'row',

@@ -12,7 +12,7 @@ interface EventCardProps {
 }
 
 export const EventCard: React.FC<EventCardProps> = ({ event }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <Pressable
@@ -20,20 +20,22 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
       style={styles.eventCardContainer}
     >
       <AppCard style={styles.eventCard}>
-        <View style={styles.timeTitleRow}>
-          {/* Accent color for time */}
-          <Text style={[TYPOGRAPHY.BodyM, styles.eventTime]}>{event.time}</Text>
-          {/* UI CHANGE: Primary dark text for event title */}
-          <Text style={[TYPOGRAPHY.BodyL, styles.eventTitle]} numberOfLines={1}>{event.title}</Text>
+        {/* Title + Time (stacked, left-aligned) */}
+        <View style={styles.headerSection}>
+          <Text style={styles.eventTitle} numberOfLines={2}>
+            {event.title}
+          </Text>
+          <Text style={styles.eventTime}>{event.time}</Text>
         </View>
-        <View style={styles.summaryRow}>
-          <View style={styles.summaryBox}>
-            {/* UI CHANGE: Secondary gray text for summary */}
-            <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{event.summary}</Text>
-          </View>
+
+        {/* Summary + Optional Video Icon */}
+        <View style={styles.footerRow}>
+          <Text style={styles.eventSummary} numberOfLines={3}>
+            {event.summary}
+          </Text>
+
           {event.videoThumbnail && (
-            <View style={styles.videoThumbnail}>
-              {/* UI CHANGE: Icon color is now secondary gray text */}
+            <View style={styles.videoIconContainer}>
               <Ionicons name="videocam" size={24} color={COLORS.textSecondary} />
             </View>
           )}
@@ -49,42 +51,49 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     padding: SPACING.s16,
-    // UI CHANGE: Card background is now white (or light neutral)
-    backgroundColor: COLORS.backgroundLight, 
+    backgroundColor: COLORS.backgroundNeutral,
+    borderRadius: RADIUS.large,
+    borderWidth: 1,
+    borderColor: COLORS.backgroundNeutral,
   },
-  timeTitleRow: {
-    flexDirection: 'row',
+
+  // NEW: Title and time stacked vertically
+  headerSection: {
     marginBottom: SPACING.s12,
-    alignItems: 'center',
-  },
-  eventTime: {
-    // UI CHANGE: Use the secondary alias (desertSand value)
-    color: COLORS.secondary,
-    fontWeight: '700',
-    marginRight: SPACING.s16,
   },
   eventTitle: {
-    // UI CHANGE: Primary dark text for the title
+    ...TYPOGRAPHY.BodyL,
     color: COLORS.textPrimary,
     fontWeight: '700',
-    flex: 1,
+    lineHeight: 22,
   },
-  summaryRow: {
+  eventTime: {
+    ...TYPOGRAPHY.BodyM,
+    color: COLORS.primary,        // Your blue/accent color
+    fontWeight: '600',
+    marginTop: SPACING.s4,
+  },
+
+  // Footer: summary + optional video icon on the right
+  footerRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
-  summaryBox: {
+  eventSummary: {
+    ...TYPOGRAPHY.Caption,
+    color: COLORS.textSecondary,
     flex: 1,
     paddingRight: SPACING.s16,
+    lineHeight: 18,
   },
-  videoThumbnail: {
-    width: 80,
-    height: 50,
-    // UI CHANGE: Background is now borderLight (gray200 alias)
+  videoIconContainer: {
+    width: 48,
+    height: 48,
     backgroundColor: COLORS.borderLight,
-    borderRadius: RADIUS.default / 2,
+    borderRadius: RADIUS.default,
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: SPACING.s8,
   },
 });

@@ -1,29 +1,36 @@
+// screens/HomeScreen.tsx
+
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
-  View
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import AppHeader from '../../components/HeaderComponent';
 import AppModal from '../../components/ModalComponent';
 import { COLORS } from '../../theme/colors';
 import { SCREEN } from '../../theme/styles';
+
 import { ChatContainer } from './components/ChatContainer';
 import { DrawerContent } from './components/DrawerContent';
 import { EvidenceModal } from './components/EvidenceModal';
 import { InputBar } from './components/InputBar';
+import { SearchDrawer } from './components/SearchDrawer';
 import { mockChatHistory } from './constants';
 
 const { width } = Dimensions.get('window');
 
-
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
+  const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
+
   const [chatInput, setChatInput] = useState('');
 
   const handleSendMessage = () => {
@@ -32,65 +39,46 @@ const HomeScreen: React.FC = () => {
     }
   };
 
-  const handleEvidencePress = (messageId: number) => {
-    setIsModalVisible(true);
-  };
-
-  //const KeyboardAvoidingComponent = () => {
   return (
-    // FIX 1: Ensure SafeAreaView takes full height
     <SafeAreaView style={[SCREEN.safeArea, { flex: 1, backgroundColor: COLORS.backgroundLight }]}>
 
-      {/* Header stays OUTSIDE the keyboard view so it doesn't get pushed off */}
+      {/* HEADER */}
       <AppHeader
         title="EM-EQA"
-
-        // Left Side: The Menu Button
-        leftIconName="menu-outline"
-        onLeftIconPress={() => setIsDrawerOpen(true)}
-
-        // Right Side: The Profile Button
-        rightIconName="person-circle-outline"
-        onRightIconPress={() => navigation.navigate('ProfileSettings' as never)}
+        leftIconName="search-outline"
+        onLeftIconPress={() => setIsSearchDrawerVisible(true)}
+        rightIconName="menu-outline"
+        onRightIconPress={() => setIsDrawerOpen(true)}
       />
 
-      {/* FIX 2: KeyboardAvoidingView fills the space between Header and Bottom */}
+      {/* MAIN CHAT AREA */}
       <KeyboardAvoidingView
-        style={{ flex: 1 , height:'20%'}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        // Tweak this number if input is still slightly hidden (try 60-100)
-        keyboardVerticalOffset={ Platform.OS === 'ios' ? 10 : 0 }
       >
-
-        {/* FIX 3: THE FLEX CHAIN FIX 
-            This View forces the ChatContainer to occupy all available space 
-            but shrink when the keyboard pushes the InputBar up. 
-        */}
         <View style={{ flex: 1 }}>
           <ChatContainer
             messages={mockChatHistory}
-            onEvidencePress={handleEvidencePress}
+            onEvidencePress={() => setIsEvidenceModalVisible(true)}
           />
         </View>
 
-        <View style={{ marginBottom: 10 , paddingBottom:15 }}>
-          <InputBar
-            onVoiceInput={() => console.log('Voice Input')}
-            onSend={handleSendMessage}
-          />
+        <View style={{ marginBottom: 10, paddingBottom: 15 }}>
+          <InputBar onSend={handleSendMessage} onVoiceInput={() => {}} />
         </View>
-
       </KeyboardAvoidingView>
 
+      {/* EVIDENCE MODAL */}
       <EvidenceModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        isVisible={isEvidenceModalVisible}
+        onClose={() => setIsEvidenceModalVisible(false)}
         onGoToEventDetails={() => {
-          setIsModalVisible(false);
+          setIsEvidenceModalVisible(false);
           navigation.navigate('EventDetails' as never);
         }}
       />
 
+      {/* RIGHT SIDE CONTENT DRAWER */}
       <AppModal
         isVisible={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -98,8 +86,15 @@ const HomeScreen: React.FC = () => {
       >
         <DrawerContent onClose={() => setIsDrawerOpen(false)} />
       </AppModal>
+
+      {/* LEFT SEARCH DRAWER */}
+      <SearchDrawer
+        visible={isSearchDrawerVisible}
+        onClose={() => setIsSearchDrawerVisible(false)}
+      />
+
     </SafeAreaView>
   );
-  };
+};
 
 export default HomeScreen;

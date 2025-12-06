@@ -50,7 +50,7 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
         <View style={{ height: SPACING.s16 }} />
 
         <Pressable onPress={() => console.log('Change Password')} style={styles.changePasswordLink}>
-          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.secondary, textDecorationLine: 'underline', fontWeight: '600' }]}>
+          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.primary, textDecorationLine: 'underline', fontWeight: '600', paddingLeft: 222}]}>
             Change Password
           </Text>
         </Pressable>

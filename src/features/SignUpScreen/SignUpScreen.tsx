@@ -45,6 +45,7 @@ const SignUpScreen: React.FC = () => {
             value={fullName}
             onChangeText={setFullName}
             keyboardType="default"
+            placeholder='Enter your name'
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -52,6 +53,8 @@ const SignUpScreen: React.FC = () => {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            placeholder='Enter your email'
+
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -59,6 +62,8 @@ const SignUpScreen: React.FC = () => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
+             placeholder='Enter your password'
+
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -66,12 +71,16 @@ const SignUpScreen: React.FC = () => {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={true}
+             placeholder='Confirm your password'
+
           />
         </View>
 
         <View style={{ height: SPACING.s32 }} />
 
-        <AppButton title="Create Account" onPress={handleSignUp} />
+        <AppButton title="Create Account" onPress={() => navigation.navigate('Login' as never)}
+        style={{ width: '90%' ,  backgroundColor: COLORS.primary , }} 
+        />
 
         <View style={{ height: SPACING.s32 }} />
 
@@ -80,7 +89,7 @@ const SignUpScreen: React.FC = () => {
           <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>
             Have an account?{' '}
             {/* The accent color is now named 'secondary' but the value is the same. */}
-            <Text style={{ color: COLORS.secondary, fontWeight: '700' }}>Login</Text>
+            <Text style={{ color: COLORS.primary, fontWeight: '700' }}>Login</Text>
           </Text>
         </Pressable>
 

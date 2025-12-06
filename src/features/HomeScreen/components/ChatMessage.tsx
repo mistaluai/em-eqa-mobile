@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   evidenceText: {
     // UI CHANGE: Text color from desertSand to secondary
-    color: COLORS.secondary,
+    color: COLORS.primary,
     textDecorationLine: 'underline',
   },
 });

@@ -53,7 +53,7 @@ const DataPrivacyControlScreen: React.FC = () => {
           title="Delete All My Data"
           onPress={() => setIsDeleteModalVisible(true)}
           // Variant remains 'danger', but its colors will be handled by the internal AppButton styles using COLORS.secondary
-          variant="danger" 
+          variant="primary" 
           style={styles.deleteButton}
         />
       </View>
@@ -79,8 +79,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   deleteButton: {
-    width: '100%',
+    width: '90%',
     marginTop: SPACING.s12,
+    color: COLORS.primary,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+    marginHorizontal: SPACING.s20,
+    
   },
 });
 

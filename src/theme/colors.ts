@@ -1,10 +1,10 @@
 export const COLORS = {
   // Primary/Action Colors (These are fine as they are meant to contrast)
-  primary: '#3023CE',         // ultraViolet
+  primary: '#2F23C3',         // ultraViolet
   primaryLight: '#C5BAFF',    // lightLavender
 
   // Secondary/Accent Color
-  secondary: '#F5DEB3',       // desertSand
+  secondary: '#df9711ff',       // desertSand
 
   // Background Colors (For a Light UI)
   backgroundLight: '#FFFFFF', // UI CHANGE: Main canvas (White)
@@ -18,4 +18,5 @@ export const COLORS = {
   // Border/Separator Colors
   borderLight: '#EAEAEA',     // UI CHANGE: Light border on light background (gray200)
   borderDark: '#3A3A3A',      // Darker border if needed
+  warning : 'red'
 } as const;

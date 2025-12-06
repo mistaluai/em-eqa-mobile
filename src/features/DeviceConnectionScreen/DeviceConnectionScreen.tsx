@@ -36,10 +36,12 @@ const DeviceConnectionScreen: React.FC = () => {
         />
 
         <AppButton
-          title="Reconnect Device"
+          title="Reconnect Device" 
+          //variant='primary'
           onPress={handleReconnect}
           disabled={status === 'connected'}
-          style={styles.reconnectButton}
+          style={styles.reconnectButton }
+          
         />
 
         <View style={{ flex: 1 }} />
@@ -60,7 +62,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   reconnectButton: {
-    width: '100%',
+    width: '80%',
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+    marginTop: SPACING.s16,
+    //backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary,
+    marginHorizontal: SPACING.s24,
+    paddingHorizontal: SPACING.s12,
+    
   },
 });
 

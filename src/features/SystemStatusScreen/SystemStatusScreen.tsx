@@ -56,7 +56,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="server-outline"
           statusText="28 GB used"
           detailText="Available: 100 GB"
-          statusColor={COLORS.secondary} // Using secondary alias for desertSand
+          statusColor={COLORS.primary} // Using secondary alias for desertSand
         />
 
         <View style={{ height: SPACING.s32 }} />
