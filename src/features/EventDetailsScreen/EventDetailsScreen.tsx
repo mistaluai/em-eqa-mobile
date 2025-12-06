@@ -6,9 +6,9 @@ import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 import { COLORS } from '../../theme/colors';
 import { SPACING } from '../../theme/styles';
-import { VideoPlaceholder } from './components/VideoPlaceholder';
 import { EventMetadata } from './components/EventMetadata';
 import { SummaryCard } from './components/SummaryCard';
+import { VideoPlaceholder } from './components/VideoPlaceholder';
 
 const EventDetailsScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -28,8 +28,6 @@ const EventDetailsScreen: React.FC = () => {
       <AppHeader
         title="Event Details"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <ScrollView contentContainerStyle={styles.container}>

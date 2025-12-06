@@ -15,8 +15,6 @@ const SystemStatusScreen: React.FC = () => {
       <AppHeader
         title="System Status"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <ScrollView contentContainerStyle={styles.container}>
@@ -60,7 +58,7 @@ const SystemStatusScreen: React.FC = () => {
           detailText="Available: 100 GB"
           statusColor={COLORS.desertSand}
         />
-        
+
         <View style={{ height: SPACING.s32 }} />
       </ScrollView>
     </SafeAreaView>

@@ -6,9 +6,9 @@ import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 import { COLORS } from '../../theme/colors';
 import { SPACING, TYPOGRAPHY } from '../../theme/styles';
-import { RecordingPermissionCard } from './components/RecordingPermissionCard';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
 import { DeletionConfirmationModal } from './components/DeletionConfirmationModal';
+import { RecordingPermissionCard } from './components/RecordingPermissionCard';
 
 const DataPrivacyControlScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -26,8 +26,6 @@ const DataPrivacyControlScreen: React.FC = () => {
       <AppHeader
         title="Privacy & Data Control"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <DeletionConfirmationModal

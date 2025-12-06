@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
+import { Clip, UploadStatus } from '../../shared/types';
 import { COLORS } from '../../theme/colors';
 import { SCREEN, SPACING } from '../../theme/styles';
-import { Clip, UploadStatus } from '../../shared/types';
-import { UploadStatusDashboard } from './components/UploadStatusDashboard';
 import { ClipSection } from './components/ClipSection';
+import { UploadStatusDashboard } from './components/UploadStatusDashboard';
 
 const mockClips: Clip[] = [
   { name: 'Meeting_20241205_1430', progress: 100, status: 'completed' },
@@ -53,8 +53,6 @@ const ClipUploadSyncScreen: React.FC = () => {
       <AppHeader
         title="Clip Upload & Sync"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <ScrollView contentContainerStyle={SCREEN.container}>

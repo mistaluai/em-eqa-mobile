@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
+import { Filter } from '../../shared/types';
 import { COLORS } from '../../theme/colors';
 import { SPACING } from '../../theme/styles';
-import { Filter } from '../../shared/types';
-import { FilterBar } from './components/FilterBar';
 import { EventCard } from './components/EventCard';
+import { FilterBar } from './components/FilterBar';
 import { mockEvents } from './constants';
 
 const TimelineEventsScreen: React.FC = () => {
@@ -21,8 +21,6 @@ const TimelineEventsScreen: React.FC = () => {
       <AppHeader
         title="Timeline & Events"
         showBack={false}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <View style={styles.container}>

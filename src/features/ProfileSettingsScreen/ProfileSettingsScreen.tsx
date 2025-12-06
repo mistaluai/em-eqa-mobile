@@ -30,8 +30,6 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
       <AppHeader
         title="Profile & Recording Settings"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
       />
 
       <TriggerSelectionModal

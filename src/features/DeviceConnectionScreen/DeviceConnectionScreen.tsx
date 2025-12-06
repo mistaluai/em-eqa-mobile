@@ -6,8 +6,8 @@ import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 import { COLORS } from '../../theme/colors';
 import { SPACING } from '../../theme/styles';
-import { LivePreviewBox } from './components/LivePreviewBox';
 import { ConnectionStatusCard } from './components/ConnectionStatusCard';
+import { LivePreviewBox } from './components/LivePreviewBox';
 
 const DeviceConnectionScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -24,8 +24,8 @@ const DeviceConnectionScreen: React.FC = () => {
       <AppHeader
         title="Device Connection"
         showBack={true}
-        rightIconName="menu-outline"
-        onRightIconPress={() => console.log('Open Menu')}
+      // rightIconName="menu-outline"
+      // onRightIconPress={() => console.log('Open Menu')}
       />
 
       <View style={styles.container}>
