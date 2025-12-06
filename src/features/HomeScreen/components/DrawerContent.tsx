@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+// CHECK THIS PATH: Ensure it matches your folder structure exactly
 import { COLORS } from '../../../theme/colors';
 import { SPACING, TYPOGRAPHY } from '../../../theme/styles';
 
@@ -30,11 +31,15 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
   return (
     <View style={styles.drawerContainer}>
       <View style={styles.drawerHeader}>
-        <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white }]}>EM-EQA Menu</Text>
+        {/* Added explicit color: 'white' to debug theme issues */}
+        <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white || 'white' }]}>
+          EM-EQA Menu
+        </Text>
         <Pressable onPress={onClose} style={{ padding: SPACING.s8 }}>
-          <Ionicons name="close-outline" size={32} color={COLORS.white} />
+          <Ionicons name="close-outline" size={32} color={COLORS.white || 'white'} />
         </Pressable>
       </View>
+
       {NAV_ITEMS.map((item) => (
         <Pressable
           key={item.name}
@@ -44,14 +49,34 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
           }}
           style={styles.drawerItem}
         >
-          <Ionicons name={item.icon as any} size={24} color={COLORS.lightLavender} />
-          <Text style={[TYPOGRAPHY.BodyM, styles.drawerItemText]}>{item.name}</Text>
+          <Ionicons
+            name={item.icon as any}
+            size={24}
+            // Fallback to white if COLORS.lightLavender is undefined
+            color={COLORS.lightLavender || 'white'}
+          />
+          <Text style={[
+            TYPOGRAPHY.BodyM,
+            styles.drawerItemText,
+            // Ensure color is applied even if style fails
+            { color: COLORS.white || 'white' }
+          ]}>
+            {item.name}
+          </Text>
         </Pressable>
       ))}
-      <View style={{ flex: 1 }} />
+
+      {/* Replaced flex: 1 spacer with a fixed margin if needed, or remove it */}
+      <View style={{ marginTop: 20 }} />
+
       <Pressable onPress={() => navigation.navigate('Login' as never)} style={styles.drawerItem}>
-        <Ionicons name="log-out-outline" size={24} color={COLORS.desertSand} />
-        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.desertSand, marginLeft: SPACING.s12 }]}>Log Out</Text>
+        <Ionicons name="log-out-outline" size={24} color={COLORS.desertSand || 'red'} />
+        <Text style={[
+          TYPOGRAPHY.BodyM,
+          { color: COLORS.desertSand || 'red', marginLeft: SPACING.s12 }
+        ]}>
+          Log Out
+        </Text>
       </Pressable>
     </View>
   );
@@ -59,8 +84,9 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
 
 const styles = StyleSheet.create({
   drawerContainer: {
-    flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    // REMOVED flex: 1. This prevents the modal from collapsing or clipping.
+    width: '100%',
+    backgroundColor: COLORS.carbonBlack || '#121212', // Fallback color
     padding: SPACING.s24,
   },
   drawerHeader: {
@@ -68,6 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: SPACING.s32,
+    // Ensure padding doesn't push it off screen
     paddingTop: SPACING.s12,
   },
   drawerItem: {
@@ -75,12 +102,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: SPACING.s16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.gray700,
+    borderBottomColor: COLORS.gray700 || '#333',
   },
   drawerItemText: {
-    color: COLORS.white,
+    color: COLORS.white || 'white',
     marginLeft: SPACING.s12,
     fontWeight: '600',
   },
 });
-

@@ -4,9 +4,11 @@
     "strict": true,
     "esModuleInterop": true,
     "jsx": "react",
-    "baseUrl": ".",                      // ← ADD THIS
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
@@ -15,6 +17,8 @@
     "**/*.jsx",
     "**/*.js",
     "app/_layout.tsx",
-    "app/index.tsx"
+    "app/index.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }
