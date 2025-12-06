@@ -20,9 +20,8 @@ const Stack = createNativeStackNavigator();
 
 // Mock function to check if onboarding is done and user is logged in
 const getInitialRoute = async () => {
-  // In a real app, this would check AsyncStorage/SecureStore/Auth status
   const isLoggedIn = false;
-  const onboardingDone = false; // Set to false to force Onboarding for first view
+  const onboardingDone = false;
 
   if (!onboardingDone) {
     return 'Onboarding';
@@ -52,24 +51,43 @@ const Index = () => {
     <Stack.Navigator
       initialRouteName={initialRoute}
       screenOptions={{
-        headerShown: false, 
+        headerShown: false,
         contentStyle: { backgroundColor: '#1A1A1A' },
-        animation: 'slide_from_right',
+        // Use 'default' to let iOS/Android use their smoothest native standard
+        animation: 'default',
       }}
     >
-      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignUpScreen} />
+      {/* AUTH FLOW: Use Fade for a cleaner switch */}
+      <Stack.Group screenOptions={{ animation: 'fade' }}>
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignUpScreen} />
+      </Stack.Group>
+
+      {/* MAIN APP */}
       <Stack.Screen name="Home" component={HomeScreen} />
-      
+
       <Stack.Screen name="DeviceConnection" component={DeviceConnectionScreen} />
       <Stack.Screen name="TimelineEvents" component={TimelineEventsScreen} />
       <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
       <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
-      <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
       <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
-      
-      <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
+
+      {/* MODAL / DETAILS FLOW 
+          presentation: 'modal' makes it slide up like a card (iOS) 
+          or full screen dialog (Android) 
+      */}
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          name="ProfileSettings"
+          component={ProfileSettingsScreen}
+        />
+        <Stack.Screen
+          name="EventDetails"
+          component={EventDetailsScreen}
+        />
+      </Stack.Group>
+
     </Stack.Navigator>
   );
 };
