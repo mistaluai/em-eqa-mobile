@@ -17,7 +17,7 @@ export const DeletionConfirmationModal: React.FC<DeletionConfirmationModalProps>
   onClose,
   onConfirm,
 }) => (
-  <AppModal isVisible={isVisible} onClose={onClose}>
+  <AppModal isVisible={isVisible} onClose={onClose} position='center'>
     <View style={styles.container}>
       <Ionicons name="warning-outline" size={50} color={COLORS.desertSand} style={{ marginBottom: SPACING.s16 }} />
       <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s8 }]}>

@@ -16,13 +16,21 @@ interface EvidenceModalProps {
 }
 
 export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose, onGoToEventDetails }) => (
-  <AppModal isVisible={isVisible} onClose={onClose} modalWidth={width * 0.95}>
+  <AppModal
+    isVisible={isVisible}
+    onClose={onClose}
+    modalWidth={width * 0.95}
+    position="center"
+  >
     <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-      <Pressable onPress={onClose}>
+      <Pressable onPress={onClose} hitSlop={10}>
         <Ionicons name="close-circle-outline" size={32} color={COLORS.softGray} />
       </Pressable>
     </View>
-    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s16 }]}>Evidence Clip</Text>
+
+    <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.white, marginBottom: SPACING.s16, textAlign: 'center' }]}>
+      Evidence Clip
+    </Text>
 
     <View style={styles.videoPlaceholder}>
       <Ionicons name="play-circle-outline" size={80} color={COLORS.softGray} />
