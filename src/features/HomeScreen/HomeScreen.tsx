@@ -1,7 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Dimensions, Pressable } from 'react-native';
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  View
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
 import AppModal from '../../components/ModalComponent';
@@ -32,13 +38,42 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    // FIX 1: Ensure SafeAreaView takes full height
+    <SafeAreaView style={[SCREEN.safeArea, { flex: 1 }]}>
+
+      {/* Header stays OUTSIDE the keyboard view so it doesn't get pushed off */}
       <AppHeader
         title="EM-EQA"
         showBack={false}
         rightIconName="person-circle-outline"
         onRightIconPress={() => navigation.navigate('ProfileSettings' as never)}
       />
+
+      {/* FIX 2: KeyboardAvoidingView fills the space between Header and Bottom */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        // Tweak this number if input is still slightly hidden (try 60-100)
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+      >
+
+        {/* FIX 3: THE FLEX CHAIN FIX 
+            This View forces the ChatContainer to occupy all available space 
+            but shrink when the keyboard pushes the InputBar up. 
+        */}
+        <View style={{ flex: 1 }}>
+          <ChatContainer
+            messages={mockChatHistory}
+            onEvidencePress={handleEvidencePress}
+          />
+        </View>
+
+        <InputBar
+          onVoiceInput={() => console.log('Voice Input')}
+          onSend={handleSendMessage}
+        />
+
+      </KeyboardAvoidingView>
 
       <EvidenceModal
         isVisible={isModalVisible}
@@ -49,21 +84,13 @@ const HomeScreen: React.FC = () => {
         }}
       />
 
-      <ChatContainer messages={mockChatHistory} onEvidencePress={handleEvidencePress} />
-
-      <InputBar
-        onVoiceInput={() => console.log('Voice Input')}
-        onSend={handleSendMessage}
-      />
-
-      
       <AppModal
-  isVisible={isDrawerOpen}
-  onClose={() => setIsDrawerOpen(false)}
-  modalWidth={width * 0.85}   // or whatever you like (280–320 is perfect)
->
-  <DrawerContent onClose={() => setIsDrawerOpen(false)} />
-</AppModal>
+        isVisible={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        modalWidth={width * 0.85}
+      >
+        <DrawerContent onClose={() => setIsDrawerOpen(false)} />
+      </AppModal>
 
       <Pressable
         onPress={() => setIsDrawerOpen(true)}
@@ -76,4 +103,3 @@ const HomeScreen: React.FC = () => {
 };
 
 export default HomeScreen;
-
