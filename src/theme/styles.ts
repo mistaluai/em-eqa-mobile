@@ -117,6 +117,95 @@ export const SCREEN = {
     padding: SPACING.s24,
     alignItems: 'center' as const,
   } as ViewStyle,
+  // Login Screen specific styles
+  loginTopSpacer: {
+    flex: 1,
+    minHeight: 60,
+  } as ViewStyle,
+  loginLogoSpacer: {
+    height: SPACING.s32 + 8,
+  } as ViewStyle,
+  loginTitleSpacer: {
+    height: SPACING.s32 + 16,
+  } as ViewStyle,
+  loginFormContainer: {
+    width: '100%',
+  } as ViewStyle,
+  loginButtonSpacer: {
+    height: SPACING.s32,
+  } as ViewStyle,
+  loginButton: {
+    width: '90%',
+    backgroundColor: COLORS.primary,
+  } as ViewStyle,
+  loginBottomSpacer: {
+    height: SPACING.s32 * 2,
+  } as ViewStyle,
+  // SignUp Screen specific styles
+  signUpTopSpacer: {
+    flex: 0.5,
+    minHeight: 20,
+  } as ViewStyle,
+  signUpPhotoSpacer: {
+    height: SPACING.s32 + 16,
+  } as ViewStyle,
+  signUpTitleSpacer: {
+    height: SPACING.s32 + 16,
+  } as ViewStyle,
+  signUpFormContainer: {
+    width: '100%',
+  } as ViewStyle,
+  signUpButton: {
+    width: '90%',
+    backgroundColor: COLORS.primary,
+  } as ViewStyle,
+  signUpBottomSpacer: {
+    flex: 1,
+    minHeight: 20,
+  } as ViewStyle,
+  // Home Screen specific styles
+  homeInputBarContainer: {
+    marginBottom: 10,
+    paddingBottom: 15,
+  } as ViewStyle,
+  // Profile Settings Screen specific styles
+  profileChangePasswordLink: {
+    alignSelf: 'flex-start' as const,
+    marginTop: SPACING.s12,
+  } as ViewStyle,
+  // Timeline Events Screen specific styles
+  timelineContainer: {
+    flex: 1,
+    paddingHorizontal: SPACING.s24,
+  } as ViewStyle,
+  // System Status Screen specific styles
+  systemStatusContainer: {
+    padding: SPACING.s24,
+    gap: SPACING.s32,
+  } as ViewStyle,
+  // Device Connection Screen specific styles
+  deviceConnectionContainer: {
+    flex: 1,
+    padding: SPACING.s24,
+    alignItems: 'center' as const,
+  } as ViewStyle,
+  deviceReconnectButton: {
+    width: '80%',
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+    marginTop: SPACING.s16,
+    backgroundColor: COLORS.primary,
+    marginHorizontal: SPACING.s24,
+    paddingHorizontal: SPACING.s12,
+  } as ViewStyle,
+  // Data Privacy Control Screen specific styles
+  dataPrivacyDeleteButton: {
+    width: '90%',
+    marginTop: SPACING.s12,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+    marginHorizontal: SPACING.s20,
+  } as ViewStyle,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -350,6 +439,9 @@ export const INPUT_BAR = {
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: COLORS.borderLight, // Light border
   } as ViewStyle,
+  voiceButton: {
+    padding: SPACING.s8,
+  } as ViewStyle,
   pill: {
     flex: 1,
     height: 48,
@@ -358,6 +450,15 @@ export const INPUT_BAR = {
     marginHorizontal: SPACING.s12,
     justifyContent: 'center' as const,
     paddingHorizontal: SPACING.s16,
+    color: COLORS.textPrimary,
+  } as ViewStyle,
+  sendButton: {
+    backgroundColor: COLORS.primary,
+    width: 48,
+    height: 48,
+    borderRadius: RADIUS.full,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
   } as ViewStyle,
 } as const;
 
@@ -448,7 +549,7 @@ export const CHAT = {
     alignSelf: 'flex-end' as const,
   } as ViewStyle,
   evidenceText: {
-    color: COLORS.secondary,
+    color: COLORS.primary,
     textDecorationLine: 'underline' as const,
   } as TextStyle,
 } as const;
@@ -458,9 +559,11 @@ export const CHAT = {
 // ──────────────────────────────────────────────────
 export const DRAWER = {
   container: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundLight, // Light drawer background
+    width: '100%',
+    backgroundColor: COLORS.backgroundLight,
     padding: SPACING.s24,
+    position: 'absolute' as const,
+    direction: 'ltr' as const,
   } as ViewStyle,
   header: {
     flexDirection: 'row' as const,
@@ -474,13 +577,30 @@ export const DRAWER = {
     alignItems: 'center' as const,
     paddingVertical: SPACING.s16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.borderLight, // Light border
+    borderBottomColor: COLORS.borderDark,
   } as ViewStyle,
   itemText: {
-    color: COLORS.textPrimary, // Dark text
+    color: COLORS.textPrimary,
     marginLeft: SPACING.s12,
     fontWeight: '600' as const,
   } as TextStyle,
+  // Search Drawer specific styles
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+  } as ViewStyle,
+  drawerContainer: {
+    position: 'absolute' as const,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: COLORS.backgroundLight,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
+  } as ViewStyle,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -643,6 +763,10 @@ export const LIST = {
 // ONBOARDING
 // ──────────────────────────────────────────────────
 export const ONBOARDING = {
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  } as ViewStyle,
   header: {
     height: 48,
     flexDirection: 'row' as const,
@@ -650,6 +774,13 @@ export const ONBOARDING = {
     paddingHorizontal: SPACING.s24,
     zIndex: 1,
   } as ViewStyle,
+  skipButton: {
+    paddingVertical: SPACING.s8,
+  } as ViewStyle,
+  skipText: {
+    color: COLORS.textSecondary,
+    fontWeight: '600' as const,
+  } as TextStyle,
   bottomContainer: {
     height: 220,
     paddingHorizontal: SPACING.s32,
@@ -744,10 +875,10 @@ export const ONBOARDING = {
     textAlign: 'center' as const,
     lineHeight: 22,
   } as TextStyle,
-  skipText: {
-    color: COLORS.textSecondary, 
-    fontWeight: '600' as const,
-  } as TextStyle,
+  // skipText: {
+  //   color: COLORS.textSecondary, 
+  //   fontWeight: '600' as const,
+  // } as TextStyle,
   guestText: {
     color: COLORS.textSecondary, 
     textAlign: 'center' as const,
@@ -790,12 +921,21 @@ export const TEXT = {
     fontWeight: '800' as const,
   } as TextStyle,
   signup: {
-    color: COLORS.textSecondary, 
+    color: COLORS.textPrimary, 
     textAlign: 'center' as const,
+  } as TextStyle,
+  signupLink: {
+    color: COLORS.primary,
+    fontWeight: '700' as const,
   } as TextStyle,
   login: {
     color: COLORS.textSecondary, 
     textAlign: 'center' as const,
+  } as TextStyle,
+  forgotPassword: {
+    color: COLORS.textSecondary,
+    textAlign: 'right' as const,
+    textDecorationLine: 'underline' as const,
   } as TextStyle,
   eventTitle: {
     color: COLORS.textPrimary, 
@@ -821,6 +961,12 @@ export const TEXT = {
     marginTop: SPACING.s16,
     fontWeight: '700' as const,
   } as TextStyle,
+  changePassword: {
+    color: COLORS.primary,
+    textDecorationLine: 'underline' as const,
+    fontWeight: '600' as const,
+    paddingLeft: 222,
+  } as TextStyle,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -845,6 +991,38 @@ export const SLIDER = {
     paddingHorizontal: SPACING.s8,
   } as ViewStyle,
 } as const;
+// ──────────────────────────────────────────────────
+// LOGIN SCREEN
+// ──────────────────────────────────────────────────
+export const LOGIN = {
+  topSpacer: {
+    flex: 1,
+    minHeight: 60,
+  } as ViewStyle,
+  logoSpacer: {
+    height: SPACING.s32 + 8,
+  } as ViewStyle,
+  titleSpacer: {
+    height: SPACING.s32 + 16,
+  } as ViewStyle,
+  formContainer: {
+    width: '100%',
+  } as ViewStyle,
+  buttonSpacer: {
+    height: SPACING.s32,
+  } as ViewStyle,
+  button: {
+    width: '90%',
+    backgroundColor: COLORS.primary,
+  } as ViewStyle,
+  bottomSpacer: {
+    height: SPACING.s32 * 2,
+  } as ViewStyle,
+} as const;
+
+// ──────────────────────────────────────────────────
+// SIDEBAR / SEARCH DRAWER
+// ──────────────────────────────────────────────────
 export const sidebarStyles = StyleSheet.create({
   // The content wrapper inside SafeAreaView
   contentContainer: {

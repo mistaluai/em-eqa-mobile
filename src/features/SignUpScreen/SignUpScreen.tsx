@@ -1,51 +1,50 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { COLORS } from '../../theme/colors';
-import { FORM, SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
+import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
 import { PhotoUploadPlaceholder } from './components/PhotoUploadPlaceholder';
+import { useSignUpLogic } from './hooks/useSignUpLogic';
 
+/**
+ * SignUpScreen - Main screen component for user registration
+ * Handles composition and rendering using hooks and components
+ */
 const SignUpScreen: React.FC = () => {
-  const navigation = useNavigation();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      console.error('Passwords do not match');
-      return;
-    }
-    console.log('Signing up with:', fullName, email);
-    // navigation.navigate('Home' as never); // Commented out to prevent errors if 'Home' isn't defined
-  };
+  const {
+    fullName,
+    email,
+    password,
+    confirmPassword,
+    setFullName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    handleSignUp,
+    handleNavigateToLogin,
+  } = useSignUpLogic();
 
   return (
-    // Assuming SCREEN.safeArea uses COLORS.backgroundLight
-    <SafeAreaView style={SCREEN.safeArea}> 
+    <SafeAreaView style={SCREEN.safeArea}>
       <ScrollView contentContainerStyle={SCREEN.scrollContainer} keyboardShouldPersistTaps="handled">
-        <View style={{ flex: 0.5, minHeight: 20 }} />
+        <View style={SCREEN.signUpTopSpacer} />
 
         <PhotoUploadPlaceholder onPress={() => console.log('Open image picker')} />
 
-        <View style={{ height: SPACING.s32 + 16 }} />
+        <View style={SCREEN.signUpPhotoSpacer} />
 
-        {/* Assuming TEXT.title uses COLORS.textPrimary */}
         <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>Create Account</Text>
 
-        <View style={{ height: SPACING.s32 + 16 }} />
+        <View style={SCREEN.signUpTitleSpacer} />
 
-        <View style={FORM.container}>
+        <View style={SCREEN.signUpFormContainer}>
           <AppInput
             label="Full Name"
             value={fullName}
             onChangeText={setFullName}
             keyboardType="default"
-            placeholder='Enter your name'
+            placeholder="Enter your name"
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -53,8 +52,7 @@ const SignUpScreen: React.FC = () => {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
-            placeholder='Enter your email'
-
+            placeholder="Enter your email"
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -62,8 +60,7 @@ const SignUpScreen: React.FC = () => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
-             placeholder='Enter your password'
-
+            placeholder="Enter your password"
           />
           <View style={{ height: SPACING.s16 }} />
           <AppInput
@@ -71,29 +68,24 @@ const SignUpScreen: React.FC = () => {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={true}
-             placeholder='Confirm your password'
-
+            placeholder="Confirm your password"
           />
         </View>
 
         <View style={{ height: SPACING.s32 }} />
 
-        <AppButton title="Create Account" onPress={() => navigation.navigate('Login' as never)}
-        style={{ width: '90%' ,  backgroundColor: COLORS.primary , }} 
-        />
+        <AppButton title="Create Account" onPress={handleSignUp} style={SCREEN.signUpButton} />
 
         <View style={{ height: SPACING.s32 }} />
 
-        <Pressable onPress={() => navigation.navigate('Login' as never)}>
-          {/* Assuming TEXT.login uses COLORS.textPrimary, and the bold color remains as COLORS.secondary */}
+        <Pressable onPress={handleNavigateToLogin}>
           <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>
             Have an account?{' '}
-            {/* The accent color is now named 'secondary' but the value is the same. */}
-            <Text style={{ color: COLORS.primary, fontWeight: '700' }}>Login</Text>
+            <Text style={TEXT.signupLink}>Login</Text>
           </Text>
         </Pressable>
 
-        <View style={{ flex: 1, minHeight: 20 }} />
+        <View style={SCREEN.signUpBottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );

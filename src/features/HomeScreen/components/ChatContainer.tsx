@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { CHAT } from '../../../theme/styles';
 import { ChatMessage } from './ChatMessage';
 
 interface ChatMessageData {
@@ -14,8 +15,11 @@ interface ChatContainerProps {
   onEvidencePress?: (messageId: number) => void;
 }
 
+/**
+ * ChatContainer - Pure presentation component for chat messages list
+ */
 export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => (
-  <View style={styles.chatContainer}>
+  <View style={CHAT.container}>
     <FlatList
       data={messages.slice().reverse()}
       renderItem={({ item }) => (
@@ -25,19 +29,8 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEviden
         />
       )}
       keyExtractor={(item) => item.id.toString()}
-      style={styles.chatHistory}
+      style={CHAT.history}
       inverted
     />
   </View>
 );
-
-const styles = StyleSheet.create({
-  chatContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  chatHistory: {
-    flexGrow: 1,
-  },
-});

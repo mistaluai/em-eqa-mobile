@@ -1,0 +1,2 @@
+export { useDataPrivacyControlLogic } from './useDataPrivacyControlLogic';
+

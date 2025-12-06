@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { sidebarStyles } from '../../../theme/styles';
+import { DRAWER, sidebarStyles } from '../../../theme/styles';
 // import { DrawerContent } from './DrawerContent'; // Not needed if we use the generated code
 
 const { width } = Dimensions.get('window');
@@ -78,10 +78,10 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
   return (
     <Modal visible={visible} transparent animationType="fade">
       {/* BACKDROP */}
-      <Pressable style={styles.backdrop} onPress={onClose} />
+      <Pressable style={DRAWER.backdrop} onPress={onClose} />
 
       {/* LEFT DRAWER */}
-      <View style={[styles.drawer, { width: DRAWER_WIDTH }]}>
+      <View style={[DRAWER.drawerContainer, { width: DRAWER_WIDTH }]}>
         <SafeAreaView style={{ flex: 1 }}>
           <DrawerSidebarContent /> {/* INJECTED SIDEBAR CONTENT HERE */}
         </SafeAreaView>
@@ -90,21 +90,4 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
   );
 };
 
-const styles = StyleSheet.create({
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-  },
-  drawer: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: COLORS.backgroundLight,
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-});
+// Styles moved to central theme/styles.ts

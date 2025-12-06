@@ -18,7 +18,7 @@ export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ onPress }) =
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    aspectRatio: 16 / 9,
+    aspectRatio: (16 / 9)/1.25,
     // UI Change: Background color switched from COLORS.gray700 to COLORS.backgroundNeutral
     backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,

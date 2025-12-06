@@ -1,0 +1,2 @@
+export { useEventDetailsLogic } from './useEventDetailsLogic';
+

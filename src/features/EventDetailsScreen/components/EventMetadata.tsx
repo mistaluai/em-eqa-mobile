@@ -17,13 +17,13 @@ export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, locat
     <View style={styles.pillsContainer}>
       <View style={styles.pill}>
         {/* UI Change: Icon color switched from COLORS.desertSand to COLORS.secondary */}
-        <Ionicons name="time-outline" size={16} color={COLORS.secondary} />
+        <Ionicons name="time-outline" size={20} color={COLORS.primary} />
         {/* UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary */}
         <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{time}</Text>
       </View>
       <View style={styles.pill}>
         {/* UI Change: Icon color switched from COLORS.desertSand to COLORS.secondary */}
-        <Ionicons name="location-outline" size={16} color={COLORS.secondary} />
+        <Ionicons name="location-outline" size={20} color={COLORS.primary} />
         {/* UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary */}
         <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{location}</Text>
       </View>
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   },
   pillText: {
     // UI Change: Pill text color switched from COLORS.desertSand to COLORS.secondary
-    color: COLORS.secondary,
+    color: COLORS.textSecondary,
     marginLeft: SPACING.s4,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });

@@ -1,40 +1,42 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { COLORS } from '../../theme/colors';
-import { FORM, SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
+import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
 import { LogoPlaceholder } from './components/LogoPlaceholder';
+import { useLoginLogic } from './hooks/useLoginLogic';
 
+/**
+ * LoginScreen - Main screen component for user authentication
+ * Handles composition and rendering using hooks and components
+ */
 const LoginScreen: React.FC = () => {
-  const navigation = useNavigation();
   const { width } = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    console.log('Logging in with:', email, password);
-    navigation.navigate('Home' as never);
-  };
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    handleLogin,
+    handleForgotPassword,
+    handleNavigateToSignUp,
+  } = useLoginLogic();
 
   return (
-    // UI CHANGE: Screen background from dark to backgroundLight
-    <SafeAreaView style={[SCREEN.safeArea, { backgroundColor: COLORS.backgroundLight }]}>
+    <SafeAreaView style={SCREEN.safeArea}>
       <ScrollView contentContainerStyle={SCREEN.scrollContainer} keyboardShouldPersistTaps="handled">
-        <View style={{ flex: 1, minHeight: 60 }} />
+        <View style={SCREEN.loginTopSpacer} />
 
         <LogoPlaceholder size={width * 0.5} />
 
-        <View style={{ height: SPACING.s32 + 8 }} />
+        <View style={SCREEN.loginLogoSpacer} />
 
-        {/* UI CHANGE: Title text color from white/light to textPrimary */}
-        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title, { color: COLORS.textPrimary }]}>Welcome</Text>
+        <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>Welcome</Text>
 
-        <View style={{ height: SPACING.s32 + 16 }} />
+        <View style={SCREEN.loginTitleSpacer} />
 
-        <View style={FORM.container}>
+        <View style={SCREEN.loginFormContainer}>
           <AppInput
             label="Email Address"
             value={email}
@@ -49,32 +51,25 @@ const LoginScreen: React.FC = () => {
             secureTextEntry={true}
           />
           <View style={{ height: SPACING.s12 }} />
-          <Pressable onPress={() => console.log('Forgot Password')}>
-            {/* UI CHANGE: Forgot Password link text color from softGray/white to textSecondary */}
-            <Text style={[TYPOGRAPHY.Caption, FORM.forgotPassword, { color: COLORS.textSecondary ,    textDecorationLine: 'underline',
-}]}>Forgot Password?</Text>
+          <Pressable onPress={handleForgotPassword}>
+            <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>Forgot Password?</Text>
           </Pressable>
         </View>
 
-        <View style={{ height: SPACING.s32,  }} />
+        <View style={SCREEN.loginButtonSpacer} />
 
-        <AppButton title="Login"  onPress={handleLogin} 
-          style={{ width: '90%' ,  backgroundColor: COLORS.primary , }}          
-        />
+        <AppButton title="Login" onPress={handleLogin} style={SCREEN.loginButton} />
 
         <View style={{ height: SPACING.s32 }} />
 
-        <Pressable onPress={() => navigation.navigate('Signup' as never)}>
-          <Text style={[TYPOGRAPHY.BodyM, TEXT.signup, { color: COLORS.textPrimary }]}>
+        <Pressable onPress={handleNavigateToSignUp}>
+          <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
             Don't have an account?{' '}
-            {/* UI CHANGE: Link color from desertSand to primary */}
-            <Text style={{ color: COLORS.primary, fontWeight: '700' }}>
-              Sign up
-            </Text>
+            <Text style={TEXT.signupLink}>Sign up</Text>
           </Text>
         </Pressable>
 
-        <View style={{ height: SPACING.s32 * 2 }} />
+        <View style={SCREEN.loginBottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );

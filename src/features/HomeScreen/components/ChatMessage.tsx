@@ -1,8 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
 import { COLORS } from '../../../theme/colors';
-import { RADIUS, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { CHAT, SPACING, TYPOGRAPHY } from '../../../theme/styles';
 
 interface ChatMessageProps {
   message: {
@@ -14,62 +14,21 @@ interface ChatMessageProps {
   onEvidencePress?: () => void;
 }
 
+/**
+ * ChatMessage - Pure presentation component for individual chat message
+ */
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onEvidencePress }) => {
   const isUser = message.sender === 'user';
   return (
-    <View style={[styles.messageRow, isUser ? styles.userMessageRow : styles.aiMessageRow]}>
-      <AppCard style={[styles.messageBubble, isUser ? styles.userBubble : styles.aiBubble]}>
-        <Text style={[TYPOGRAPHY.BodyM, isUser ? styles.userText : styles.aiText]}>{message.text}</Text>
+    <View style={[CHAT.messageRow, isUser ? CHAT.messageRowUser : CHAT.messageRowAI]}>
+      <AppCard style={[CHAT.bubble, isUser ? CHAT.bubbleUser : CHAT.bubbleAI]}>
+        <Text style={[TYPOGRAPHY.BodyM, isUser ? CHAT.textUser : CHAT.textAI]}>{message.text}</Text>
         {message.hasEvidence && (
-          <Pressable onPress={onEvidencePress} style={styles.evidenceButton}>
-            <Text style={[TYPOGRAPHY.Caption, styles.evidenceText]}>See Evidence</Text>
+          <Pressable onPress={onEvidencePress} style={CHAT.evidenceButton}>
+            <Text style={[TYPOGRAPHY.Caption, CHAT.evidenceText]}>See Evidence</Text>
           </Pressable>
         )}
       </AppCard>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  messageRow: {
-    maxWidth: '80%',
-    marginVertical: SPACING.s4,
-  },
-  userMessageRow: {
-    alignSelf: 'flex-end',
-  },
-  aiMessageRow: {
-    alignSelf: 'flex-start',
-  },
-  messageBubble: {
-    padding: SPACING.s12,
-    borderRadius: RADIUS.default,
-  },
-  userBubble: {
-    // UI CHANGE: Background from ultraViolet to primary
-    backgroundColor: COLORS.primary,
-    borderBottomRightRadius: SPACING.s4,
-  },
-  aiBubble: {
-    // UI CHANGE: Background from lightLavender to backgroundNeutral
-    backgroundColor: COLORS.backgroundNeutral,
-    borderBottomLeftRadius: SPACING.s4,
-  },
-  userText: {
-    // UI CHANGE: Text color for contrast on primary (still white)
-    color: COLORS.backgroundLight,
-  },
-  aiText: {
-    // UI CHANGE: Text color from softGray to textPrimary (dark)
-    color: COLORS.textPrimary,
-  },
-  evidenceButton: {
-    marginTop: SPACING.s8,
-    alignSelf: 'flex-end',
-  },
-  evidenceText: {
-    // UI CHANGE: Text color from desertSand to secondary
-    color: COLORS.primary,
-    textDecorationLine: 'underline',
-  },
-});

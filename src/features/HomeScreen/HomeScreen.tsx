@@ -1,98 +1,76 @@
-// screens/HomeScreen.tsx
-
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  View,
-} from 'react-native';
+import React from 'react';
+import { Dimensions, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import AppHeader from '../../components/HeaderComponent';
 import AppModal from '../../components/ModalComponent';
-import { COLORS } from '../../theme/colors';
 import { SCREEN } from '../../theme/styles';
-
 import { ChatContainer } from './components/ChatContainer';
 import { DrawerContent } from './components/DrawerContent';
 import { EvidenceModal } from './components/EvidenceModal';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
 import { mockChatHistory } from './constants';
+import { useHomeLogic } from './hooks/useHomeLogic';
 
 const { width } = Dimensions.get('window');
 
+/**
+ * HomeScreen - Main screen component for chat interface
+ * Handles composition and rendering using hooks and components
+ */
 const HomeScreen: React.FC = () => {
-  const navigation = useNavigation();
-
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
-  const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
-
-  const [chatInput, setChatInput] = useState('');
-
-  const handleSendMessage = () => {
-    if (chatInput.trim()) {
-      setChatInput('');
-    }
-  };
+  const {
+    isDrawerOpen,
+    isSearchDrawerVisible,
+    isEvidenceModalVisible,
+    handleSendMessage,
+    handleEvidencePress,
+    handleCloseEvidenceModal,
+    handleGoToEventDetails,
+    handleOpenDrawer,
+    handleCloseDrawer,
+    handleOpenSearchDrawer,
+    handleCloseSearchDrawer,
+  } = useHomeLogic();
 
   return (
-    <SafeAreaView style={[SCREEN.safeArea, { flex: 1, backgroundColor: COLORS.backgroundLight }]}>
-
-      {/* HEADER */}
+    <SafeAreaView style={[SCREEN.safeArea, { flex: 1 }]}>
       <AppHeader
         title="EM-EQA"
         leftIconName="search-outline"
-        onLeftIconPress={() => setIsSearchDrawerVisible(true)}
+        onLeftIconPress={handleOpenSearchDrawer}
         rightIconName="menu-outline"
-        onRightIconPress={() => setIsDrawerOpen(true)}
+        onRightIconPress={handleOpenDrawer}
       />
 
-      {/* MAIN CHAT AREA */}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={{ flex: 1 }}>
-          <ChatContainer
-            messages={mockChatHistory}
-            onEvidencePress={() => setIsEvidenceModalVisible(true)}
-          />
+          <ChatContainer messages={mockChatHistory} onEvidencePress={handleEvidencePress} />
         </View>
 
-        <View style={{ marginBottom: 10, paddingBottom: 15 }}>
+        <View style={SCREEN.homeInputBarContainer}>
           <InputBar onSend={handleSendMessage} onVoiceInput={() => {}} />
         </View>
       </KeyboardAvoidingView>
 
-      {/* EVIDENCE MODAL */}
       <EvidenceModal
         isVisible={isEvidenceModalVisible}
-        onClose={() => setIsEvidenceModalVisible(false)}
-        onGoToEventDetails={() => {
-          setIsEvidenceModalVisible(false);
-          navigation.navigate('EventDetails' as never);
-        }}
+        onClose={handleCloseEvidenceModal}
+        onGoToEventDetails={handleGoToEventDetails}
       />
 
-      {/* RIGHT SIDE CONTENT DRAWER */}
       <AppModal
         isVisible={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={handleCloseDrawer}
         modalWidth={width * 0.8}
       >
-        <DrawerContent onClose={() => setIsDrawerOpen(false)} />
+        <DrawerContent onClose={handleCloseDrawer} />
       </AppModal>
 
-      {/* LEFT SEARCH DRAWER */}
-      <SearchDrawer
-        visible={isSearchDrawerVisible}
-        onClose={() => setIsSearchDrawerVisible(false)}
-      />
-
+      <SearchDrawer visible={isSearchDrawerVisible} onClose={handleCloseSearchDrawer} />
     </SafeAreaView>
   );
 };
