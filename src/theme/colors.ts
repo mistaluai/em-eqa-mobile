@@ -17,5 +17,14 @@ export const COLORS = {
   // Border/Separator Colors
   borderLight: '#EAEAEA',     // UI CHANGE: Light border on light background (gray200)
   borderDark: '#3A3A3A',      // Darker border if needed
-  warning : 'red'
+  warning: 'red',
+  
+  // Navigation Hub Card Colors
+  navDevice: '#4f46e5',       // indigo-600
+  navTimeline: '#0d9488',     // teal-600
+  navPrivacy: '#dc2626',      // red-600
+  navSync: '#df9711ff',       // amber/orange (using secondary)
+  navProfile: '#3b82f6',      // blue-500
+  navStatus: '#10b981',       // emerald-500
+  navLogoutBg: '#F2F2F7',     // backgroundNeutral for logout icon bg
 } as const;

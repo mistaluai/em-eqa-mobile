@@ -10,6 +10,7 @@ import DeviceConnectionScreen from '@/src/features/DeviceConnectionScreen';
 import EventDetailsScreen from '@/src/features/EventDetailsScreen';
 import HomeScreen from '@/src/features/HomeScreen';
 import LoginScreen from '@/src/features/LoginScreen';
+import NavigationHubScreen from '@/src/features/NavigationHubScreen/NavigationHubScreen';
 import OnboardingScreen from '@/src/features/OnboardingScreen';
 import ProfileSettingsScreen from '@/src/features/ProfileSettingsScreen';
 import SignUpScreen from '@/src/features/SignUpScreen';
@@ -72,6 +73,7 @@ const Index = () => {
       <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
       <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
       <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
+      <Stack.Screen name="NavigationHubScreen" component={NavigationHubScreen} />
 
       {/* MODAL / DETAILS FLOW 
           presentation: 'modal' makes it slide up like a card (iOS) 
@@ -95,7 +97,7 @@ const Index = () => {
 const styles = StyleSheet.create({
   loaderContainer: {
     flex: 1,
-    backgroundColor: COLORS.carbonBlack,
+    backgroundColor: COLORS.backgroundDark,
     justifyContent: 'center',
     alignItems: 'center',
   }

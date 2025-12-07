@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -13,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
-import { LogoPlaceholder } from './components/LogoPlaceholder';
 import { useLoginLogic } from './hooks/useLoginLogic';
 
 const LoginScreen: React.FC = () => {
@@ -75,11 +75,14 @@ const LoginScreen: React.FC = () => {
               transform: [
                 { scale: isKeyboardOpen ? 0.9 : 1 },
               ],
-             // marginBottom: isKeyboardOpen ? 0 : SPACING.s8,
+              // marginBottom: isKeyboardOpen ? 0 : SPACING.s8,
               transitionDuration: '300ms',
-            }}
-          >
-            <LogoPlaceholder size={width * 0.5}  />
+            }}>
+
+            <Image
+              source={require('../../../assets/images/em_logo.png')}
+              style={{ width: 200, height: 200, resizeMode: 'contain' }}
+            />
           </View>
 
           {/* Title */}
@@ -127,9 +130,9 @@ const LoginScreen: React.FC = () => {
           </View>
 
           {/* Login Button */}
-          <View style={{ height: isKeyboardOpen ? SPACING.s16 : SPACING.s24  }} />
+          <View style={{ height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }} />
 
-          <AppButton title="Login" onPress={handleLogin}  style={{ width : "90%"}} />
+          <AppButton title="Login" onPress={handleLogin} style={{ width: "90%" }} />
 
           {/* Signup */}
           <View

@@ -1,5 +1,7 @@
 // components/SearchDrawer.tsx
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+
 import React from 'react';
 import {
   Dimensions,
@@ -7,13 +9,14 @@ import {
   Pressable,
   SafeAreaView,
   Text,
-  TextInput, // Changed TextInputComponent to TextInput
-  TouchableOpacity, // Added for clickable elements
-  View
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { COLORS } from '../../../theme/colors';
 import { DRAWER, sidebarStyles } from '../../../theme/styles';
-// import { DrawerContent } from './DrawerContent'; // Not needed if we use the generated code
+//import {NavigationHub} from "../features/NavigationHubScreen/NavigationHubScreen";
+
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
@@ -26,7 +29,7 @@ interface SearchDrawerProps {
 // --- Reusable Component for Chat History Item ---
 const ChatHistoryItem = ({ title }: { title: string }) => (
   <TouchableOpacity style={sidebarStyles.chatItem}>
-    <Text style={sidebarStyles.chatItemText }>{title}</Text>
+    <Text style={sidebarStyles.chatItemText}>{title}</Text>
   </TouchableOpacity>
 );
 
@@ -34,9 +37,16 @@ const ChatHistoryItem = ({ title }: { title: string }) => (
 const DrawerSidebarContent = () => {
   const SearchIconPlaceholder = () => (
     <View style={sidebarStyles.searchIconPlaceholder}>
-      <Text style={sidebarStyles.searchIconText}>🔍</Text>
+      <Text style={sidebarStyles.searchIconText}>
+        🔍
+      </Text>
     </View>
   );
+  const navigation = useNavigation<any>();
+  const handleProfilePress = () => {
+    navigation.navigate('NavigationHubScreen');
+  
+  };
 
   return (
     <View style={sidebarStyles.contentContainer}>
@@ -46,7 +56,7 @@ const DrawerSidebarContent = () => {
           <TextInput
             style={sidebarStyles.searchBarInput}
             placeholder="Search your chats"
-            placeholderTextColor= {COLORS.textSecondary}
+            placeholderTextColor={COLORS.textSecondary}
           />
           <SearchIconPlaceholder />
         </View>
@@ -64,29 +74,37 @@ const DrawerSidebarContent = () => {
         <ChatHistoryItem title="chat4" />
       </View>
 
-      {/* 3. User Profile Area */}
-      <View style={sidebarStyles.userProfile}>
+      {/* 3. USER PROFILE AREA – NOW PRESSABLE */}
+      <Pressable
+        onPress={handleProfilePress}
+        style={({ pressed }) => [
+          sidebarStyles.userProfile,
+          { opacity: pressed ? 0.7 : 1 }, // nice press feedback
+        ]}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} // easier to tap
+      >
         <View style={sidebarStyles.userPhoto} />
         <Text style={sidebarStyles.userName}>User_name</Text>
-      </View>
+      </Pressable>
     </View>
   );
 };
-// --- END: Sidebar Content Styles and Component ---
 
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
-      {/* BACKDROP */}
+      {/* BACKDROP – closes drawer when tapped */}
       <Pressable style={DRAWER.backdrop} onPress={onClose} />
 
-      {/* LEFT DRAWER */}
+      {/* LEFT DRAWER – stop propagation so taps inside don't close it */}
       <View style={[DRAWER.drawerContainer, { width: DRAWER_WIDTH }]}>
         <SafeAreaView style={{ flex: 1 }}>
-          <DrawerSidebarContent /> {/* INJECTED SIDEBAR CONTENT HERE */}
+          {/* This inner Pressable prevents backdrop onPress from firing when tapping inside the drawer */}
+          <Pressable style={{ flex: 1 }} onPress={(e) => e.stopPropagation()}>
+            <DrawerSidebarContent />
+          </Pressable>
         </SafeAreaView>
       </View>
     </Modal>
   );
 };
-

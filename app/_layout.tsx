@@ -50,7 +50,7 @@ const RootLayout = () => {
         <Stack.Screen name="ClipUploadSyncScreen" options={{ title: 'Upload Sync' }} />
         <Stack.Screen name="ProfileRecordingSettingsScreen" options={{ title: 'Profile Settings' }} />
         <Stack.Screen name="SystemStatusScreen" options={{ title: 'System Status' }} />
-        <Stack.Screen name="SearchDrawer" options={{ title: 'Search History' }} />
+        <Stack.Screen name="NavigationHubScreen" options={{ title: 'Explore Features' }} />
 
       </Stack>
     </>

@@ -1,20 +1,36 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
+interface ChatMessage {
+  id: number;
+  sender: 'user' | 'ai';
+  text: string;
+  hasEvidence?: boolean;
+}
+
 /**
  * Custom hook for HomeScreen logic
- * Handles drawer states, chat input, and navigation
+ * Handles drawer states, chat input, messages, and navigation
  */
 export const useHomeLogic = () => {
   const navigation = useNavigation();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
-  const [chatInput, setChatInput] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { id: 1, sender: 'ai', text: 'Welcome back, John. I have summarized your events from the last 2 hours. You were highly engaged in a meeting about the Q4 budget.', hasEvidence: true },
+    { id: 2, sender: 'user', text: 'What did I agree to do next?', hasEvidence: false },
+    { id: 3, sender: 'ai', text: 'You agreed to draft the initial pitch deck by Friday. I have the full clip if you want to verify the commitment.', hasEvidence: true },
+  ]);
 
-  const handleSendMessage = () => {
-    if (chatInput.trim()) {
-      setChatInput('');
+  const handleSendMessage = (messageText: string) => {
+    if (messageText.trim()) {
+      const newMessage: ChatMessage = {
+        id: messages.length + 1,
+        sender: 'user',
+        text: messageText.trim(),
+        hasEvidence: false,
+      };
+      setMessages(prev => [newMessage, ...prev]);
     }
   };
 
@@ -31,13 +47,13 @@ export const useHomeLogic = () => {
     navigation.navigate('EventDetails' as never);
   };
 
-  const handleOpenDrawer = () => {
-    setIsDrawerOpen(true);
-  };
+  // const handleOpenDrawer = () => {
+  //   setIsDrawerOpen(true);
+  // };
 
-  const handleCloseDrawer = () => {
-    setIsDrawerOpen(false);
-  };
+  // const handleCloseDrawer = () => {
+  //   setIsDrawerOpen(false);
+  // };
 
   const handleOpenSearchDrawer = () => {
     setIsSearchDrawerVisible(true);
@@ -48,19 +64,14 @@ export const useHomeLogic = () => {
   };
 
   return {
-    isDrawerOpen,
     isSearchDrawerVisible,
     isEvidenceModalVisible,
-    chatInput,
-    setChatInput,
+    messages,
     handleSendMessage,
     handleEvidencePress,
     handleCloseEvidenceModal,
     handleGoToEventDetails,
-    handleOpenDrawer,
-    handleCloseDrawer,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
   };
 };
-

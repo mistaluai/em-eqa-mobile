@@ -1,5 +1,5 @@
 // src/theme/styles.ts
-import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 // Note: Assuming the COLORS file is now logically configured for Light UI
 // e.g., COLORS.textPrimary = '#1A1A1A', COLORS.backgroundLight = '#FFFFFF'
 import { COLORS } from './colors';
@@ -8,13 +8,16 @@ import { COLORS } from './colors';
 // SPACING
 // ──────────────────────────────────────────────────
 export const SPACING = {
+  s2: 2,
   s4: 4,
   s8: 8,
+  s10: 10,
   s12: 12,
   s16: 16,
   s20: 20,
   s24: 24,
   s32: 32,
+  s40: 40,
   s64: 64,
   s96: 96,
   s128: 128,
@@ -210,6 +213,52 @@ export const SCREEN = {
     borderColor: COLORS.primary,
     marginHorizontal: SPACING.s20,
   } as ViewStyle,
+  // Navigation Hub Screen specific styles
+  navigationHubScrollContent: {
+    padding: SPACING.s16,
+    paddingBottom: SPACING.s40,
+  } as ViewStyle,
+  navigationHubListContainer: {
+    backgroundColor: COLORS.backgroundLight,
+    borderRadius: RADIUS.default,
+    ...SHADOW.default,
+    overflow: 'hidden' as const,
+  } as ViewStyle,
+  // Navigation Hub Header styles
+  navigationHubHeader: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    padding: SPACING.s16,
+    paddingTop: SPACING.s16,
+    backgroundColor: COLORS.backgroundLight,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.borderLight,
+  } as ViewStyle,
+  navigationHubBackButton: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+  } as ViewStyle,
+  navigationHubBackText: {
+    fontSize: 24,
+    color: COLORS.textSecondary,
+  } as TextStyle,
+  navigationHubHeaderSpacer: {
+    width: 30,
+  } as ViewStyle,
+  navigationHubSectionTitle: {
+    fontSize: 22,
+    fontWeight: '700' as const,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s16,
+  } as TextStyle,
+  navigationHubSeparator: {
+    height: 1,
+    backgroundColor: COLORS.borderLight,
+    marginHorizontal: SPACING.s16,
+  } as ViewStyle,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -287,6 +336,51 @@ export const CARD = {
   textBlock: {
     flex: 1,
   } as ViewStyle,
+  // Navigation Hub Card styles
+  navigationItem: {
+    backgroundColor: COLORS.backgroundLight,
+    borderRadius: RADIUS.default,
+    marginVertical: SPACING.s8,
+    width: '100%',
+    ...SHADOW.default,
+  } as ViewStyle,
+  navigationItemContent: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    padding: SPACING.s16,
+  } as ViewStyle,
+  navigationIconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    marginRight: SPACING.s16,
+    flexShrink: 0,
+  } as ViewStyle,
+  navigationIcon: {
+    fontSize: 22,
+    color: COLORS.backgroundLight,
+    marginTop: Platform.OS === 'ios' ? 2 : 0,
+  } as TextStyle,
+  navigationTextContainer: {
+    flex: 1,
+    marginRight: SPACING.s10,
+  } as ViewStyle,
+  navigationTitle: {
+    color: COLORS.textPrimary,
+    fontWeight: '600' as const,
+  } as TextStyle,
+  navigationDescription: {
+    color: COLORS.textSecondary,
+    marginTop: SPACING.s2,
+  } as TextStyle,
+  navigationChevron: {
+    fontSize: 20,
+    fontWeight: '300' as const,
+    color: COLORS.textSecondary,
+    marginLeft: 'auto' as const,
+  } as TextStyle,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -1102,14 +1196,14 @@ export const sidebarStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.borderDark, // Light border for separation
+    borderTopWidth: 0.5,
+    borderTopColor: COLORS.backgroundNeutral, // Light border for separation
   },
   userPhoto: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: COLORS.secondary, // Vibrant Purple for the photo circle
+    backgroundColor: COLORS.primary, // Vibrant Purple for the photo circle
     marginRight: 10,
   },
   userName: {
