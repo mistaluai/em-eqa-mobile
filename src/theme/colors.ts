@@ -14,7 +14,6 @@ export const COLORS = {
   // Text/Content Colors (For a Light UI)
   textPrimary: '#1A1A1A',     // UI CHANGE: Dark text for readability (carbonBlack)
   textSecondary: '#3A3A3A',   // UI CHANGE: Medium gray for captions/subtle text (gray700)
-
   // Border/Separator Colors
   borderLight: '#EAEAEA',     // UI CHANGE: Light border on light background (gray200)
   borderDark: '#3A3A3A',      // Darker border if needed

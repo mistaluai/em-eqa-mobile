@@ -16,10 +16,11 @@ export const LogoPlaceholder: React.FC<LogoPlaceholderProps> = ({ size }) => (
       {
         width: size,
         height: size,
-        borderRadius: RADIUS.full,
+        borderRadius: RADIUS.full ,
         backgroundColor: COLORS.backgroundNeutral,
         justifyContent: 'center',
         alignItems: 'center',
+        //paddingBottom: 10, 
         ...SHADOW.default,
       },
     ]}

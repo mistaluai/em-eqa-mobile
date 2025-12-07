@@ -65,9 +65,12 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
                 styles.dot,
                 { 
                   width: dotWidth, 
+        
                   opacity, 
                   // Dot color uses the main primary/action color
-                  backgroundColor: COLORS.primary 
+                  backgroundColor: COLORS.primary ,
+                  marginTop: SPACING.s128,
+                  
                 },
               ]}
             />
@@ -81,6 +84,9 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: "50%", // Adjusted to provide space for pagination dots
   },
   paginationContainer: {
     flexDirection: 'row',
@@ -92,6 +98,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
+    marginBottom: -SPACING.s128,
   },
   dot: {
     height: SPACING.s8,

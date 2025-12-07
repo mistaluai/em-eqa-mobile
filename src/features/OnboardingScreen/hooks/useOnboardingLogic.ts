@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useRef, useState } from 'react';
 import { Dimensions, FlatList } from 'react-native';
-import { onboardingData } from '../constants';
 
 const { width } = Dimensions.get('window');
 
@@ -19,17 +18,13 @@ export const useOnboardingLogic = () => {
     setCurrentIndex(newIndex);
   };
 
-  const handleNext = () => {
-    if (currentIndex < onboardingData.length - 1) {
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
-    } else {
-      navigation.navigate('Login' as never);
-    }
+  const handleLogin = () => {
+      navigation.navigate('Login' as never);  
   };
 
-  const handleSkip = () => {
-    navigation.navigate('Home' as never);
-  };
+  // const handleSkip = () => {
+  //   navigation.navigate('Home' as never);
+  // };
 
   const handleSignUp = () => {
     navigation.navigate('Signup' as never);
@@ -39,8 +34,8 @@ export const useOnboardingLogic = () => {
     flatListRef,
     currentIndex,
     handleScroll,
-    handleNext,
-    handleSkip,
+    handleLogin,
+    //handleSkip,
     handleSignUp,
   };
 };

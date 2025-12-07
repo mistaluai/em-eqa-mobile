@@ -15,6 +15,9 @@ export const SPACING = {
   s20: 20,
   s24: 24,
   s32: 32,
+  s64: 64,
+  s96: 96,
+  s128: 128,
 } as const;
 
 // ──────────────────────────────────────────────────
@@ -111,6 +114,7 @@ export const SCREEN = {
     paddingHorizontal: SPACING.s32,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
+    marginTop: SPACING.s16,
   } as ViewStyle,
   containerCentered: {
     flex: 1,

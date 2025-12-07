@@ -1,15 +1,15 @@
 // components/SearchDrawer.tsx
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   Dimensions,
   Modal,
   Pressable,
   SafeAreaView,
-  StyleSheet,
   Text,
   TextInput, // Changed TextInputComponent to TextInput
   TouchableOpacity, // Added for clickable elements
-  View,
+  View
 } from 'react-native';
 import { COLORS } from '../../../theme/colors';
 import { DRAWER, sidebarStyles } from '../../../theme/styles';
@@ -45,13 +45,13 @@ const DrawerSidebarContent = () => {
         <View style={sidebarStyles.searchBarContainer}>
           <TextInput
             style={sidebarStyles.searchBarInput}
-            placeholder="Search your"
+            placeholder="Search your chats"
             placeholderTextColor= {COLORS.textSecondary}
           />
           <SearchIconPlaceholder />
         </View>
         <TouchableOpacity>
-          <Text style={sidebarStyles.newChatText}>new chat</Text>
+          <Ionicons name="chatbox-outline" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -90,4 +90,3 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
   );
 };
 
-// Styles moved to central theme/styles.ts
