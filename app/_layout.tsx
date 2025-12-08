@@ -39,19 +39,6 @@ const RootLayout = () => {
         }}
       >
         <Stack.Screen name="index" options={{ title: 'App Index' }} />
-        <Stack.Screen name="OnboardingScreen" options={{ title: 'Onboarding' }} />
-        <Stack.Screen name="LoginScreen" options={{ title: 'Login' }} />
-        <Stack.Screen name="SignUpScreen" options={{ title: 'Sign Up' }} />
-        <Stack.Screen name="HomeScreen" options={{ title: 'Home' }} />
-        <Stack.Screen name="DeviceConnectionScreen" options={{ title: 'Device Connection' }} />
-        <Stack.Screen name="TimelineEventsScreen" options={{ title: 'Timeline & Events' }} />
-        <Stack.Screen name="EventDetailsScreen" options={{ title: 'Event Details' }} />
-        <Stack.Screen name="PrivacyDataControlScreen" options={{ title: 'Privacy Control' }} />
-        <Stack.Screen name="ClipUploadSyncScreen" options={{ title: 'Upload Sync' }} />
-        <Stack.Screen name="ProfileRecordingSettingsScreen" options={{ title: 'Profile Settings' }} />
-        <Stack.Screen name="SystemStatusScreen" options={{ title: 'System Status' }} />
-        <Stack.Screen name="NavigationHubScreen" options={{ title: 'Explore Features' }} />
-
       </Stack>
     </>
   );
