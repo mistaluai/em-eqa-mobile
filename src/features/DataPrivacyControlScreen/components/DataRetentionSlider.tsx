@@ -1,11 +1,12 @@
 // DataRetentionSlider.tsx
 import Slider from '@react-native-community/slider';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
 import { snapToClosestOption } from '../../../shared/utils';
 import { COLORS } from '../../../theme/colors';
-import { SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { DataRetentionSliderStyles } from '../../../theme/styles/DataPrivacyControlScreen/DataRetentionSliderStyle';
+import { TYPOGRAPHY } from '../../../theme';
 
 interface DataRetentionSliderProps {
   retentionDays: number;
@@ -25,32 +26,28 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   };
 
   return (
-    <AppCard style={styles.card}>
-      {/* Title text uses primary dark text */}
-      <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary, marginBottom: SPACING.s20 }]}>
+    <AppCard style={DataRetentionSliderStyles.card}>
+      <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary }, DataRetentionSliderStyles.title]}>
         Retain Clips for  
-        {/* Highlight text uses primary color */}
-        <Text style={{ color: COLORS.primary, fontWeight: '700' }}> : {retentionDays} Days</Text>
+        <Text style={[{ color: COLORS.primary }, DataRetentionSliderStyles.highlightText]}> : {retentionDays} Days</Text>
       </Text>
 
       <Slider
-        style={{ width: '100%', height: 40 }}
+        style={DataRetentionSliderStyles.slider}
         minimumValue={10}
         maximumValue={90}
         step={10}
         value={retentionDays}
         onValueChange={onRetentionDaysChange}
         onSlidingComplete={handleSlidingComplete}
-        // Slider colors updated for light theme semantics
         minimumTrackTintColor={COLORS.primary}
         maximumTrackTintColor={COLORS.borderLight}
         thumbTintColor={COLORS.primary}
       />
 
-      <View style={styles.sliderLabels}>
+      <View style={DataRetentionSliderStyles.sliderLabels}>
         {retentionOptions.map((day) => (
-          // Label text uses secondary dark text
-          <Text key={day} style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary, fontWeight: '600' }]}>
+          <Text key={day} style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }, DataRetentionSliderStyles.labelText]}>
             {day}
           </Text>
         ))}
@@ -58,15 +55,3 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
     </AppCard>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    // Card background is now the neutral surface color
-    backgroundColor: COLORS.backgroundNeutral,
-  },
-  sliderLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.s8,
-  },
-});

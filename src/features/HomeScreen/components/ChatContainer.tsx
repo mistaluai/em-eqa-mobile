@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { CHAT } from '../../../theme/styles';
+import { CHAT } from '../../../theme';
 import { ChatMessage } from './ChatMessage';
 
 interface ChatMessageData {

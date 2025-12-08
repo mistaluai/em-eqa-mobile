@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Animated, Dimensions, FlatList, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, FlatList, View } from 'react-native';
 import { COLORS } from '../theme/colors';
-import { RADIUS, SPACING } from '../theme/styles';
+import { SPACING } from '../theme';
+import { CarouselComponentStyles } from '../theme/styles/components/CarouselComponentStyle';
 
 const { width } = Dimensions.get('window');
 
@@ -29,7 +30,7 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
   );
 
   return (
-    <View style={styles.container}>
+    <View style={CarouselComponentStyles.container}>
       <FlatList
         ref={flatListRef}
         data={data}
@@ -42,7 +43,7 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
         scrollEventThrottle={16}
         decelerationRate="fast"
       />
-      <View style={styles.paginationContainer}>
+      <View style={CarouselComponentStyles.paginationContainer}>
         {data.map((_, index) => {
           const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
 
@@ -62,15 +63,12 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
             <Animated.View
               key={index.toString()}
               style={[
-                styles.dot,
+                CarouselComponentStyles.dot,
                 { 
                   width: dotWidth, 
-        
                   opacity, 
-                  // Dot color uses the main primary/action color
-                  backgroundColor: COLORS.primary ,
+                  backgroundColor: COLORS.primary,
                   marginTop: SPACING.s128,
-                  
                 },
               ]}
             />
@@ -80,32 +78,5 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: "50%", // Adjusted to provide space for pagination dots
-  },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    position: 'absolute',
-    // The bottom position might need further adjustment depending on the parent screen layout,
-    // but the rest of the style properties remain appropriate.
-    bottom: SPACING.s24 + 220, 
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    marginBottom: -SPACING.s128,
-  },
-  dot: {
-    height: SPACING.s8,
-    borderRadius: RADIUS.full,
-    marginHorizontal: SPACING.s4,
-    // The background color is set dynamically above using COLORS.primary
-  },
-});
 
 export default AppCarousel;

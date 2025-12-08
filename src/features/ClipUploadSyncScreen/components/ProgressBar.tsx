@@ -1,7 +1,7 @@
 // ProgressBar.tsx
 import React from 'react';
 import { View } from 'react-native';
-import { PROGRESS } from '../../../theme/styles';
+import { PROGRESS } from '../../../theme';
 
 interface ProgressBarProps {
   progress: number;

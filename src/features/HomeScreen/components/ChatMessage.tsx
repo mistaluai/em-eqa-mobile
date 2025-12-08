@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
 import { COLORS } from '../../../theme/colors';
-import { CHAT, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { CHAT, SPACING, TYPOGRAPHY } from '../../../theme';
 
 interface ChatMessageProps {
   message: {

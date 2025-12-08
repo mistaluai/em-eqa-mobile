@@ -5,7 +5,7 @@ import { Pressable, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
 import { Clip } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
-import { CARD, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { CARD, SPACING, TYPOGRAPHY } from '../../../theme';
 import { ProgressBar } from './ProgressBar';
 
 interface ClipItemProps {

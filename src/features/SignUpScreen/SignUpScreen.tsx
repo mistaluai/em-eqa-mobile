@@ -10,7 +10,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
+import { SignUpFormStyles } from '../../theme/styles/SignUpScreen/SignUpFormStyle';
+import { SignUpScreenStyles } from '../../theme/styles/SignUpScreen/SignUpScreenStyle';
+import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
 import { PhotoUploadPlaceholder } from './components/PhotoUploadPlaceholder';
 import { useSignUpLogic } from './hooks/useSignUpLogic';
 
@@ -43,45 +45,43 @@ const SignUpScreen: React.FC = () => {
   return (
     <SafeAreaView style={SCREEN.safeArea}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={SignUpScreenStyles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : -10}
       >
         <View
           style={[
             SCREEN.scrollContainer,
+            SignUpScreenStyles.scrollContainer,
             {
-              flex: 1,
               justifyContent: isKeyboardOpen ? 'flex-start' : 'center',
               paddingHorizontal: SPACING.s20,
               marginBottom: isKeyboardOpen ? 6 : 0,
             },
           ]}
         >
-          {/* Collapsible Photo Section */}
           <View
-            style={{
-              alignItems: 'center',
-              overflow: 'hidden',
-              transition: 'all 0.3s',
-              maxHeight: isKeyboardOpen ? 0 : 200,
-              opacity: isKeyboardOpen ? 0 : 1,
-            } as any}
+            style={[
+              SignUpScreenStyles.photoContainer,
+              {
+                maxHeight: isKeyboardOpen ? 0 : 200,
+                opacity: isKeyboardOpen ? 0 : 1,
+              } as any,
+            ]}
           >
             <PhotoUploadPlaceholder
               onPress={() => console.log('Open image picker')}
             />
           </View>
 
-          <View style={{ height: isKeyboardOpen ? SPACING.s32 : SPACING.s32 }} />
+          <View style={SignUpScreenStyles.spacer} />
 
           <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>
             Create Account
           </Text>
 
-          <View style={{ height: SPACING.s32 }} />
+          <View style={SignUpScreenStyles.titleSpacer} />
 
-          {/* Form Fields */}
           <View style={SCREEN.signUpFormContainer}>
             <AppInput
               label="Full Name"
@@ -93,7 +93,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="Enter your name"
             />
 
-            <View style={{ height: SPACING.s16 }} />
+            <View style={SignUpFormStyles.spacer} />
 
             <AppInput
               label="Email Address"
@@ -105,7 +105,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="Enter your email"
             />
 
-            <View style={{ height: SPACING.s16 }} />
+            <View style={SignUpFormStyles.spacer} />
 
             <AppInput
               label="Password"
@@ -117,7 +117,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="Enter your password"
             />
 
-            <View style={{ height: SPACING.s16 }} />
+            <View style={SignUpFormStyles.spacer} />
 
             <AppInput
               label="Confirm Password"
@@ -130,7 +130,7 @@ const SignUpScreen: React.FC = () => {
             />
           </View>
 
-          <View style={{ height: SPACING.s32 }} />
+          <View style={SignUpScreenStyles.titleSpacer} />
 
           <AppButton
             title="Create Account"
@@ -138,7 +138,7 @@ const SignUpScreen: React.FC = () => {
             style={SCREEN.signUpButton}
           />
 
-          <View style={{ height: SPACING.s24 }} />
+          <View style={SignUpScreenStyles.loginLinkSpacer} />
 
           <Pressable onPress={handleNavigateToLogin}>
             <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>

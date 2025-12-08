@@ -3,7 +3,8 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
 import { COLORS } from '../../theme/colors';
-import { SCREEN, SPACING } from '../../theme/styles';
+import { SystemStatusScreenStyles } from '../../theme/styles/SystemStatusScreen/SystemStatusScreenStyle';
+import { SCREEN } from '../../theme';
 import { StatusBarCard } from './components/StatusBarCard';
 import { useSystemStatusLogic } from './hooks/useSystemStatusLogic';
 
@@ -60,7 +61,7 @@ const SystemStatusScreen: React.FC = () => {
           statusColor={COLORS.primary}
         />
 
-        <View style={{ height: SPACING.s32 }} />
+        <View style={SystemStatusScreenStyles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );

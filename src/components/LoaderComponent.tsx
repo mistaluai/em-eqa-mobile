@@ -1,6 +1,7 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { COLORS } from '../theme/colors';
+import { LoaderComponentStyles } from '../theme/styles/components/LoaderComponentStyle';
 
 interface LoaderProps {
   size?: 'small' | 'large';
@@ -13,18 +14,10 @@ const Loader: React.FC<LoaderProps> = ({
   color = COLORS.primary 
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={LoaderComponentStyles.container}>
       <ActivityIndicator size={size} color={color} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default Loader;

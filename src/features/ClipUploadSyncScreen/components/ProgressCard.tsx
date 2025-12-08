@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { CARD, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { CARD, SPACING, TYPOGRAPHY } from '../../../theme';
 
 interface ProgressCardProps {
   iconName: string;

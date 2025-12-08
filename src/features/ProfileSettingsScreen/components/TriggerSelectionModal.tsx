@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import AppModal from '../../../components/ModalComponent';
 import { COLORS } from '../../../theme/colors';
-import { RADIUS, SPACING, TYPOGRAPHY } from '../../../theme/styles';
+import { TriggerSelectionModalStyles } from '../../../theme/styles/ProfileSettingsScreen/TriggerSelectionModalStyle';
+import { TYPOGRAPHY } from '../../../theme';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface TriggerSelectionModalProps {
   isVisible: boolean;
@@ -24,19 +25,19 @@ export const TriggerSelectionModal: React.FC<TriggerSelectionModalProps> = ({
   onToggleTrigger,
 }) => (
   <AppModal isVisible={isVisible} onClose={onClose} modalWidth={width * 0.85}>
-    <View style={styles.modalContent}>
-      <Text style={[TYPOGRAPHY.HeadlineM, styles.modalTitle]}>Select Recording Triggers</Text>
-      <ScrollView style={styles.triggerList}>
+    <View style={TriggerSelectionModalStyles.modalContent}>
+      <Text style={[TYPOGRAPHY.HeadlineM, TriggerSelectionModalStyles.modalTitle]}>Select Recording Triggers</Text>
+      <ScrollView style={TriggerSelectionModalStyles.triggerList}>
         {availableTriggers.map((trigger, index) => (
           <Pressable
             key={index}
             onPress={() => onToggleTrigger(trigger)}
-            style={styles.triggerItem}
+            style={TriggerSelectionModalStyles.triggerItem}
           >
             <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary }]}>{trigger}</Text>
             <View style={[
-              styles.checkbox,
-              selectedTriggers.includes(trigger) && styles.checkboxSelected
+              TriggerSelectionModalStyles.checkbox,
+              selectedTriggers.includes(trigger) && TriggerSelectionModalStyles.checkboxSelected
             ]}>
               {selectedTriggers.includes(trigger) && (
                 <Ionicons name="checkmark" size={16} color={COLORS.textPrimary} />
@@ -49,42 +50,3 @@ export const TriggerSelectionModal: React.FC<TriggerSelectionModalProps> = ({
     </View>
   </AppModal>
 );
-
-const styles = StyleSheet.create({
-  modalContent: {
-    backgroundColor: COLORS.backgroundLight,
-    borderRadius: RADIUS.large,
-    padding: SPACING.s24,
-  },
-  modalTitle: {
-    color: COLORS.textPrimary,
-    textAlign: 'center',
-    marginBottom: SPACING.s24,
-    fontWeight: '700',
-  },
-  triggerList: {
-    maxHeight: height * 0.5,
-    marginBottom: SPACING.s24,
-  },
-  triggerItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: SPACING.s12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.borderLight, // Used borderLight for separator
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: RADIUS.full,
-    borderWidth: 2,
-    borderColor: COLORS.textSecondary, // Subtle border
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxSelected: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-});

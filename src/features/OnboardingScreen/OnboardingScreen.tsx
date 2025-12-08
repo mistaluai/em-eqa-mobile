@@ -3,7 +3,8 @@ import { FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppCarousel from '../../components/CarouselComponent';
-import { ONBOARDING, SPACING } from '../../theme/styles';
+import { OnboardingScreenStyles } from '../../theme/styles/OnboardingScreen/OnboardingScreenStyle';
+import { ONBOARDING } from '../../theme';
 import { SlideContent } from './components/SlideContent';
 import { onboardingData } from './constants';
 import { useOnboardingLogic } from './hooks/useOnboardingLogic';
@@ -48,17 +49,14 @@ const OnboardingScreen: React.FC = () => {
           title="Login"
           onPress={handleLogin}
           variant="primary"
-          style={{ marginBottom: SPACING.s20 }}
+          style={OnboardingScreenStyles.buttonSpacer}
         />
         <AppButton
           title="Sign Up"
           onPress={handleSignUp}
           variant="secondary"
-          style={{ marginBottom: SPACING.s20 }}
+          style={OnboardingScreenStyles.buttonSpacer}
         />
-        {/* <Pressable onPress={handleSkip}>
-          <Text style={[TYPOGRAPHY.Caption, ONBOARDING.guestText]}>Continue as guest</Text>
-        </Pressable> */}
       </View>
     </SafeAreaView>
   );

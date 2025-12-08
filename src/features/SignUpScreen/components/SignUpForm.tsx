@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import AppInput from '../../../components/InputComponent';
-import { SPACING } from '../../../theme/styles';
+import { SignUpFormStyles } from '../../../theme/styles/SignUpScreen/SignUpFormStyle';
 
 interface SignUpFormProps {
   onSignUp: (data: { fullName: string; email: string; password: string; confirmPassword: string }) => void;
@@ -18,28 +18,28 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp }) => {
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View style={SignUpFormStyles.formContainer}>
       <AppInput
         label="Full Name"
         value={fullName}
         onChangeText={setFullName}
         keyboardType="default"
       />
-      <View style={{ height: SPACING.s16 }} />
+      <View style={SignUpFormStyles.spacer} />
       <AppInput
         label="Email Address"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-      <View style={{ height: SPACING.s16 }} />
+      <View style={SignUpFormStyles.spacer} />
       <AppInput
         label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
       />
-      <View style={{ height: SPACING.s16 }} />
+      <View style={SignUpFormStyles.spacer} />
       <AppInput
         label="Confirm Password"
         value={confirmPassword}
@@ -49,9 +49,3 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  formContainer: {
-    width: '100%',
-  },
-});

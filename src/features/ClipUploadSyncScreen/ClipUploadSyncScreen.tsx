@@ -3,7 +3,8 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
 import { COLORS } from '../../theme/colors';
-import { SCREEN, SPACING } from '../../theme/styles';
+import { ClipUploadSyncScreenStyles } from '../../theme/styles/ClipUploadSyncScreen/ClipUploadSyncScreenStyle';
+import { SCREEN } from '../../theme';
 import { ClipSection } from './components/ClipSection';
 import { UploadStatusDashboard } from './components/UploadStatusDashboard';
 import { useClipUploadSyncLogic } from './hooks/useClipUploadSyncLogic';
@@ -58,7 +59,7 @@ const ClipUploadSyncScreen: React.FC = () => {
           titleColor={COLORS.textPrimary}
         />
 
-        <View style={{ height: SPACING.s32 }} />
+        <View style={ClipUploadSyncScreenStyles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );

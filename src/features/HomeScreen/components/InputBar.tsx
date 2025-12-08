@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { INPUT_BAR } from '../../../theme/styles';
+import { INPUT_BAR } from '../../../theme';
 
 interface InputBarProps {
   onSend: (message: string) => void;

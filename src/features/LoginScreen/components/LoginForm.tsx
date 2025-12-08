@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import AppInput from '../../../components/InputComponent';
-import { SPACING, TYPOGRAPHY, TEXT } from '../../../theme/styles';
+import { TEXT, TYPOGRAPHY } from '../../../theme';
+import { LoginFormStyles } from '../../../theme/styles/LoginScreen/LoginFormStyle';
 
 interface LoginFormProps {
   email: string;
@@ -25,21 +26,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onSignUp,
 }) => {
   return (
-    <View style={{ width: '100%' }}>
+    <View style={LoginFormStyles.container}>
       <AppInput
         label="Email Address"
         value={email}
         onChangeText={onEmailChange}
         keyboardType="email-address"
       />
-      <View style={{ height: SPACING.s16 }} />
+      <View style={LoginFormStyles.spacer} />
       <AppInput
         label="Password"
         value={password}
         onChangeText={onPasswordChange}
         secureTextEntry={true}
       />
-      <View style={{ height: SPACING.s12 }} />
+      <View style={LoginFormStyles.spacerSmall} />
       {onForgotPassword && (
         <Pressable onPress={onForgotPassword}>
           <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>Forgot Password?</Text>
@@ -47,7 +48,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       )}
 
       {onSignUp && (
-        <Pressable onPress={onSignUp} style={{ marginTop: SPACING.s32, alignSelf: 'center' }}>
+        <Pressable onPress={onSignUp} style={LoginFormStyles.signUpContainer}>
           <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
             Don't have an account?{' '}
             <Text style={TEXT.signupLink}>Sign up</Text>

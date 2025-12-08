@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { UploadStatus } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
-import { CARD, SPACING } from '../../../theme/styles';
+import { CARD, SPACING } from '../../../theme';
 import { ProgressCard } from './ProgressCard';
 
 interface UploadStatusDashboardProps {

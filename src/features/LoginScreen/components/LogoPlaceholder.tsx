@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { RADIUS, SHADOW, TYPOGRAPHY } from '../../../theme/styles';
+import { LogoPlaceholderStyles } from '../../../theme/styles/LoginScreen/LogoPlaceholderStyle';
+import { TYPOGRAPHY } from '../../../theme';
 
 interface LogoPlaceholderProps {
   size: number;
@@ -13,18 +14,13 @@ interface LogoPlaceholderProps {
 export const LogoPlaceholder: React.FC<LogoPlaceholderProps> = ({ size }) => (
   <View
     style={[
+      LogoPlaceholderStyles.container,
       {
         width: size,
         height: size,
-        borderRadius: RADIUS.full,
-        backgroundColor: COLORS.backgroundNeutral,
-        justifyContent: 'center',
-        alignItems: 'center',
-        //paddingBottom: 10, 
-        ...SHADOW.default,
       },
     ]}
   >
-    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary, fontWeight: '800' }]}>Logo</Text>
+    <Text style={[TYPOGRAPHY.BodyL, LogoPlaceholderStyles.text]}>Logo</Text>
   </View>
 );

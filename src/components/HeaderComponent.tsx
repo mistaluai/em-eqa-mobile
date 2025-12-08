@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
 import { COLORS } from '../theme/colors';
-import { SPACING, TYPOGRAPHY } from '../theme/styles';
+import { TYPOGRAPHY } from '../theme';
+import { HeaderComponentStyles } from '../theme/styles/components/HeaderComponentStyle';
 
 interface AppHeaderProps {
   title: string;
@@ -45,24 +46,24 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     : (showBack ? () => navigation.goBack() : undefined);
 
   return (
-    <View style={styles.header}>
+    <View style={HeaderComponentStyles.header}>
       {/* LEFT ICON AREA */}
       {finalLeftIcon && handleLeftPress ? (
         <Pressable
           onPress={handleLeftPress}
-          style={styles.iconButton}
+          style={HeaderComponentStyles.iconButton}
           hitSlop={8}
         >
           {/* Left Icon color is now dark (textPrimary) */}
           <Ionicons name={finalLeftIcon} size={32} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
-        <View style={styles.iconPlaceholder} />
+        <View style={HeaderComponentStyles.iconPlaceholder} />
       )}
 
       {/* CENTER TITLE */}
       {/* Title color is now dark (textPrimary) */}
-      <Text style={[TYPOGRAPHY.HeadlineM, styles.title]} numberOfLines={1}>
+      <Text style={[TYPOGRAPHY.HeadlineM, HeaderComponentStyles.title]} numberOfLines={1}>
         {title}
       </Text>
 
@@ -70,49 +71,17 @@ const AppHeader: React.FC<AppHeaderProps> = ({
       {rightIconName && onRightIconPress ? (
         <Pressable
           onPress={onRightIconPress}
-          style={styles.iconButton}
+          style={HeaderComponentStyles.iconButton}
           hitSlop={8}
         >
           {/* Right Icon color is now dark (textPrimary) */}
           <Ionicons name={rightIconName} size={28} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
-        <View style={styles.iconPlaceholder} />
+        <View style={HeaderComponentStyles.iconPlaceholder} />
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 60,
-    paddingHorizontal: SPACING.s16,
-    // Header background is now white (backgroundLight)
-    backgroundColor: COLORS.backgroundLight,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    // Border uses a subtle light border color
-    borderBottomColor: COLORS.borderLight,
-  },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    marginHorizontal: SPACING.s8,
-    // Title text color is now dark (textPrimary)
-    color: COLORS.textPrimary,
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconPlaceholder: {
-    width: 40,
-    height: 40,
-  },
-});
 
 export default AppHeader;

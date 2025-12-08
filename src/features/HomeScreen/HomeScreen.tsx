@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN, SPACING } from '../../theme/styles';
+import { HomeScreenStyles } from '../../theme/styles/HomeScreen/HomeScreenStyle';
+import { SCREEN } from '../../theme';
 import { ChatContainer } from './components/ChatContainer';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
@@ -39,7 +40,7 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={[SCREEN.safeArea, { flex: 1 }]}>
+    <SafeAreaView style={[SCREEN.safeArea, HomeScreenStyles.safeArea]}>
       <AppHeader
         title="EM-EQA"
         leftIconName="menu-outline"
@@ -47,15 +48,18 @@ const HomeScreen: React.FC = () => {
       />
 
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={HomeScreenStyles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-        <View style={{ flex: 1 }}>
+        <View style={HomeScreenStyles.chatContainer}>
           <ChatContainer messages={messages} onEvidencePress={handleEvidencePress} />
         </View>
 
-        <View style={[SCREEN.homeInputBarContainer, { marginBottom: isKeyboardOpen ? SPACING.s12 : 0 }]}>
+        <View style={[
+          SCREEN.homeInputBarContainer,
+          isKeyboardOpen ? HomeScreenStyles.inputBarContainerKeyboard : HomeScreenStyles.inputBarContainer
+        ]}>
           <InputBar onSend={handleSendMessage} onVoiceInput={() => {}} />
         </View>
       </KeyboardAvoidingView>

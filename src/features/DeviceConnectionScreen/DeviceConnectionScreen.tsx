@@ -3,7 +3,8 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN } from '../../theme/styles';
+import { DeviceConnectionScreenStyles } from '../../theme/styles/DeviceConnectionScreen/DeviceConnectionScreenStyle';
+import { SCREEN } from '../../theme';
 import { ConnectionStatusCard } from './components/ConnectionStatusCard';
 import { LivePreviewBox } from './components/LivePreviewBox';
 import { useDeviceConnectionLogic } from './hooks/useDeviceConnectionLogic';
@@ -35,7 +36,7 @@ const DeviceConnectionScreen: React.FC = () => {
           style={SCREEN.deviceReconnectButton}
         />
 
-        <View style={{ flex: 1 }} />
+        <View style={DeviceConnectionScreenStyles.flexSpacer} />
       </View>
     </SafeAreaView>
   );

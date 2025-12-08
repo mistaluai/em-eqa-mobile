@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dimensions, Modal, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
-import { COLORS } from '../theme/colors';
-import { RADIUS, SHADOW, SPACING } from '../theme/styles';
+import { Dimensions, Modal, Pressable, View, ViewStyle } from 'react-native';
+import { RADIUS } from '../theme';
+import { ModalComponentStyles } from '../theme/styles/components/ModalComponentStyle';
 
 const { width } = Dimensions.get('window');
 
@@ -50,18 +50,18 @@ const AppModal: React.FC<AppModalProps> = ({
       onRequestClose={onClose}
     >
       <Pressable
-        style={[styles.backdrop, alignmentStyle]}
+        style={[ModalComponentStyles.backdrop, alignmentStyle]}
         onPress={onClose}
       >
         <Pressable
           onPress={(e) => e.stopPropagation()}
           style={[
-            styles.modalContent,
+            ModalComponentStyles.modalContent,
             contentShapeStyle,
             { width: modalWidth }
           ]}
         >
-          <View style={styles.modalBody}>
+          <View style={ModalComponentStyles.modalBody}>
             {children}
           </View>
         </Pressable>
@@ -69,23 +69,5 @@ const AppModal: React.FC<AppModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    // Slightly reduced opacity for a light UI feel (0.7 -> 0.5)
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-    // Flex properties are now handled dynamically via 'alignmentStyle'
-  },
-  modalContent: {
-    // Modal background is now white (backgroundLight)
-    backgroundColor: COLORS.backgroundLight,
-    ...SHADOW.default,
-    overflow: 'hidden', 
-  },
-  modalBody: {
-    padding: SPACING.s24,
-  },
-});
 
 export default AppModal;

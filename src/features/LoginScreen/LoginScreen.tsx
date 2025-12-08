@@ -7,13 +7,15 @@ import {
   Pressable,
   Text,
   View,
-  useWindowDimensions,
+  useWindowDimensions
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme/styles';
+import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
+import { LoginFormStyles } from '../../theme/styles/LoginScreen/LoginFormStyle';
+import { LoginScreenStyles } from '../../theme/styles/LoginScreen/LoginScreenStyle';
 import { useLoginLogic } from './hooks/useLoginLogic';
 
 const LoginScreen: React.FC = () => {
@@ -48,61 +50,52 @@ const LoginScreen: React.FC = () => {
   return (
     <SafeAreaView style={SCREEN.safeArea}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={LoginScreenStyles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : -10}
       >
         <View
           style={[
             SCREEN.scrollContainer,
+            LoginScreenStyles.scrollContainer,
             {
-              flex: 1,
               justifyContent: isKeyboardOpen ? 'flex-start' : 'center',
               paddingHorizontal: SPACING.s20,
               paddingVertical: SPACING.s24,
-              // paddingTop: isKeyboardOpen ? SPACING.s24 : SPACING.s4,
-              // paddingBottom: isKeyboardOpen ? SPACING.s24 : SPACING.s4,
             },
           ]}
         >
-          {/* Animated Logo Collapse */}
           <View
-            style={{
-              alignItems: 'center',
-              overflow: 'hidden',
-              maxHeight: isKeyboardOpen ? 0 : 200,
-              opacity: isKeyboardOpen ? 0 : 1,
-              transform: [
-                { scale: isKeyboardOpen ? 0.9 : 1 },
-              ],
-              // marginBottom: isKeyboardOpen ? 0 : SPACING.s8,
-              transitionDuration: '300ms',
-            }}>
-
+            style={[
+              LoginScreenStyles.logoContainer,
+              {
+                maxHeight: isKeyboardOpen ? 0 : 200,
+                opacity: isKeyboardOpen ? 0 : 1,
+                transform: [{ scale: isKeyboardOpen ? 0.9 : 1 }],
+              },
+            ]}
+          >
             <Image
               source={require('../../../assets/images/em_logo.png')}
-              style={{ width: 200, height: 200, resizeMode: 'contain' }}
+               style  ={LoginScreenStyles.logoImage}
             />
           </View>
 
-          {/* Title */}
           <Text
             style={[
               TYPOGRAPHY.HeadlineXL,
               TEXT.title,
+              LoginScreenStyles.title,
               {
-                fontSize: isKeyboardOpen ? 32 : 32,
                 marginBottom: isKeyboardOpen ? SPACING.s96 : SPACING.s24,
                 visibility: isKeyboardOpen ? 'hidden' : 'visible',
-                //display: isKeyboardOpen ? 'none' : 'flex',
               },
             ]}
           >
             Welcome
           </Text>
 
-          {/* Form Container */}
-          <View style={{ width: '100%' }}>
+          <View style={LoginScreenStyles.formContainer}>
             <AppInput
               label="Email Address"
               value={email}
@@ -111,7 +104,7 @@ const LoginScreen: React.FC = () => {
               placeholder="example@email.com"
             />
 
-            <View style={{ height: SPACING.s16 }} />
+            <View style={LoginFormStyles.spacer} />
 
             <AppInput
               label="Password"
@@ -120,7 +113,7 @@ const LoginScreen: React.FC = () => {
               secureTextEntry={true}
             />
 
-            <View style={{ height: SPACING.s12 }} />
+            <View style={LoginFormStyles.spacerSmall} />
 
             <Pressable onPress={handleForgotPassword}>
               <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>
@@ -129,17 +122,11 @@ const LoginScreen: React.FC = () => {
             </Pressable>
           </View>
 
-          {/* Login Button */}
-          <View style={{ height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }} />
+          <View style={[LoginScreenStyles.buttonSpacer, { height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }]} />
 
-          <AppButton title="Login" onPress={handleLogin} style={{ width: "90%" }} />
+          <AppButton title="Login" onPress={handleLogin} style={LoginScreenStyles.loginButton} />
 
-          {/* Signup */}
-          <View
-            style={{
-              marginTop: isKeyboardOpen ? SPACING.s16 : SPACING.s32,
-            }}
-          >
+          <View style={isKeyboardOpen ? LoginScreenStyles.signUpContainerKeyboard : LoginScreenStyles.signUpContainer}>
             <Pressable onPress={handleNavigateToSignUp}>
               <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
                 Don't have an account?{' '}

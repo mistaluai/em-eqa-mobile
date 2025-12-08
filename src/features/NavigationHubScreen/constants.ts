@@ -7,7 +7,7 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'device', 
     title: 'Device Connection', 
     description: 'Manage pairing and connection settings for your external devices.', 
-    icon: '🔗',
+    //icon: '🔗',
     screen: 'DeviceConnectionScreen',
     color: COLORS.navDevice
   },
@@ -15,7 +15,7 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'timeline', 
     title: 'Timeline & Events', 
     description: 'Review and search through your summarized daily events and history.', 
-    icon: '🗓️',
+   // icon: '🗓️',
     screen: 'TimelineEventsScreen',
     color: COLORS.navTimeline
   },
@@ -23,7 +23,7 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'privacy', 
     title: 'Data Privacy & Control', 
     description: 'Adjust permissions, data retention, and sharing settings.', 
-    icon: '🛡️',
+   // icon: '🛡️',
     screen: 'DataPrivacyScreen',
     color: COLORS.navPrivacy
   },
@@ -31,7 +31,7 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'sync', 
     title: 'Clip Upload & Sync', 
     description: 'Monitor and control the synchronization of recorded clips to the cloud.', 
-    icon: '☁️',
+    //icon: '☁️',
     screen: 'ClipSyncScreen',
     color: COLORS.navSync
   },
@@ -39,7 +39,7 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'profile', 
     title: 'Profile & Recording Settings', 
     description: 'Update personal information and configure recording preferences.', 
-    icon: '👤',
+   // icon: '👤',
     screen: 'ProfileSettingsScreen',
     color: COLORS.navProfile
   },
@@ -47,8 +47,16 @@ export const NAV_ITEMS: NavItemData[] = [
     id: 'status', 
     title: 'System Status', 
     description: 'Check the health, battery, and real-time operational status of the app.', 
-    icon: '🩺',
+    //icon: '🩺',
     screen: 'SystemStatusScreen',
     color: COLORS.navStatus
+  },
+  { 
+    id: 'logout', 
+    title: 'Log Out', 
+    description: 'Securely sign out of your current account session.', 
+    //icon: '🚪',
+    screen: 'Logout',
+    color: COLORS.navLogoutBg
   },
 ];

@@ -5,7 +5,8 @@ import AppCard from '../../components/AppCard';
 import AppHeader from '../../components/HeaderComponent';
 import AppInput from '../../components/InputComponent';
 import { COLORS } from '../../theme/colors';
-import { BUTTON, CARD, PILL, SCREEN, SECTION, SPACING, TEXT, TRIGGER_HEADER, TYPOGRAPHY } from '../../theme/styles';
+import { ProfileSettingsScreenStyles } from '../../theme/styles/ProfileSettingsScreen/ProfileSettingsScreenStyle';
+import { BUTTON, CARD, PILL, SCREEN, SECTION, TEXT, TRIGGER_HEADER, TYPOGRAPHY } from '../../theme';
 import { AvatarUpload } from './components/AvatarUpload';
 import { TriggerPill } from './components/TriggerPill';
 import { TriggerSelectionModal } from './components/TriggerSelectionModal';
@@ -48,9 +49,9 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
         <AvatarUpload onPress={handleChangeAvatar} />
 
         <AppInput label="Username" value={username} onChangeText={setUsername} />
-        <View style={{ height: SPACING.s16 }} />
+        <View style={ProfileSettingsScreenStyles.inputSpacer} />
         <AppInput label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-        <View style={{ height: SPACING.s16 }} />
+        <View style={ProfileSettingsScreenStyles.inputSpacer} />
 
         <Pressable onPress={handleChangePassword} style={SCREEN.profileChangePasswordLink}>
           <Text style={[TYPOGRAPHY.BodyM, TEXT.changePassword]}>Change Password</Text>
@@ -58,11 +59,11 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
 
         <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Trigger Preferences</Text>
         <View style={TRIGGER_HEADER.container}>
-          <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary, fontWeight: '600' }]}>
+          <Text style={[TYPOGRAPHY.BodyL, ProfileSettingsScreenStyles.triggerLabel]}>
             Object Triggers
           </Text>
           <Pressable onPress={handleOpenModal} style={BUTTON.add}>
-            <Text style={{ color: COLORS.textPrimary, fontSize: 24, fontWeight: '700' }}>+</Text>
+            <Text style={ProfileSettingsScreenStyles.addButtonText}>+</Text>
           </Pressable>
         </View>
 
@@ -74,7 +75,7 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
               ))}
             </View>
           ) : (
-            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>
+            <Text style={[TYPOGRAPHY.BodyM, ProfileSettingsScreenStyles.emptyText]}>
               No triggers selected
             </Text>
           )}
@@ -82,12 +83,12 @@ const ProfileRecordingSettingsScreen: React.FC = () => {
 
         <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Critical Events & Alerts</Text>
         <AppCard style={CARD.trigger}>
-          <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>
+          <Text style={[TYPOGRAPHY.BodyM, ProfileSettingsScreenStyles.emptyText]}>
             Configure event alerts here (Future Feature)
           </Text>
         </AppCard>
 
-        <View style={{ height: SPACING.s32 }} />
+        <View style={ProfileSettingsScreenStyles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );

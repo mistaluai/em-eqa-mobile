@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN, SECTION, SPACING, TYPOGRAPHY } from '../../theme/styles';
+import { SCREEN, SECTION, SPACING, TYPOGRAPHY } from '../../theme';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
 import { DeletionConfirmationModal } from './components/DeletionConfirmationModal';
 import { RecordingPermissionCard } from './components/RecordingPermissionCard';

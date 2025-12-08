@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { Clip } from '../../../shared/types';
 import { COLORS } from '../../../theme/colors';
-import { TEXT, TYPOGRAPHY } from '../../../theme/styles';
+import { TEXT, TYPOGRAPHY } from '../../../theme';
 import { ClipItem } from './ClipItem';
 
 interface ClipSectionProps {

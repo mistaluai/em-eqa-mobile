@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { LIST, SCREEN } from '../../theme/styles';
+import { LIST, SCREEN } from '../../theme';
 import { EventCard } from './components/EventCard';
 import { FilterBar } from './components/FilterBar';
 import { mockEvents } from './constants';
