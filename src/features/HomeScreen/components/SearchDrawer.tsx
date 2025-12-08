@@ -7,12 +7,12 @@ import {
   Dimensions,
   Modal,
   Pressable,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../../../theme/colors';
 import { DRAWER, sidebarStyles } from '../../../theme/styles';
 //import {NavigationHub} from "../features/NavigationHubScreen/NavigationHubScreen";
@@ -45,7 +45,7 @@ const DrawerSidebarContent = () => {
   const navigation = useNavigation<any>();
   const handleProfilePress = () => {
     navigation.navigate('NavigationHubScreen');
-  
+
   };
 
   return (

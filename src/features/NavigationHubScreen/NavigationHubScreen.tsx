@@ -4,12 +4,12 @@ import { SPACING } from '@/src/theme/styles';
 import React from 'react';
 import {
   Platform,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigationHubLogic } from '../NavigationHubScreen/hooks/useNavigationHubLogic'; // ← Import your hook
 import { NAV_ITEMS } from './constants';
 
@@ -35,7 +35,7 @@ interface LogoutItemProps {
 // --- Navigation Item Component ---
 const NavItem: React.FC<NavItemProps> = ({ item, handlePress }) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.navItemContainer}
       onPress={() => handlePress(item.screen)}
       activeOpacity={0.7}
@@ -55,7 +55,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, handlePress }) => {
 // --- Logout Item Component ---
 const LogoutItem: React.FC<LogoutItemProps> = ({ handlePress }) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.navItemContainer}
       onPress={() => handlePress('Logout')}
       activeOpacity={0.7}
@@ -78,26 +78,26 @@ const NavigationHubScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      
+
       {/* Header */}
-      <AppHeader title="Navigation Hub" showBack={true}  />
+      <AppHeader title="Navigation Hub" showBack={true} />
 
-        {/* Navigation List Container */}
-        <View style={styles.listContainer}>
-          {NAV_ITEMS.map(item => (
-            <React.Fragment key={item.id}>
-              <NavItem 
-                item={item} 
-                handlePress={handleCardPress} 
-              />
-              <View style={styles.separator} /> 
-            </React.Fragment>
-          ))}
+      {/* Navigation List Container */}
+      <View style={styles.listContainer}>
+        {NAV_ITEMS.map(item => (
+          <React.Fragment key={item.id}>
+            <NavItem
+              item={item}
+              handlePress={handleCardPress}
+            />
+            <View style={styles.separator} />
+          </React.Fragment>
+        ))}
 
-          {/* Logout Item */}
-          <LogoutItem handlePress={handleCardPress} />
-        </View>
-      
+        {/* Logout Item */}
+        <LogoutItem handlePress={handleCardPress} />
+      </View>
+
 
     </SafeAreaView>
   );
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 16 : 0,
     backgroundColor: COLORS.backgroundLight,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight, 
+    borderBottomColor: COLORS.borderLight,
   },
   headerTitle: {
     fontSize: 18,
