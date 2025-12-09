@@ -1,42 +1,54 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
-import AppCard from '../../../components/AppCard';
 import { COLORS } from '../../../theme/colors';
 import { ConnectionStatusCardStyles } from '../../../theme/styles/DeviceConnectionScreen/ConnectionStatusCardStyle';
-import { TYPOGRAPHY } from '../../../theme';
 
 interface ConnectionStatusCardProps {
-  status: 'connected' | 'disconnected';
+  status: 'connected' | 'disconnected' | 'searching';
   deviceName: string;
-  lastCheckTime: string;
+  deviceModel: string;
+  batteryLevel: number;
 }
 
 export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   status,
   deviceName,
-  lastCheckTime,
+  deviceModel,
+  batteryLevel,
 }) => {
-  // Switched COLORS.ultraViolet to COLORS.primary and COLORS.desertSand to COLORS.secondary
-  const statusColor = status === 'connected' ? COLORS.primary : COLORS.secondary;
-  const statusText = status === 'connected' ? 'Connected' : 'Disconnected';
-  const statusIcon = status === 'connected' ? 'wifi' : 'warning';
+  const isConnected = status === 'connected';
+  const statusColor = isConnected ? COLORS.navStatus : COLORS.textSecondary;
+  const statusText = isConnected ? 'Active' : 'Offline';
 
   return (
-    <AppCard style={ConnectionStatusCardStyles.statusCard}>
-      <View style={ConnectionStatusCardStyles.statusRow}>
-        <View style={[ConnectionStatusCardStyles.statusDot, { backgroundColor: statusColor }]} />
-        <Text style={[TYPOGRAPHY.BodyM, { color: statusColor }, ConnectionStatusCardStyles.statusText]}>
-          {statusText}
-        </Text>
-        <Text style={[TYPOGRAPHY.Caption, ConnectionStatusCardStyles.deviceName]}>{deviceName}</Text>
+    <View style={ConnectionStatusCardStyles.glassContainer}>
+      {/* Row 1: Header & Status */}
+      <View style={ConnectionStatusCardStyles.row}>
+        <View>
+          <Text style={ConnectionStatusCardStyles.label}>Device</Text>
+          <Text style={ConnectionStatusCardStyles.deviceName}>{deviceName}</Text>
+        </View>
+        <View style={ConnectionStatusCardStyles.statusBadge}>
+          <View style={[ConnectionStatusCardStyles.statusDot, { backgroundColor: statusColor }]} />
+          <Text style={[ConnectionStatusCardStyles.statusText, { color: statusColor }]}>{statusText}</Text>
+        </View>
       </View>
-      <View style={ConnectionStatusCardStyles.statusRow}>
-        <Ionicons name={statusIcon as any} size={24} color={statusColor} style={ConnectionStatusCardStyles.iconMargin} />
-        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary }]}>
-          Last Check: {lastCheckTime}
-        </Text>
+
+      {/* Divider */}
+      <View style={ConnectionStatusCardStyles.divider} />
+
+      {/* Row 2: Details (Model & Battery) */}
+      <View style={ConnectionStatusCardStyles.detailsRow}>
+        <View style={ConnectionStatusCardStyles.detailItem}>
+          <Ionicons name="hardware-chip-outline" size={18} color={COLORS.textSecondary} />
+          <Text style={ConnectionStatusCardStyles.detailText}>{deviceModel}</Text>
+        </View>
+        <View style={ConnectionStatusCardStyles.detailItem}>
+          <Ionicons name={batteryLevel > 20 ? "battery-half-outline" : "battery-dead-outline"} size={18} color={COLORS.textSecondary} />
+          <Text style={ConnectionStatusCardStyles.detailText}>{batteryLevel}% Battery</Text>
+        </View>
       </View>
-    </AppCard>
+    </View>
   );
 };
