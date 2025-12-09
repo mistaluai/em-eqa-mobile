@@ -19,17 +19,12 @@ import TimelineEventsScreen from '@/src/features/TimelineEventsScreen';
 
 const Stack = createNativeStackNavigator();
 
-// Mock function to check if onboarding is done and user is logged in
 const getInitialRoute = async () => {
   const isLoggedIn = false;
   const onboardingDone = false;
 
-  if (!onboardingDone) {
-    return 'Onboarding';
-  }
-  if (isLoggedIn) {
-    return 'Home';
-  }
+  if (!onboardingDone) return 'Onboarding';
+  if (isLoggedIn) return 'Home';
   return 'Login';
 };
 
@@ -53,12 +48,15 @@ const Index = () => {
       initialRouteName={initialRoute}
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: '#1A1A1A' },
-        // Use 'default' to let iOS/Android use their smoothest native standard
-        animation: 'default',
+        // FIX 1: Keep background white so no black void appears
+        contentStyle: { backgroundColor: COLORS.backgroundLight },
+        // FIX 2: Use 'fade'. It is faster, cleaner, and hides the sliding artifacts completely.
+        animation: 'fade',
+        // FIX 3: Ensure gestures are enabled for a native feel even with fade
+        gestureEnabled: true,
       }}
     >
-      {/* AUTH FLOW: Use Fade for a cleaner switch */}
+      {/* AUTH FLOW */}
       <Stack.Group screenOptions={{ animation: 'fade' }}>
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -68,26 +66,22 @@ const Index = () => {
       {/* MAIN APP */}
       <Stack.Screen name="Home" component={HomeScreen} />
 
+      {/* You can keep slide_from_bottom for the Hub as it usually handles overlays better */}
+      <Stack.Screen
+        name="NavigationHubScreen"
+        component={NavigationHubScreen}
+      />
+
       <Stack.Screen name="DeviceConnection" component={DeviceConnectionScreen} />
       <Stack.Screen name="TimelineEvents" component={TimelineEventsScreen} />
       <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
       <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
       <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
-      <Stack.Screen name="NavigationHubScreen" component={NavigationHubScreen} />
 
-      {/* MODAL / DETAILS FLOW 
-          presentation: 'modal' makes it slide up like a card (iOS) 
-          or full screen dialog (Android) 
-      */}
+      {/* MODAL / DETAILS FLOW */}
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen
-          name="ProfileSettings"
-          component={ProfileSettingsScreen}
-        />
-        <Stack.Screen
-          name="EventDetails"
-          component={EventDetailsScreen}
-        />
+        <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+        <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
       </Stack.Group>
 
     </Stack.Navigator>
@@ -97,7 +91,7 @@ const Index = () => {
 const styles = StyleSheet.create({
   loaderContainer: {
     flex: 1,
-    backgroundColor: COLORS.backgroundDark,
+    backgroundColor: COLORS.backgroundLight,
     justifyContent: 'center',
     alignItems: 'center',
   }

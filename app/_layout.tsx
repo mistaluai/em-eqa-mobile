@@ -1,11 +1,10 @@
-//import { Font } from 'expo-font';
-import { Stack } from 'expo-router';
+import { fontFamily } from '@/src/theme/fonts';
+import * as Font from 'expo-font';
+import { Slot } from 'expo-router'; // UI CHANGE: Use Slot instead of Stack
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-//import { Font } from '../src/theme/fonts';
-import { fontFamily } from '@/src/theme/fonts';
-import * as Font from 'expo-font';
+
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
@@ -30,16 +29,9 @@ const RootLayout = () => {
 
   return (
     <>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerShown: false, // Screens use their own AppHeader component
-          contentStyle: { backgroundColor: '#1A1A1A' }, // carbonBlack
-          animation: 'slide_from_right',
-        }}
-      >
-        <Stack.Screen name="index" options={{ title: 'App Index' }} />
-      </Stack>
+      <StatusBar style="dark" />
+      { }
+      <Slot />
     </>
   );
 };
