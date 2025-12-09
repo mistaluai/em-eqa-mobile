@@ -75,8 +75,8 @@ const DrawerSidebarContent = () => {
       {/* 2. Top Navigation Actions */}
       <View style={SearchDrawerStyles.topMenuContainer}>
         <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
-        <MenuItem icon="grid-outline" label="Timeline & Events" />
-        <MenuItem icon="camera-outline" label="Camera Connection" />
+        <MenuItem icon="grid-outline" label="Timeline & Events" onPress={() => navigation.navigate('TimelineEvents')} />
+        <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => navigation.navigate('DeviceConnection')} />
       </View>
 
       <View style={SearchDrawerStyles.sectionTitleContainer}>
