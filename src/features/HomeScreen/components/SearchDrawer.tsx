@@ -1,23 +1,21 @@
 // components/SearchDrawer.tsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-
 import React from 'react';
 import {
   Dimensions,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS } from '../../../theme/colors';
 import { DRAWER } from '../../../theme';
+import { COLORS } from '../../../theme/colors';
 import { SearchDrawerStyles } from '../../../theme/styles/HomeScreen/SearchDrawerStyle';
-//import {NavigationHub} from "../features/NavigationHubScreen/NavigationHubScreen";
-
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
@@ -27,65 +25,88 @@ interface SearchDrawerProps {
   onClose: () => void;
 }
 
-// --- Reusable Component for Chat History Item ---
-const ChatHistoryItem = ({ title }: { title: string }) => (
-  <TouchableOpacity style={SearchDrawerStyles.chatItem}>
-    <Text style={SearchDrawerStyles.chatItemText}>{title}</Text>
+// --- Menu Item Component (New Chat, Library, etc) ---
+const MenuItem = ({ icon, label, onPress, isNewChat = false }: { icon: string, label: string, onPress?: () => void, isNewChat?: boolean }) => (
+  <TouchableOpacity style={SearchDrawerStyles.menuItem} onPress={onPress}>
+    <Ionicons name={icon as any} size={20} color={COLORS.textPrimary} style={SearchDrawerStyles.menuIcon} />
+    <Text style={[SearchDrawerStyles.menuLabel, isNewChat && SearchDrawerStyles.newChatLabel]}>{label}</Text>
+    {isNewChat && (
+      <View style={SearchDrawerStyles.newChatIconContainer}>
+        <Ionicons name="create-outline" size={20} color={COLORS.textPrimary} />
+      </View>
+    )}
   </TouchableOpacity>
 );
 
-// --- Content Component (The actual Sidebar UI) ---
+// --- Chat History Item Component (Clean Text) ---
+const ChatHistoryItem = ({ title }: { title: string }) => (
+  <TouchableOpacity style={SearchDrawerStyles.chatItem}>
+    <Text style={SearchDrawerStyles.chatItemText} numberOfLines={1}>{title}</Text>
+  </TouchableOpacity>
+);
+
 const DrawerSidebarContent = () => {
-  const SearchIconPlaceholder = () => (
-    <View style={SearchDrawerStyles.searchIconPlaceholder}>
-      <Text style={SearchDrawerStyles.searchIconText}>
-        🔍
-      </Text>
-    </View>
-  );
   const navigation = useNavigation<any>();
+
   const handleProfilePress = () => {
     navigation.navigate('NavigationHubScreen');
-
   };
+
+  // Mock data matching your screenshot for visual verification
+  const historyItems = [
+    "Medicine Query",
+    "Interaction Chat",
+  ];
 
   return (
     <View style={SearchDrawerStyles.contentContainer}>
-      {/* 1. Header and Search Bar Area */}
-      <View style={SearchDrawerStyles.header}>
-        <View style={SearchDrawerStyles.searchBarContainer}>
+      {/* 1. Search Bar Area */}
+      <View style={SearchDrawerStyles.searchContainer}>
+        <View style={SearchDrawerStyles.searchBar}>
+          <Ionicons name="search" size={20} color={COLORS.textSecondary} style={{ marginRight: 8 }} />
           <TextInput
             style={SearchDrawerStyles.searchBarInput}
-            placeholder="Search your chats"
+            placeholder="Search"
             placeholderTextColor={COLORS.textSecondary}
           />
-          <SearchIconPlaceholder />
         </View>
-        <TouchableOpacity>
-          <Ionicons name="chatbox-outline" size={24} color={COLORS.textPrimary} />
-        </TouchableOpacity>
       </View>
 
-      {/* 2. Chat History */}
-      <Text style={SearchDrawerStyles.chatHistoryTitle}>Chat History</Text>
-      <View style={SearchDrawerStyles.chatHistoryList}>
-        <ChatHistoryItem title="chat1" />
-        <ChatHistoryItem title="chat2" />
-        <ChatHistoryItem title="chat3" />
-        <ChatHistoryItem title="chat4" />
+      {/* 2. Top Navigation Actions */}
+      <View style={SearchDrawerStyles.topMenuContainer}>
+        <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
+        <MenuItem icon="grid-outline" label="Timeline & Events" />
+        <MenuItem icon="camera-outline" label="Camera Connection" />
       </View>
 
-      {/* 3. USER PROFILE AREA – NOW PRESSABLE */}
+      <View style={SearchDrawerStyles.sectionTitleContainer}>
+        <Text style={SearchDrawerStyles.sectionTitle}>Today</Text>
+      </View>
+
+      {/* 3. Scrollable Chat History */}
+      <ScrollView
+        style={SearchDrawerStyles.scrollArea}
+        contentContainerStyle={SearchDrawerStyles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {historyItems.map((item, index) => (
+          <ChatHistoryItem key={index} title={item} />
+        ))}
+      </ScrollView>
+
+      {/* 4. Footer User Profile */}
       <Pressable
         onPress={handleProfilePress}
         style={({ pressed }) => [
           SearchDrawerStyles.userProfile,
           { opacity: pressed ? 0.7 : 1 },
         ]}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
-        <View style={SearchDrawerStyles.userPhoto} />
-        <Text style={SearchDrawerStyles.userName}>User_name</Text>
+        <View style={SearchDrawerStyles.userAvatar}>
+          <Text style={SearchDrawerStyles.avatarText}>LA</Text>
+        </View>
+        <Text style={SearchDrawerStyles.userName}>Luai Waleed Abdelkarim</Text>
+        <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.textSecondary} style={{ marginLeft: 'auto' }} />
       </Pressable>
     </View>
   );
@@ -94,13 +115,9 @@ const DrawerSidebarContent = () => {
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
-      {/* BACKDROP – closes drawer when tapped */}
       <Pressable style={DRAWER.backdrop} onPress={onClose} />
-
-      {/* LEFT DRAWER – stop propagation so taps inside don't close it */}
       <View style={[DRAWER.drawerContainer, { width: DRAWER_WIDTH }]}>
         <SafeAreaView style={SearchDrawerStyles.safeAreaContent}>
-          {/* This inner Pressable prevents backdrop onPress from firing when tapping inside the drawer */}
           <Pressable style={SearchDrawerStyles.drawerPressable} onPress={(e) => e.stopPropagation()}>
             <DrawerSidebarContent />
           </Pressable>
