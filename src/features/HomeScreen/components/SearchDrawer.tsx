@@ -1,9 +1,11 @@
 // components/SearchDrawer.tsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Animated,
   Dimensions,
+  Easing,
   Modal,
   Pressable,
   ScrollView,
@@ -45,11 +47,11 @@ const ChatHistoryItem = ({ title }: { title: string }) => (
   </TouchableOpacity>
 );
 
-const DrawerSidebarContent = () => {
-  const navigation = useNavigation<any>();
+// --- Updated Content Component to accept navigation handler ---
+const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
 
   const handleProfilePress = () => {
-    navigation.navigate('NavigationHubScreen');
+    onNavigate('NavigationHubScreen');
   };
 
   // Mock data matching your screenshot for visual verification
@@ -75,8 +77,9 @@ const DrawerSidebarContent = () => {
       {/* 2. Top Navigation Actions */}
       <View style={SearchDrawerStyles.topMenuContainer}>
         <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
-        <MenuItem icon="grid-outline" label="Timeline & Events" onPress={() => navigation.navigate('TimelineEvents')} />
-        <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => navigation.navigate('DeviceConnection')} />
+        {/* Use onNavigate to close drawer then navigate */}
+        <MenuItem icon="grid-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
+        <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
 
       <View style={SearchDrawerStyles.sectionTitleContainer}>
@@ -113,16 +116,97 @@ const DrawerSidebarContent = () => {
 };
 
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
+  const navigation = useNavigation<any>();
+
+  // 1. Setup Animation Values
+  // Slide starts off-screen (-width)
+  const slideAnim = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
+  // Fade starts at 0 (invisible)
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // 2. Trigger Entry Animation when 'visible' becomes true
+  useEffect(() => {
+    if (visible) {
+      Animated.parallel([
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+          easing: Easing.out(Easing.quad), // Smooth deceleration
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible]);
+
+  // 3. Helper to Animate Out then Close
+  const closeDrawer = () => {
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: -DRAWER_WIDTH,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.in(Easing.quad), // Smooth acceleration
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Actually unmount/hide the modal after animation finishes
+      onClose();
+    });
+  };
+
+  // 4. Handle Navigation (Close first, then navigate)
+  const handleNavigation = (screenName: string) => {
+    closeDrawer();
+    // Small timeout to ensure animation starts smoothly before screen transition
+    setTimeout(() => {
+      navigation.navigate(screenName);
+    }, 100);
+  };
+
   return (
-    <Modal visible={visible} transparent animationType="fade">
-      <Pressable style={DRAWER.backdrop} onPress={onClose} />
-      <View style={[DRAWER.drawerContainer, { width: DRAWER_WIDTH }]}>
+    <Modal
+      visible={visible}
+      transparent
+      // Important: Disable default 'fade' so our custom animation controls it
+      animationType="none"
+      onRequestClose={closeDrawer} // Android back button support
+    >
+      {/* Animated Backdrop */}
+      <Animated.View
+        style={[
+          DRAWER.backdrop,
+          { opacity: fadeAnim }
+        ]}
+      >
+        <Pressable style={{ flex: 1 }} onPress={closeDrawer} />
+      </Animated.View>
+
+      {/* Animated Drawer Container */}
+      <Animated.View
+        style={[
+          DRAWER.drawerContainer,
+          {
+            width: DRAWER_WIDTH,
+            transform: [{ translateX: slideAnim }]
+          }
+        ]}
+      >
         <SafeAreaView style={SearchDrawerStyles.safeAreaContent}>
           <Pressable style={SearchDrawerStyles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            <DrawerSidebarContent />
+            {/* Pass the custom navigation handler */}
+            <DrawerSidebarContent onNavigate={handleNavigation} />
           </Pressable>
         </SafeAreaView>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };
