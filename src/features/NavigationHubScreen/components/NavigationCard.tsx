@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
@@ -9,25 +10,33 @@ interface NavigationCardProps {
   onPress: () => void;
 }
 
-/**
- * NavigationCard - Reusable component for rendering navigation items
- * Used for all navigation targets including logout
- */
 export const NavigationCard: React.FC<NavigationCardProps> = ({ item, onPress }) => {
   return (
     <Pressable
-      style={NavigationCardStyles.card}
+      style={({ pressed }) => [
+        NavigationCardStyles.card,
+        pressed && NavigationCardStyles.cardPressed
+      ]}
       onPress={onPress}
-      android_ripple={{ color: COLORS.borderLight }}
     >
-      <View style={NavigationCardStyles.container}>
-        <View style={NavigationCardStyles.textContainer}>
-          <Text style={NavigationCardStyles.title}>{item.title}</Text>
-          <Text style={NavigationCardStyles.description}>{item.description}</Text>
-        </View>
-        <Text style={NavigationCardStyles.chevron}>&gt;</Text>
+      {/* 1. Colorful Icon Container */}
+      <View style={[NavigationCardStyles.iconContainer, { backgroundColor: item.color + '20' }]}>
+        {/* Using '20' opacity hex for a soft pastel background, or use solid item.color if preferred */}
+        <Ionicons name={item.icon as any} size={24} color={item.color} />
+      </View>
+
+      {/* 2. Text Content */}
+      <View style={NavigationCardStyles.textContainer}>
+        <Text style={NavigationCardStyles.title}>{item.title}</Text>
+        <Text style={NavigationCardStyles.description} numberOfLines={1}>
+          {item.description}
+        </Text>
+      </View>
+
+      {/* 3. Modern Chevron */}
+      <View style={NavigationCardStyles.chevronContainer}>
+        <Ionicons name="chevron-forward" size={20} color={COLORS.borderDark} />
       </View>
     </Pressable>
   );
 };
-

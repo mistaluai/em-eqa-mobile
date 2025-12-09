@@ -1,62 +1,61 @@
 import { COLORS } from '../../theme/colors';
 import { NavItemData } from './types';
 
-// NOTE: Using emojis and symbols as placeholders for icons.
 export const NAV_ITEMS: NavItemData[] = [
-  { 
-    id: 'device', 
-    title: 'Device Connection', 
-    description: 'Manage pairing and connection settings for your external devices.', 
-    //icon: '🔗',
+  {
+    id: 'device',
+    title: 'Camera Connection',
+    description: 'Manage pairing and connection settings.',
+    icon: 'camera', // Ionicons name
     screen: 'DeviceConnectionScreen',
     color: COLORS.navDevice
   },
-  { 
-    id: 'timeline', 
-    title: 'Timeline & Events', 
-    description: 'Review and search through your summarized daily events and history.', 
-   // icon: '🗓️',
+  {
+    id: 'timeline',
+    title: 'Timeline & Events',
+    description: 'Review daily summaries and history.',
+    icon: 'calendar',
     screen: 'TimelineEventsScreen',
     color: COLORS.navTimeline
   },
-  { 
-    id: 'privacy', 
-    title: 'Data Privacy & Control', 
-    description: 'Adjust permissions, data retention, and sharing settings.', 
-   // icon: '🛡️',
-    screen: 'DataPrivacyScreen',
-    color: COLORS.navPrivacy
-  },
-  { 
-    id: 'sync', 
-    title: 'Clip Upload & Sync', 
-    description: 'Monitor and control the synchronization of recorded clips to the cloud.', 
-    //icon: '☁️',
+  {
+    id: 'sync',
+    title: 'Clip Upload & Sync',
+    description: 'Monitor cloud synchronization status.',
+    icon: 'cloud-upload',
     screen: 'ClipSyncScreen',
     color: COLORS.navSync
   },
-  { 
-    id: 'profile', 
-    title: 'Profile & Recording Settings', 
-    description: 'Update personal information and configure recording preferences.', 
-   // icon: '👤',
+  {
+    id: 'privacy',
+    title: 'Data Privacy',
+    description: 'Retention rules and deletion.',
+    icon: 'shield-checkmark',
+    screen: 'DataPrivacyScreen',
+    color: COLORS.navPrivacy
+  },
+  {
+    id: 'profile',
+    title: 'Profile Settings',
+    description: 'Personal info and recording triggers.',
+    icon: 'person',
     screen: 'ProfileSettingsScreen',
     color: COLORS.navProfile
   },
-  { 
-    id: 'status', 
-    title: 'System Status', 
-    description: 'Check the health, battery, and real-time operational status of the app.', 
-    //icon: '🩺',
+  {
+    id: 'status',
+    title: 'System Status',
+    description: 'Health, battery, and operations.',
+    icon: 'pulse',
     screen: 'SystemStatusScreen',
     color: COLORS.navStatus
   },
-  { 
-    id: 'logout', 
-    title: 'Log Out', 
-    description: 'Securely sign out of your current account session.', 
-    //icon: '🚪',
+  {
+    id: 'logout',
+    title: 'Log Out',
+    description: 'Sign out of your account.',
+    icon: 'log-out',
     screen: 'Logout',
-    color: COLORS.navLogoutBg
+    color: COLORS.textSecondary // Neutral color for logout
   },
 ];

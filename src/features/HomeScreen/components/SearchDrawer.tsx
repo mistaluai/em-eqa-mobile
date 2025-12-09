@@ -78,7 +78,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
       <View style={SearchDrawerStyles.topMenuContainer}>
         <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
         {/* Use onNavigate to close drawer then navigate */}
-        <MenuItem icon="grid-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
+        <MenuItem icon="calendar-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
 
