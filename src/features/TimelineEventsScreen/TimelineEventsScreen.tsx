@@ -8,10 +8,6 @@ import { FilterBar } from './components/FilterBar';
 import { mockEvents } from './constants';
 import { useTimelineEventsLogic } from './hooks/useTimelineEventsLogic';
 
-/**
- * TimelineEventsScreen - Main screen component for timeline and events
- * Handles composition and rendering using hooks and components
- */
 const TimelineEventsScreen: React.FC = () => {
   const { activeFilter, setActiveFilter, getFilteredEvents } = useTimelineEventsLogic();
   const filteredEvents = getFilteredEvents(mockEvents);
@@ -25,7 +21,12 @@ const TimelineEventsScreen: React.FC = () => {
 
         <FlatList
           data={filteredEvents}
-          renderItem={({ item }) => <EventCard event={item} />}
+          renderItem={({ item, index }) => (
+            <EventCard
+              event={item}
+              isLast={index === filteredEvents.length - 1}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={LIST.content}
           showsVerticalScrollIndicator={false}
