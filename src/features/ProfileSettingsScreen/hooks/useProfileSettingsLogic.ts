@@ -1,152 +1,72 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useEffect } from 'react';
+import { useAuthStore } from '../../../services/auth/supabaseAuth'; // [cite: 609]
+import { Alert } from 'react-native';
 
-import AppButton from '../../../components/AppButton';
-import AppHeader from '../../../components/HeaderComponent';
-import { AvatarUpload } from '../components/AvatarUpload';
+export const useProfileSettingsLogic = () => {
+  // 1. Get Global State
+  const {
+    full_name,
+    username,
+    email: storeEmail,
+    dob,
+    setFullname,
+    setEmail: setStoreEmail
+  } = useAuthStore();
 
-import { COLORS } from '../../../theme/colors';
-import { ProfileSettingsScreenStyles } from '../../../theme/styles/ProfileSettingsScreen/ProfileSettingsScreenStyle';
+  // 2. Local State for editing
+  const [localEmail, setLocalEmail] = useState(storeEmail);
+  const [naturalLanguageInput, setNaturalLanguageInput] = useState('');
 
-const ProfileSettingsScreen: React.FC = () => {
-  const [name, setName] = useState('Luai Waleed Abdelkarim');
-  const [email, setEmail] = useState('luai.wa@university.edu');
-  const [preferences, setPreferences] = useState('');
+  // 3. Calculated Age (Read-only)
+  const calculateAge = (dateOfBirth: Date | string) => {
+    const birthday = new Date(dateOfBirth);
+    const ageDifMs = Date.now() - birthday.getTime();
+    const ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
 
-  const username = "luai_cse";
-  const dobYear = "2002";
-  const age = "23";
+  const age = calculateAge(dob);
 
-  return (
-    // FIX: Only protect the TOP edge. We handle bottom protection manually via ScrollView padding.
-    <SafeAreaView 
-      style= { ProfileSettingsScreenStyles.screenBackground }
-  edges = { ['top', 'left', 'right']}
-    >
-    <AppHeader title="Edit Profile" showBack = { true} />
+  // 4. Handlers
+  const handleUpdateProfile = () => {
+    // In a real app, this would call an update API
+    setStoreEmail(localEmail); // Update global store
+    Alert.alert('Success', 'Profile information updated.');
+  };
 
-      {/* FIX: KeyboardAvoidingView must flex to fill the space below the header */ }
-      < KeyboardAvoidingView
-  behavior = { Platform.OS === 'ios' ? 'padding' : undefined }
-  style = {{ flex: 1 }
-}
-      >
-  <ScrollView 
-          contentContainerStyle={ ProfileSettingsScreenStyles.contentContainer }
-showsVerticalScrollIndicator = { false}
-// FIX: Ensure keyboard interactions don't block taps
-keyboardShouldPersistTaps = "handled"
-  >
+  const handleChangeAvatar = () => {
+    console.log('Open Image Picker');
+  };
 
-  {/* 1. Header Section */ }
-  < View style = { ProfileSettingsScreenStyles.headerContainer } >
-    <View style={ ProfileSettingsScreenStyles.avatarWrapper }>
-      <AvatarUpload onPress={ () => { } } />
-        < View style = { ProfileSettingsScreenStyles.editIconBadge } >
-          <Ionicons name="pencil" size = { 14} color = "white" />
-            </View>
-            </View>
+  const handleChangePassword = () => {
+    // Navigate to a dedicated password change screen or show modal
+    Alert.alert('Reset Password', 'A password reset link has been sent to your email.');
+  };
 
-            < Text style = { ProfileSettingsScreenStyles.nameText } > { name } </Text>
-              < Text style = { ProfileSettingsScreenStyles.usernameText } > @{ username } </Text>
+  const handleUpdateTriggers = () => {
+    if (naturalLanguageInput.trim().length === 0) return;
+    // Here you would send this string to your LLM to parse into tags
+    Alert.alert('AI Preferences Updated', 'The AI is now looking for: ' + naturalLanguageInput);
+    setNaturalLanguageInput('');
+  };
 
-                < View style = { ProfileSettingsScreenStyles.badgeRow } >
-                  <View style={ ProfileSettingsScreenStyles.infoBadge }>
-                    <Text style={ ProfileSettingsScreenStyles.badgeText }> Age { age } </Text>
-                      </View>
-                      < View style = { ProfileSettingsScreenStyles.infoBadge } >
-                        <Text style={ ProfileSettingsScreenStyles.badgeText }> Born { dobYear } </Text>
-                          </View>
-                          < View style = { [ProfileSettingsScreenStyles.infoBadge, { backgroundColor: '#E0F2FE' }]} >
-                            <Text style={ [ProfileSettingsScreenStyles.badgeText, { color: '#0284C7' }] }> CSE Student </Text>
-                              </View>
-                              </View>
-                              </View>
+  // Sync local state if global changes
+  useEffect(() => {
+    setLocalEmail(storeEmail);
+  }, [storeEmail]);
 
-{/* 2. Personal Info Group */ }
-<Text style={ ProfileSettingsScreenStyles.sectionLabel }> Personal Information </Text>
-  < View style = { ProfileSettingsScreenStyles.settingsGroup } >
-    <View style={ ProfileSettingsScreenStyles.settingRow }>
-      <View style={ ProfileSettingsScreenStyles.rowIconContainer }>
-        <Ionicons name="person-outline" size = { 20} color = { COLORS.textSecondary } />
-          </View>
-          < Text style = { ProfileSettingsScreenStyles.rowLabel } > Name </Text>
-            < TextInput
-value = { name }
-onChangeText = { setName }
-style = { ProfileSettingsScreenStyles.rowInput }
-placeholderTextColor = { COLORS.textSecondary }
-  />
-  </View>
-
-  < View style = { [ProfileSettingsScreenStyles.settingRow, ProfileSettingsScreenStyles.lastRow]} >
-    <View style={ ProfileSettingsScreenStyles.rowIconContainer }>
-      <Ionicons name="mail-outline" size = { 20} color = { COLORS.textSecondary } />
-        </View>
-        < Text style = { ProfileSettingsScreenStyles.rowLabel } > Email </Text>
-          < TextInput
-value = { email }
-onChangeText = { setEmail }
-keyboardType = "email-address"
-autoCapitalize = "none"
-style = { ProfileSettingsScreenStyles.rowInput }
-placeholderTextColor = { COLORS.textSecondary }
-  />
-  </View>
-  </View>
-
-{/* 3. Security Group */ }
-<Text style={ ProfileSettingsScreenStyles.sectionLabel }> Security </Text>
-  < View style = { ProfileSettingsScreenStyles.settingsGroup } >
-    <Pressable 
-              style={ [ProfileSettingsScreenStyles.settingRow, ProfileSettingsScreenStyles.lastRow] }
-onPress = {() => console.log("Navigate to Change Password")}
-            >
-  <View style={ ProfileSettingsScreenStyles.rowIconContainer }>
-    <Ionicons name="lock-closed-outline" size = { 20} color = { COLORS.textSecondary } />
-      </View>
-      < Text style = { [ProfileSettingsScreenStyles.rowLabel, { flex: 1 }]} > Password </Text>
-        < Text style = {{ color: COLORS.textSecondary, fontSize: 14 }}> Last changed 30d ago </Text>
-          < Ionicons name = "chevron-forward" size = { 18} color = { COLORS.textSecondary } style = { ProfileSettingsScreenStyles.chevron } />
-            </Pressable>
-            </View>
-
-{/* 4. Tracking Group */ }
-<Text style={ ProfileSettingsScreenStyles.sectionLabel }> Tracking Preferences </Text>
-  < View style = { [ProfileSettingsScreenStyles.settingsGroup, ProfileSettingsScreenStyles.textAreaContainer]} >
-    <TextInput 
-              multiline
-placeholder = "Tell the AI what to track (e.g., 'Remind me if I leave my wallet, track my medication intake...')"
-placeholderTextColor = { COLORS.textSecondary }
-style = { ProfileSettingsScreenStyles.textAreaInput }
-value = { preferences }
-onChangeText = { setPreferences }
-scrollEnabled = { false} // Let parent scroll
-  />
-  </View>
-
-{/* 5. Save Button */ }
-<AppButton 
-            title="Save Changes"
-onPress = {() => console.log('Save')}
-style = { ProfileSettingsScreenStyles.actionButton }
-variant = "primary"
-  />
-
-  </ScrollView>
-  </KeyboardAvoidingView>
-  </SafeAreaView>
-  );
+  return {
+    fullName: full_name,
+    username,
+    email: localEmail,
+    setEmail: setLocalEmail,
+    dob,
+    age,
+    naturalLanguageInput,
+    setNaturalLanguageInput,
+    handleUpdateProfile,
+    handleChangeAvatar,
+    handleChangePassword,
+    handleUpdateTriggers,
+  };
 };
-
-export default ProfileSettingsScreen;
