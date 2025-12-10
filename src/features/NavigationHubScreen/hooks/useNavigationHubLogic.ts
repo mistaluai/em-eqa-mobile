@@ -1,11 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-
+import { useAuthStore } from '../../../services/auth/supabaseAuth';
 /**
  * Navigation logic for NavigationHubScreen
- * Dynamically routes each card to its appropriate screen.
+ * Dynamically routes each card to its appropriate screen or action.
  */
 export const useNavigationHubLogic = () => {
   const navigation = useNavigation();
+
+  // 2. Destructure the signOut function
+  const { signOut } = useAuthStore();
 
   // Unified map for card keys → actual navigation routes
   const screenMap: Record<string, string> = {
@@ -16,20 +19,28 @@ export const useNavigationHubLogic = () => {
     ClipSyncScreen: 'ClipUploadSync',
     ProfileSettingsScreen: 'ProfileSettings',
     SystemStatusScreen: 'SystemStatus',
-    Logout: 'Login',
+    // Logout mapping is no longer needed since we handle it explicitly below
   };
 
-  /** 
-   * Handles navigating to the correct screen
-   * Falls back to using the original name if no mapping exists
+  /** * Handles navigating to the correct screen OR signing out
    */
-  const handleCardPress = (screenName: string) => {
+  const handleCardPress = async (screenName: string) => {
+    // 3. Intercept the 'Logout' action defined in constants.ts
+    if (screenName === 'Logout') {
+      await signOut();
+      // No need to navigate manually. 
+      // app/index.tsx detects the session change and swaps to the Auth Stack automatically.
+      return;
+    }
+
+    // Standard navigation for other items
     const target = screenMap[screenName] ?? screenName;
     navigation.navigate(target as never);
   };
 
   const handleGoBack = () => {
-navigation.navigate('Home' as never);  };
+    navigation.navigate('Home' as never);
+  };
 
   return {
     handleCardPress,

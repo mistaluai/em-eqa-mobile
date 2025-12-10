@@ -16,18 +16,22 @@ import AppInput from '../../components/InputComponent';
 import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
 import { LoginFormStyles } from '../../theme/styles/LoginScreen/LoginFormStyle';
 import { LoginScreenStyles } from '../../theme/styles/LoginScreen/LoginScreenStyle';
+// Ensure this path matches where you saved the hook file
 import { useLoginLogic } from './hooks/useLoginLogic';
 
 const LoginScreen: React.FC = () => {
   const { width } = useWindowDimensions();
+
+  // 1. INTEGRATION: Destructure all necessary values and functions
   const {
     email,
     password,
+    loading,              // Use this for button state
     setEmail,
     setPassword,
     handleLogin,
-    handleForgotPassword,
     handleNavigateToSignUp,
+    handleForgotPassword  // Added this (was missing in your snippet)
   } = useLoginLogic();
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -77,7 +81,7 @@ const LoginScreen: React.FC = () => {
           >
             <Image
               source={require('../../../assets/images/em_logo.png')}
-               style  ={LoginScreenStyles.logoImage}
+              style={LoginScreenStyles.logoImage}
             />
           </View>
 
@@ -88,7 +92,9 @@ const LoginScreen: React.FC = () => {
               LoginScreenStyles.title,
               {
                 marginBottom: isKeyboardOpen ? SPACING.s96 : SPACING.s24,
-                visibility: isKeyboardOpen ? 'hidden' : 'visible',
+                // Note: React Native uses 'opacity' or 'display', not 'visibility'
+                opacity: isKeyboardOpen ? 0 : 1,
+                height: isKeyboardOpen ? 0 : undefined,
               },
             ]}
           >
@@ -96,6 +102,7 @@ const LoginScreen: React.FC = () => {
           </Text>
 
           <View style={LoginScreenStyles.formContainer}>
+            {/* 2. INTEGRATION: State is now controlled by Zustand via the Hook */}
             <AppInput
               label="Email Address"
               value={email}
@@ -124,7 +131,13 @@ const LoginScreen: React.FC = () => {
 
           <View style={[LoginScreenStyles.buttonSpacer, { height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }]} />
 
-          <AppButton title="Login" onPress={handleLogin} style={LoginScreenStyles.loginButton} />
+          {/* 3. INTEGRATION: Pass loading state to button */}
+          <AppButton
+            title="Login"
+            onPress={handleLogin}
+            style={LoginScreenStyles.loginButton}
+            disabled={loading} // Prevent double clicks
+          />
 
           <View style={isKeyboardOpen ? LoginScreenStyles.signUpContainerKeyboard : LoginScreenStyles.signUpContainer}>
             <Pressable onPress={handleNavigateToSignUp}>

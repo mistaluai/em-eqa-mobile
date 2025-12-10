@@ -6,7 +6,8 @@ export const SignUpScreenStyles = StyleSheet.create({
     flex: 1,
   } as ViewStyle,
   scrollContainer: {
-    flex: 1,
+    flexGrow: 1,
+    paddingBottom: SPACING.s32,
   } as ViewStyle,
   photoContainer: {
     alignItems: 'center',

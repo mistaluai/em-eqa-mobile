@@ -1,24 +1,51 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { Alert } from 'react-native';
+import { useAuthStore } from '../../../services/auth/supabaseAuth'
 
 /**
  * Custom hook for SignUpScreen logic
- * Handles form state and signup submission
+ * Handles form state via Global Store and signup submission
  */
 export const useSignUpLogic = () => {
   const navigation = useNavigation();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  // 1. Local State: We keep confirmPassword local because it's 
+  // just for validation and doesn't need to be stored globally.
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      console.error('Passwords do not match');
+  // 2. Global Store: Destructure values and setters
+  const {
+    email,
+    password,
+    full_name,
+    username,
+    dob,
+    loading,
+    setEmail,
+    setPassword,
+    setFullname,
+    setUsername,
+    setDOB,
+    signUp
+  } = useAuthStore();
+
+  // 3. The Sign Up Handler
+  const handleSignUp = async () => {
+    // Basic Validation
+    if (!email || !password || !full_name) {
+      Alert.alert('Missing Data', 'Please fill in all required fields.');
       return;
     }
-    console.log('Signing up with:', fullName, email);
-    navigation.navigate('Login' as never);
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    // Call the store action
+    // The store handles the Supabase call and alerts for errors/success
+    await signUp();
   };
 
   const handleNavigateToLogin = () => {
@@ -26,16 +53,29 @@ export const useSignUpLogic = () => {
   };
 
   return {
-    fullName,
+    // MAPPING: The UI expects camelCase 'fullName', 
+    // but the store uses snake_case 'full_name'. We map them here.
+    fullName: full_name,
+    setFullName: setFullname,
+
     email,
-    password,
-    confirmPassword,
-    setFullName,
     setEmail,
+    password,
     setPassword,
+
+    // Local state
+    confirmPassword,
     setConfirmPassword,
+
+    // New fields (Ready for you to add <AppInput> for them in the UI)
+    username,
+    setUsername,
+    dob,
+    setDOB,
+
+    // UI Utilities
+    loading,
     handleSignUp,
     handleNavigateToLogin,
   };
 };
-

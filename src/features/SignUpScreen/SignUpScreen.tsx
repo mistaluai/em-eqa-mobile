@@ -3,11 +3,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView, // 1. Import ScrollView
   Text,
   TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { SignUpFormStyles } from '../../theme/styles/SignUpScreen/SignUpFormStyle';
@@ -19,20 +22,45 @@ import { useSignUpLogic } from './hooks/useSignUpLogic';
 const SignUpScreen: React.FC = () => {
   const {
     fullName,
-    email,
-    password,
-    confirmPassword,
     setFullName,
+    username,
+    setUsername,
+    email,
     setEmail,
+    dob,
+    setDOB,
+    password,
     setPassword,
+    confirmPassword,
     setConfirmPassword,
     handleSignUp,
     handleNavigateToLogin,
+    loading,
   } = useSignUpLogic();
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // simple input focus logic (same as Login)
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+
+    if (event.type === 'dismissed') {
+      setShowDatePicker(false);
+      return;
+    }
+
+    if (selectedDate) {
+      setDOB(selectedDate);
+      if (Platform.OS === 'android') {
+        setShowDatePicker(false);
+      }
+    }
+  };
+
+  const toggleDatePicker = () => {
+    setShowDatePicker(!showDatePicker);
+  };
+
   const handleFocus = () => setIsKeyboardOpen(true);
 
   const handleBlur = () => {
@@ -49,14 +77,20 @@ const SignUpScreen: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : -10}
       >
-        <View
-          style={[
+        {/* 2. Changed View to ScrollView */}
+        <ScrollView
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          // 3. Moved styles to contentContainerStyle
+          contentContainerStyle={[
             SCREEN.scrollContainer,
             SignUpScreenStyles.scrollContainer,
             {
+              // When keyboard opens, align top so we can scroll to bottom fields
               justifyContent: isKeyboardOpen ? 'flex-start' : 'center',
               paddingHorizontal: SPACING.s20,
-              marginBottom: isKeyboardOpen ? 6 : 0,
+              paddingBottom: SPACING.s40, // Add bottom padding for better scrolling experience
             },
           ]}
         >
@@ -66,6 +100,7 @@ const SignUpScreen: React.FC = () => {
               {
                 maxHeight: isKeyboardOpen ? 0 : 200,
                 opacity: isKeyboardOpen ? 0 : 1,
+                overflow: 'hidden', // Added to ensure it hides cleanly
               } as any,
             ]}
           >
@@ -90,7 +125,19 @@ const SignUpScreen: React.FC = () => {
               keyboardType="default"
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="Enter your name"
+              placeholder="John Doe"
+            />
+
+            <View style={SignUpFormStyles.spacer} />
+
+            <AppInput
+              label="Username"
+              value={username}
+              onChangeText={setUsername}
+              keyboardType="default"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder="johndoe123"
             />
 
             <View style={SignUpFormStyles.spacer} />
@@ -102,8 +149,32 @@ const SignUpScreen: React.FC = () => {
               keyboardType="email-address"
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="Enter your email"
+              placeholder="john@example.com"
             />
+
+            <View style={SignUpFormStyles.spacer} />
+
+            {/* DATE OF BIRTH PICKER */}
+            <Pressable onPress={toggleDatePicker}>
+              <View pointerEvents="none">
+                <AppInput
+                  label="Date of Birth"
+                  value={dob.toISOString().split('T')[0]}
+                  onChangeText={() => { }}
+                  placeholder="YYYY-MM-DD"
+                />
+              </View>
+            </Pressable>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={dob}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={onDateChange}
+                maximumDate={new Date()}
+              />
+            )}
 
             <View style={SignUpFormStyles.spacer} />
 
@@ -114,7 +185,7 @@ const SignUpScreen: React.FC = () => {
               secureTextEntry
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="Enter your password"
+              placeholder="••••••"
             />
 
             <View style={SignUpFormStyles.spacer} />
@@ -126,16 +197,17 @@ const SignUpScreen: React.FC = () => {
               secureTextEntry
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="Confirm your password"
+              placeholder="••••••"
             />
           </View>
 
           <View style={SignUpScreenStyles.titleSpacer} />
 
           <AppButton
-            title="Create Account"
+            title={loading ? "Creating..." : "Create Account"}
             onPress={handleSignUp}
             style={SCREEN.signUpButton}
+            disabled={loading}
           />
 
           <View style={SignUpScreenStyles.loginLinkSpacer} />
@@ -146,7 +218,7 @@ const SignUpScreen: React.FC = () => {
               <Text style={TEXT.signupLink}>Login</Text>
             </Text>
           </Pressable>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
