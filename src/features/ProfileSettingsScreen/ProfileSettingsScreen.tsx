@@ -1,97 +1,177 @@
-import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppCard from '../../components/AppCard';
+
+// Components
+import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import AppInput from '../../components/InputComponent';
+import { AvatarUpload } from './components/AvatarUpload';
+
+// Theme
 import { COLORS } from '../../theme/colors';
 import { ProfileSettingsScreenStyles } from '../../theme/styles/ProfileSettingsScreen/ProfileSettingsScreenStyle';
-import { BUTTON, CARD, PILL, SCREEN, SECTION, TEXT, TRIGGER_HEADER, TYPOGRAPHY } from '../../theme';
-import { AvatarUpload } from './components/AvatarUpload';
-import { TriggerPill } from './components/TriggerPill';
-import { TriggerSelectionModal } from './components/TriggerSelectionModal';
-import { availableTriggers } from './constants';
-import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
-/**
- * ProfileSettingsScreen - Main screen component for profile and settings
- * Handles composition and rendering using hooks and components
- */
-const ProfileRecordingSettingsScreen: React.FC = () => {
-  const {
-    username,
-    email,
-    isModalVisible,
-    selectedTriggers,
-    setUsername,
-    setEmail,
-    handleTriggerToggle,
-    handleOpenModal,
-    handleCloseModal,
-    handleChangePassword,
-    handleChangeAvatar,
-  } = useProfileSettingsLogic();
+const ProfileSettingsScreen: React.FC = () => {
+  const [name, setName] = useState('Luai Waleed Abdelkarim');
+  const [email, setEmail] = useState('luai.wa@university.edu');
+  const [preferences, setPreferences] = useState('');
+
+  const username = 'luai_cse';
+  const dobYear = '2002';
+  const age = '23';
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
-      <AppHeader title="Profile & Recording Settings" showBack={true} />
+    <SafeAreaView
+      style={ProfileSettingsScreenStyles.screenBackground}
+      edges={['top', 'left', 'right']}
+    >
+      <AppHeader title="Edit Profile" showBack={true} />
 
-      <TriggerSelectionModal
-        isVisible={isModalVisible}
-        onClose={handleCloseModal}
-        availableTriggers={availableTriggers}
-        selectedTriggers={selectedTriggers}
-        onToggleTrigger={handleTriggerToggle}
-      />
-
-      <ScrollView contentContainerStyle={SCREEN.container}>
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Personal Info</Text>
-        <AvatarUpload onPress={handleChangeAvatar} />
-
-        <AppInput label="Username" value={username} onChangeText={setUsername} />
-        <View style={ProfileSettingsScreenStyles.inputSpacer} />
-        <AppInput label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-        <View style={ProfileSettingsScreenStyles.inputSpacer} />
-
-        <Pressable onPress={handleChangePassword} style={SCREEN.profileChangePasswordLink}>
-          <Text style={[TYPOGRAPHY.BodyM, TEXT.changePassword]}>Change Password</Text>
-        </Pressable>
-
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Trigger Preferences</Text>
-        <View style={TRIGGER_HEADER.container}>
-          <Text style={[TYPOGRAPHY.BodyL, ProfileSettingsScreenStyles.triggerLabel]}>
-            Object Triggers
-          </Text>
-          <Pressable onPress={handleOpenModal} style={BUTTON.add}>
-            <Text style={ProfileSettingsScreenStyles.addButtonText}>+</Text>
-          </Pressable>
-        </View>
-
-        <AppCard style={CARD.trigger}>
-          {selectedTriggers.length > 0 ? (
-            <View style={PILL.container}>
-              {selectedTriggers.map((trigger, index) => (
-                <TriggerPill key={index} trigger={trigger} onRemove={handleTriggerToggle} />
-              ))}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          // FIX: Explicitly tell ScrollView to take available space
+          style={{ flex: 1 }}
+          contentContainerStyle={ProfileSettingsScreenStyles.contentContainer}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* 1. Header Section */}
+          <View style={ProfileSettingsScreenStyles.headerContainer}>
+            <View style={ProfileSettingsScreenStyles.avatarWrapper}>
+              <AvatarUpload onPress={() => { }} />
+              <View style={ProfileSettingsScreenStyles.editIconBadge}>
+                <Ionicons name="pencil" size={14} color="white" />
+              </View>
             </View>
-          ) : (
-            <Text style={[TYPOGRAPHY.BodyM, ProfileSettingsScreenStyles.emptyText]}>
-              No triggers selected
-            </Text>
-          )}
-        </AppCard>
 
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Critical Events & Alerts</Text>
-        <AppCard style={CARD.trigger}>
-          <Text style={[TYPOGRAPHY.BodyM, ProfileSettingsScreenStyles.emptyText]}>
-            Configure event alerts here (Future Feature)
-          </Text>
-        </AppCard>
+            <Text style={ProfileSettingsScreenStyles.nameText}>{name}</Text>
+            <Text style={ProfileSettingsScreenStyles.usernameText}>@{username}</Text>
 
-        <View style={ProfileSettingsScreenStyles.bottomSpacer} />
-      </ScrollView>
+            <View style={ProfileSettingsScreenStyles.badgeRow}>
+              <View style={ProfileSettingsScreenStyles.infoBadge}>
+                <Text style={ProfileSettingsScreenStyles.badgeText}>Age {age}</Text>
+              </View>
+              <View
+                style={[
+                  ProfileSettingsScreenStyles.infoBadge,
+                  { backgroundColor: '#E0F2FE' },
+                ]}
+              >
+                <Text style={[ProfileSettingsScreenStyles.badgeText, { color: '#0284C7' }]}>
+                  CSE Student
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 2. Personal Information Group */}
+          <Text style={ProfileSettingsScreenStyles.sectionLabel}>Personal Information</Text>
+          <View style={ProfileSettingsScreenStyles.settingsGroup}>
+            <View style={ProfileSettingsScreenStyles.settingRow}>
+              <View style={ProfileSettingsScreenStyles.rowIconContainer}>
+                <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} />
+              </View>
+              <Text style={ProfileSettingsScreenStyles.rowLabel}>Name</Text>
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                style={ProfileSettingsScreenStyles.rowInput}
+                placeholderTextColor={COLORS.textSecondary}
+              />
+            </View>
+
+            <View
+              style={[
+                ProfileSettingsScreenStyles.settingRow,
+                ProfileSettingsScreenStyles.lastRow,
+              ]}
+            >
+              <View style={ProfileSettingsScreenStyles.rowIconContainer}>
+                <Ionicons name="mail-outline" size={20} color={COLORS.textSecondary} />
+              </View>
+              <Text style={ProfileSettingsScreenStyles.rowLabel}>Email</Text>
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={ProfileSettingsScreenStyles.rowInput}
+                placeholderTextColor={COLORS.textSecondary}
+              />
+            </View>
+          </View>
+
+          {/* 3. Security Group */}
+          <Text style={ProfileSettingsScreenStyles.sectionLabel}>Security</Text>
+          <View style={ProfileSettingsScreenStyles.settingsGroup}>
+            <Pressable
+              style={[
+                ProfileSettingsScreenStyles.settingRow,
+                ProfileSettingsScreenStyles.lastRow,
+              ]}
+              onPress={() => console.log('Navigate to Change Password')}
+            >
+              <View style={ProfileSettingsScreenStyles.rowIconContainer}>
+                <Ionicons name="lock-closed-outline" size={20} color={COLORS.textSecondary} />
+              </View>
+              <Text style={[ProfileSettingsScreenStyles.rowLabel, { flex: 1 }]}>Password</Text>
+              <Text style={{ color: COLORS.textSecondary, fontSize: 14 }}>
+                Last changed 30d ago
+              </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={18}
+                color={COLORS.textSecondary}
+                style={ProfileSettingsScreenStyles.chevron}
+              />
+            </Pressable>
+          </View>
+
+          {/* 4. Tracking Preferences Group */}
+          <Text style={ProfileSettingsScreenStyles.sectionLabel}>Tracking Preferences</Text>
+          <View
+            style={[
+              ProfileSettingsScreenStyles.settingsGroup,
+              ProfileSettingsScreenStyles.textAreaContainer,
+            ]}
+          >
+            <TextInput
+              multiline
+              placeholder="Tell the AI what to track..."
+              placeholderTextColor={COLORS.textSecondary}
+              style={ProfileSettingsScreenStyles.textAreaInput}
+              value={preferences}
+              onChangeText={setPreferences}
+              scrollEnabled={true}
+            />
+          </View>
+
+          {/* 5. Save Button */}
+          <AppButton
+            title="Save Changes"
+            onPress={() => console.log('Save')}
+            style={ProfileSettingsScreenStyles.actionButton}
+            variant="primary"
+          />
+
+          {/* FIX: Extra spacer view to forcefully push scroll limits down */}
+          <View style={{ height: 40 }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-export default ProfileRecordingSettingsScreen;
+export default ProfileSettingsScreen;
