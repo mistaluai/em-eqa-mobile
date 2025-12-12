@@ -1,11 +1,13 @@
-import { create } from 'zustand'
 import { Alert } from 'react-native'
+import { create } from 'zustand'
 import { supabase } from '../databases/supabase/supabase_client'
 
 interface AuthState {
+    userid: string
     email: string
     password: string
     full_name: string
+    avatar_path: string | null;
     username: string
     dob: Date
     loading: boolean
@@ -17,14 +19,18 @@ interface AuthState {
     signInWithEmail: () => Promise<void>
     signUp: () => Promise<void>
     signOut: () => Promise<void>
+    setAvatarPath: (path: string) => void;
+    loadUserProfile: (uid: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
+    userid: '',
     email: '',
     password: '',
     loading: false,
     full_name: '',
     username: '',
+    avatar_path: null,
     dob: new Date(),
     // Simple actions to update state
     setEmail: (email) => set({ email }),
@@ -32,6 +38,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     setFullname: (full_name) => set({ full_name }),
     setUsername: (username) => set({ username }),
     setDOB: (dob) => set({ dob }),
+    setAvatarPath: (path) => set({ avatar_path: path }),
+
+    loadUserProfile: async (uid: string) => {
+        const { data, error } = await supabase
+            .from('users')
+            .select('avatar_url, full_name, username, date_of_birth')
+            .eq('id', uid)
+            .single();
+
+        if (data) {
+            set({
+                avatar_path: data.avatar_url, // Store the path!
+                full_name: data.full_name,
+                username: data.username,
+                dob: new Date(data.date_of_birth)
+            });
+        }
+    },
 
     // The Logic: Sign In
     signInWithEmail: async () => {
@@ -43,8 +67,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             password: password,
         })
 
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+            set({ userid: user.id })
+            await get().loadUserProfile(user.id);
+        }
+
         if (error) Alert.alert(error.message)
         set({ loading: false })
+
     },
 
     // The Logic: Sign Up
@@ -69,6 +100,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         })
 
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+            set({ userid: user.id })
+            await get().loadUserProfile(user.id);
+        }
+
         if (error) Alert.alert(error.message)
         if (!session && !error) Alert.alert('Please check your inbox for email verification!')
         set({ loading: false })
@@ -86,6 +123,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             password: '',
             full_name: '',
             username: '',
+            userid: '',
             loading: false
         })
     }

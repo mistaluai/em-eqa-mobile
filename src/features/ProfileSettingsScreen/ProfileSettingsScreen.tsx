@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,20 +14,33 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // Components
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { AvatarUpload } from './components/AvatarUpload';
+// Import your Avatar component
+import { Avatar } from '../../components/Avatar';
 
 // Theme
 import { COLORS } from '../../theme/colors';
 import { ProfileSettingsScreenStyles } from '../../theme/styles/ProfileSettingsScreen/ProfileSettingsScreenStyle';
 
-const ProfileSettingsScreen: React.FC = () => {
-  const [name, setName] = useState('Luai Waleed Abdelkarim');
-  const [email, setEmail] = useState('luai.wa@university.edu');
-  const [preferences, setPreferences] = useState('');
+// Hook
+import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
-  const username = 'luai_cse';
-  const dobYear = '2002';
-  const age = '23';
+const ProfileSettingsScreen: React.FC = () => {
+  // 1. Destructure everything from your custom hook
+  const {
+    fullName,
+    username,
+    email,
+    age,
+    avatarUri,
+    isAvatarLoading,
+    naturalLanguageInput,
+    setEmail,
+    setNaturalLanguageInput,
+    handleUpdateProfile,
+    handleChangeAvatar,
+    handleChangePassword,
+    handleUpdateTriggers,
+  } = useProfileSettingsLogic();
 
   return (
     <SafeAreaView
@@ -41,7 +54,6 @@ const ProfileSettingsScreen: React.FC = () => {
         style={{ flex: 1 }}
       >
         <ScrollView
-          // FIX: Explicitly tell ScrollView to take available space
           style={{ flex: 1 }}
           contentContainerStyle={ProfileSettingsScreenStyles.contentContainer}
           showsVerticalScrollIndicator={false}
@@ -50,13 +62,17 @@ const ProfileSettingsScreen: React.FC = () => {
           {/* 1. Header Section */}
           <View style={ProfileSettingsScreenStyles.headerContainer}>
             <View style={ProfileSettingsScreenStyles.avatarWrapper}>
-              <AvatarUpload onPress={() => { }} />
-              <View style={ProfileSettingsScreenStyles.editIconBadge}>
-                <Ionicons name="pencil" size={14} color="white" />
-              </View>
+              {/* 2. Use Global Avatar Component connected to Hook State */}
+              <Avatar
+                uri={avatarUri}
+                size={120}
+                showEditBadge={true}
+                isLoading={isAvatarLoading}
+                onPress={handleChangeAvatar}
+              />
             </View>
 
-            <Text style={ProfileSettingsScreenStyles.nameText}>{name}</Text>
+            <Text style={ProfileSettingsScreenStyles.nameText}>{fullName}</Text>
             <Text style={ProfileSettingsScreenStyles.usernameText}>@{username}</Text>
 
             <View style={ProfileSettingsScreenStyles.badgeRow}>
@@ -84,12 +100,10 @@ const ProfileSettingsScreen: React.FC = () => {
                 <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} />
               </View>
               <Text style={ProfileSettingsScreenStyles.rowLabel}>Name</Text>
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                style={ProfileSettingsScreenStyles.rowInput}
-                placeholderTextColor={COLORS.textSecondary}
-              />
+              {/* Note: Full Name is currently read-only in the hook, but displayed here */}
+              <Text style={[ProfileSettingsScreenStyles.rowInput, { color: COLORS.textSecondary }]}>
+                {fullName}
+              </Text>
             </View>
 
             <View
@@ -121,14 +135,14 @@ const ProfileSettingsScreen: React.FC = () => {
                 ProfileSettingsScreenStyles.settingRow,
                 ProfileSettingsScreenStyles.lastRow,
               ]}
-              onPress={() => console.log('Navigate to Change Password')}
+              onPress={handleChangePassword}
             >
               <View style={ProfileSettingsScreenStyles.rowIconContainer}>
                 <Ionicons name="lock-closed-outline" size={20} color={COLORS.textSecondary} />
               </View>
               <Text style={[ProfileSettingsScreenStyles.rowLabel, { flex: 1 }]}>Password</Text>
               <Text style={{ color: COLORS.textSecondary, fontSize: 14 }}>
-                Last changed 30d ago
+                Tap to change
               </Text>
               <Ionicons
                 name="chevron-forward"
@@ -152,8 +166,8 @@ const ProfileSettingsScreen: React.FC = () => {
               placeholder="Tell the AI what to track..."
               placeholderTextColor={COLORS.textSecondary}
               style={ProfileSettingsScreenStyles.textAreaInput}
-              value={preferences}
-              onChangeText={setPreferences}
+              value={naturalLanguageInput}
+              onChangeText={setNaturalLanguageInput}
               scrollEnabled={true}
             />
           </View>
@@ -161,12 +175,11 @@ const ProfileSettingsScreen: React.FC = () => {
           {/* 5. Save Button */}
           <AppButton
             title="Save Changes"
-            onPress={() => console.log('Save')}
+            onPress={handleUpdateProfile}
             style={ProfileSettingsScreenStyles.actionButton}
             variant="primary"
           />
 
-          {/* FIX: Extra spacer view to forcefully push scroll limits down */}
           <View style={{ height: 40 }} />
         </ScrollView>
       </KeyboardAvoidingView>

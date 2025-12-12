@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
 import { Session } from '@supabase/supabase-js'; // Import Session type
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 // 1. Import your Supabase client
 import { supabase } from '@/src/services/databases/supabase/supabase_client';
@@ -22,6 +22,7 @@ import ProfileSettingsScreen from '@/src/features/ProfileSettingsScreen';
 import SignUpScreen from '@/src/features/SignUpScreen';
 import SystemStatusScreen from '@/src/features/SystemStatusScreen';
 import TimelineEventsScreen from '@/src/features/TimelineEventsScreen';
+import { useAuthStore } from '@/src/services/auth/supabaseAuth';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,9 @@ const Index = () => {
     // A. Check initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user) {
+        useAuthStore.getState().loadUserProfile(session.user.id);
+      }
       setIsLoading(false);
     });
 
