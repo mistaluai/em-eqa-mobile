@@ -19,6 +19,11 @@ import { DRAWER } from '../../../theme';
 import { COLORS } from '../../../theme/colors';
 import { SearchDrawerStyles } from '../../../theme/styles/HomeScreen/SearchDrawerStyle';
 
+// 1. IMPORT STORES AND COMPONENT
+import { Avatar } from '../../../components/Avatar';
+import { useAuthStore } from '../../../services/auth/supabaseAuth';
+import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
+
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
 
@@ -27,7 +32,7 @@ interface SearchDrawerProps {
   onClose: () => void;
 }
 
-// --- Menu Item Component (New Chat, Library, etc) ---
+// ... MenuItem and ChatHistoryItem components remain the same ...
 const MenuItem = ({ icon, label, onPress, isNewChat = false }: { icon: string, label: string, onPress?: () => void, isNewChat?: boolean }) => (
   <TouchableOpacity style={SearchDrawerStyles.menuItem} onPress={onPress}>
     <Ionicons name={icon as any} size={20} color={COLORS.textPrimary} style={SearchDrawerStyles.menuIcon} />
@@ -40,21 +45,25 @@ const MenuItem = ({ icon, label, onPress, isNewChat = false }: { icon: string, l
   </TouchableOpacity>
 );
 
-// --- Chat History Item Component (Clean Text) ---
 const ChatHistoryItem = ({ title }: { title: string }) => (
   <TouchableOpacity style={SearchDrawerStyles.chatItem}>
     <Text style={SearchDrawerStyles.chatItemText} numberOfLines={1}>{title}</Text>
   </TouchableOpacity>
 );
 
-// --- Updated Content Component to accept navigation handler ---
+// --- Updated Content Component ---
 const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+
+  // 2. GET USER DATA
+  const { full_name } = useAuthStore();
+
+  // 3. GET AVATAR DATA (This hook automatically handles downloading if needed)
+  const { avatarUri } = useAvatarMedia();
 
   const handleProfilePress = () => {
     onNavigate('NavigationHubScreen');
   };
 
-  // Mock data matching your screenshot for visual verification
   const historyItems = [
     "Medicine Query",
     "Interaction Chat",
@@ -77,7 +86,6 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
       {/* 2. Top Navigation Actions */}
       <View style={SearchDrawerStyles.topMenuContainer}>
         <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
-        {/* Use onNavigate to close drawer then navigate */}
         <MenuItem icon="calendar-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
@@ -97,7 +105,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
         ))}
       </ScrollView>
 
-      {/* 4. Footer User Profile */}
+      {/* 4. Footer User Profile (UPDATED) */}
       <Pressable
         onPress={handleProfilePress}
         style={({ pressed }) => [
@@ -105,26 +113,39 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
           { opacity: pressed ? 0.7 : 1 },
         ]}
       >
-        <View style={SearchDrawerStyles.userAvatar}>
-          <Text style={SearchDrawerStyles.avatarText}>LA</Text>
-        </View>
-        <Text style={SearchDrawerStyles.userName}>Luai Waleed Abdelkarim</Text>
+        {/* Replace hardcoded View with Avatar Component */}
+        <Avatar
+          uri={avatarUri}
+          size={36}
+          style={{
+            marginRight: 12,
+            // 1. Remove Shadow Overrides
+            elevation: 0,                 // Android
+            shadowOpacity: 0,             // iOS
+            shadowColor: 'transparent',   // Safety
+            shadowOffset: { width: 0, height: 0 },
+            shadowRadius: 0
+          }}
+        />
+
+        {/* Display Actual Name */}
+        <Text style={SearchDrawerStyles.userName}>
+          {full_name || 'User'}
+        </Text>
+
         <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.textSecondary} style={{ marginLeft: 'auto' }} />
       </Pressable>
     </View>
   );
 };
 
+// ... The SearchDrawer export remains exactly the same ...
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
+  // ... same animation and modal logic ...
   const navigation = useNavigation<any>();
-
-  // 1. Setup Animation Values
-  // Slide starts off-screen (-width)
   const slideAnim = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
-  // Fade starts at 0 (invisible)
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // 2. Trigger Entry Animation when 'visible' becomes true
   useEffect(() => {
     if (visible) {
       Animated.parallel([
@@ -132,7 +153,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
-          easing: Easing.out(Easing.quad), // Smooth deceleration
+          easing: Easing.out(Easing.quad),
         }),
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -143,14 +164,13 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
     }
   }, [visible]);
 
-  // 3. Helper to Animate Out then Close
   const closeDrawer = () => {
     Animated.parallel([
       Animated.timing(slideAnim, {
         toValue: -DRAWER_WIDTH,
         duration: 250,
         useNativeDriver: true,
-        easing: Easing.in(Easing.quad), // Smooth acceleration
+        easing: Easing.in(Easing.quad),
       }),
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -158,15 +178,12 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
         useNativeDriver: true,
       }),
     ]).start(() => {
-      // Actually unmount/hide the modal after animation finishes
       onClose();
     });
   };
 
-  // 4. Handle Navigation (Close first, then navigate)
   const handleNavigation = (screenName: string) => {
     closeDrawer();
-    // Small timeout to ensure animation starts smoothly before screen transition
     setTimeout(() => {
       navigation.navigate(screenName);
     }, 100);
@@ -176,11 +193,9 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
     <Modal
       visible={visible}
       transparent
-      // Important: Disable default 'fade' so our custom animation controls it
       animationType="none"
-      onRequestClose={closeDrawer} // Android back button support
+      onRequestClose={closeDrawer}
     >
-      {/* Animated Backdrop */}
       <Animated.View
         style={[
           DRAWER.backdrop,
@@ -190,7 +205,6 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
         <Pressable style={{ flex: 1 }} onPress={closeDrawer} />
       </Animated.View>
 
-      {/* Animated Drawer Container */}
       <Animated.View
         style={[
           DRAWER.drawerContainer,
@@ -202,7 +216,6 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
       >
         <SafeAreaView style={SearchDrawerStyles.safeAreaContent}>
           <Pressable style={SearchDrawerStyles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            {/* Pass the custom navigation handler */}
             <DrawerSidebarContent onNavigate={handleNavigation} />
           </Pressable>
         </SafeAreaView>

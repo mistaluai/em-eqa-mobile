@@ -115,18 +115,25 @@ export const SearchDrawerStyles = StyleSheet.create({
   userProfile: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: SPACING.s16,
-    borderTopWidth: 1,
-    // Light border for separation
-    borderTopColor: COLORS.borderLight,
-    marginBottom: SPACING.s8,
+
+    // Modern Card Styling
+    backgroundColor: COLORS.backgroundNeutral, // Creates the card shape against the white background
+    borderRadius: 16,                          // Rounded edges
+    padding: SPACING.s12,                      // Inner spacing for the card content
+
+    // Positioning
+    marginTop: SPACING.s16,                    // Push away from the chat list
+    marginBottom: SPACING.s24,                 // Space from the bottom of the screen
+    marginHorizontal: SPACING.s4,              // Slight inset from the sides if needed
+
+    // Remove the old "Divider" look
+    borderTopWidth: 0,
   } as ViewStyle,
 
   userAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    // Using primary (UltraViolet) for the avatar circle
+    width: 40,        // Slightly larger for the card look (optional, current is 36)
+    height: 40,
+    borderRadius: 20,
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
