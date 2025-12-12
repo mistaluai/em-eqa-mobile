@@ -1,3 +1,4 @@
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -9,14 +10,12 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
+import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
 import { SignUpFormStyles } from '../../theme/styles/SignUpScreen/SignUpFormStyle';
 import { SignUpScreenStyles } from '../../theme/styles/SignUpScreen/SignUpScreenStyle';
-import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
-import { PhotoUploadPlaceholder } from './components/PhotoUploadPlaceholder';
 import { useSignUpLogic } from './hooks/useSignUpLogic';
 
 const SignUpScreen: React.FC = () => {
@@ -94,20 +93,7 @@ const SignUpScreen: React.FC = () => {
             },
           ]}
         >
-          <View
-            style={[
-              SignUpScreenStyles.photoContainer,
-              {
-                maxHeight: isKeyboardOpen ? 0 : 200,
-                opacity: isKeyboardOpen ? 0 : 1,
-                overflow: 'hidden', // Added to ensure it hides cleanly
-              } as any,
-            ]}
-          >
-            <PhotoUploadPlaceholder
-              onPress={() => console.log('Open image picker')}
-            />
-          </View>
+
 
           <View style={SignUpScreenStyles.spacer} />
 
