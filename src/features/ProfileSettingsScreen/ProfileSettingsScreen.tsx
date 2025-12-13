@@ -34,12 +34,10 @@ const ProfileSettingsScreen: React.FC = () => {
     avatarUri,
     isAvatarLoading,
     naturalLanguageInput,
-    setEmail,
     setNaturalLanguageInput,
     handleUpdateProfile,
     handleChangeAvatar,
     handleChangePassword,
-    handleUpdateTriggers,
   } = useProfileSettingsLogic();
 
   return (
@@ -76,6 +74,7 @@ const ProfileSettingsScreen: React.FC = () => {
             <Text style={ProfileSettingsScreenStyles.usernameText}>@{username}</Text>
 
             <View style={ProfileSettingsScreenStyles.badgeRow}>
+              {/* Age is Read-Only here */}
               <View style={ProfileSettingsScreenStyles.infoBadge}>
                 <Text style={ProfileSettingsScreenStyles.badgeText}>Age {age}</Text>
               </View>
@@ -86,7 +85,7 @@ const ProfileSettingsScreen: React.FC = () => {
                 ]}
               >
                 <Text style={[ProfileSettingsScreenStyles.badgeText, { color: '#0284C7' }]}>
-                  CSE Student
+                  Free Plan
                 </Text>
               </View>
             </View>
@@ -100,7 +99,7 @@ const ProfileSettingsScreen: React.FC = () => {
                 <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} />
               </View>
               <Text style={ProfileSettingsScreenStyles.rowLabel}>Name</Text>
-              {/* Note: Full Name is currently read-only in the hook, but displayed here */}
+              {/* Name is Read-Only */}
               <Text style={[ProfileSettingsScreenStyles.rowInput, { color: COLORS.textSecondary }]}>
                 {fullName}
               </Text>
@@ -116,14 +115,10 @@ const ProfileSettingsScreen: React.FC = () => {
                 <Ionicons name="mail-outline" size={20} color={COLORS.textSecondary} />
               </View>
               <Text style={ProfileSettingsScreenStyles.rowLabel}>Email</Text>
-              <TextInput
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={ProfileSettingsScreenStyles.rowInput}
-                placeholderTextColor={COLORS.textSecondary}
-              />
+
+              <Text style={[ProfileSettingsScreenStyles.rowInput, { color: COLORS.textSecondary }]}>
+                {email}
+              </Text>
             </View>
           </View>
 
