@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { HomeScreenStyles } from '../../theme/styles/HomeScreen/HomeScreenStyle';
 import { SCREEN } from '../../theme';
+import { HomeScreenStyles } from '../../theme/styles/HomeScreen/HomeScreenStyle';
 import { ChatContainer } from './components/ChatContainer';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
@@ -60,7 +60,7 @@ const HomeScreen: React.FC = () => {
           SCREEN.homeInputBarContainer,
           isKeyboardOpen ? HomeScreenStyles.inputBarContainerKeyboard : HomeScreenStyles.inputBarContainer
         ]}>
-          <InputBar onSend={handleSendMessage} onVoiceInput={() => {}} />
+          <InputBar onSend={handleSendMessage} onVoiceInput={() => { }} />
         </View>
       </KeyboardAvoidingView>
 
