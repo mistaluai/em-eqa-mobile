@@ -1,14 +1,18 @@
 import { fontFamily } from '@/src/theme/fonts';
 import * as Font from 'expo-font';
-import { Slot } from 'expo-router'; // UI CHANGE: Use Slot instead of Stack
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
+import { useAuthStore } from '../src/services/auth/supabaseAuth';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+  // 2. Get the initialize function and state
+  const { initialize, initialized } = useAuthStore();
+
   const [fontsLoaded] = Font.useFonts({
     [fontFamily.regular]: require("../src/theme/fonts/Inter_18pt-Regular.ttf"),
     [fontFamily.medium]: require("../src/theme/fonts/Inter_18pt-Medium.ttf"),
@@ -17,20 +21,26 @@ const RootLayout = () => {
     [fontFamily.extrabold]: require("../src/theme/fonts/Inter_18pt-ExtraBold.ttf"),
   });
 
+  // 3. Trigger Auth Check immediately when app mounts
   useEffect(() => {
-    if (fontsLoaded) {
+    initialize();
+  }, []);
+
+  // 4. Hide Splash Screen only when BOTH Fonts and Auth are ready
+  useEffect(() => {
+    if (fontsLoaded && initialized) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, initialized]);
 
-  if (!fontsLoaded) {
+  // 5. Return null until we are ready (Splash screen handles the visuals)
+  if (!fontsLoaded || !initialized) {
     return null;
   }
 
   return (
     <>
       <StatusBar style="dark" />
-      { }
       <Slot />
     </>
   );

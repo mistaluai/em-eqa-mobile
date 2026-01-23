@@ -21,10 +21,13 @@ interface AuthState {
     signOut: () => Promise<void>
     setAvatarPath: (path: string) => void;
     loadUserProfile: (uid: string) => Promise<void>;
+    initialized: boolean;
+    initialize: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
     userid: '',
+    initialized: false,
     email: '',
     password: '',
     loading: false,
@@ -43,7 +46,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     loadUserProfile: async (uid: string) => {
         const { data, error } = await supabase
             .from('users')
-            .select('avatar_url, full_name, username, date_of_birth')
+            .select('avatar_url, full_name, username, date_of_birth, email')
             .eq('id', uid)
             .single();
 
@@ -52,6 +55,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 avatar_path: data.avatar_url, // Store the path!
                 full_name: data.full_name,
                 username: data.username,
+                email: data.email,
                 dob: new Date(data.date_of_birth)
             });
         }
@@ -126,5 +130,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             userid: '',
             loading: false
         })
-    }
+    },
+    initialize: async () => {
+        // Check local storage for an existing session
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session && session.user) {
+            console.log("Global Init: Session found for", session.user.id);
+            set({ userid: session.user.id });
+
+            // Optional: Load profile in background
+            get().loadUserProfile(session.user.id);
+        } else {
+            console.log("Global Init: No session found.");
+        }
+
+        // Mark as finished so the app knows it can stop showing the splash screen
+        set({ initialized: true });
+    },
 }))
