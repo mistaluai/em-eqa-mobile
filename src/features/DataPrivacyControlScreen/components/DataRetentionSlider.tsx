@@ -4,9 +4,9 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
 import { snapToClosestOption } from '../../../shared/utils';
+import { TYPOGRAPHY } from '../../../theme';
 import { COLORS } from '../../../theme/colors';
 import { DataRetentionSliderStyles } from '../../../theme/styles/DataPrivacyControlScreen/DataRetentionSliderStyle';
-import { TYPOGRAPHY } from '../../../theme';
 
 interface DataRetentionSliderProps {
   retentionDays: number;
@@ -14,7 +14,7 @@ interface DataRetentionSliderProps {
   retentionOptions?: number[];
 }
 
-const DEFAULT_RETENTION_OPTIONS = [10,  45, 90];
+const DEFAULT_RETENTION_OPTIONS = [10, 45, 90];
 
 export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   retentionDays,
@@ -28,7 +28,7 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   return (
     <AppCard style={DataRetentionSliderStyles.card}>
       <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textPrimary }, DataRetentionSliderStyles.title]}>
-        Retain Clips for  
+        Retain Clips for
         <Text style={[{ color: COLORS.primary }, DataRetentionSliderStyles.highlightText]}> : {retentionDays} Days</Text>
       </Text>
 
