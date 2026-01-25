@@ -28,9 +28,9 @@ export const NAV_ITEMS: NavItemData[] = [
   },
   {
     id: 'privacy',
-    title: 'Data Privacy',
+    title: 'Cloud Data Control',
     description: 'Retention rules and deletion.',
-    icon: 'shield-checkmark',
+    icon: 'cloud',
     screen: 'DataPrivacyScreen',
     color: COLORS.navPrivacy
   },

@@ -1,24 +1,24 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { COLORS } from '@/src/theme/colors';
+import { DeleteAllMyDataStyles } from '@/src/theme/styles/DataPrivacyControlScreen/DeleteAllMyDataStyle';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN, SECTION, SPACING, TYPOGRAPHY } from '../../theme';
+import { SCREEN, SECTION, TYPOGRAPHY } from '../../theme';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
 import { DeletionConfirmationModal } from './components/DeletionConfirmationModal';
-import { RecordingPermissionCard } from './components/RecordingPermissionCard';
 import { useDataPrivacyControlLogic } from './hooks/useDataPrivacyControlLogic';
 
 /**
  * DataPrivacyControlScreen - Main screen component for privacy and data control
- * Handles composition and rendering using hooks and components
  */
 const DataPrivacyControlScreen: React.FC = () => {
   const {
-    isRecordingEnabled,
     dataRetentionDays,
     isDeleteModalVisible,
-    setIsRecordingEnabled,
     setDataRetentionDays,
     handleDeleteAllData,
     handleOpenDeleteModal,
@@ -27,7 +27,7 @@ const DataPrivacyControlScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={SCREEN.safeArea}>
-      <AppHeader title="Privacy & Data Control" showBack={true} />
+      <AppHeader title="Cloud Data Control" showBack={true} />
 
       <DeletionConfirmationModal
         isVisible={isDeleteModalVisible}
@@ -36,25 +36,43 @@ const DataPrivacyControlScreen: React.FC = () => {
       />
 
       <View style={SCREEN.container}>
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Recording Permissions</Text>
-        <RecordingPermissionCard
-          isRecordingEnabled={isRecordingEnabled}
-          onToggle={setIsRecordingEnabled}
-        />
 
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Data Storage</Text>
-        <DataRetentionSlider
-          retentionDays={dataRetentionDays}
-          onRetentionDaysChange={setDataRetentionDays}
-        />
+        {/* Retention Section */}
+        <View style={DeleteAllMyDataStyles.sectionContainer}>
+          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Data Storage</Text>
+          <DataRetentionSlider
+            retentionDays={dataRetentionDays}
+            onRetentionDaysChange={setDataRetentionDays}
+          />
+        </View>
 
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Data Deletion</Text>
-        <AppButton
-          title="Delete All My Data"
-          onPress={handleOpenDeleteModal}
-          variant="primary"
-          style={SCREEN.dataPrivacyDeleteButton}
-        />
+        {/* Danger Zone / Deletion Section */}
+        <View style={DeleteAllMyDataStyles.dangerZoneContainer}>
+          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title, DeleteAllMyDataStyles.dangerTitle]}>
+            Data Deletion
+          </Text>
+
+          <AppButton
+            title="Delete All My Events"
+            onPress={handleOpenDeleteModal}
+            variant="primary"
+            style={[SCREEN.dataPrivacyDeleteButton, DeleteAllMyDataStyles.dangerButton]}
+          />
+
+          <View style={DeleteAllMyDataStyles.warningContainer}>
+            <MaterialCommunityIcons
+              name="alert"
+              size={16}
+              color={COLORS.navPrivacy} // Matches the red text in styles
+              style={{ marginTop: 2 }}
+            />
+            <Text style={DeleteAllMyDataStyles.warningText}>
+              This action will <Text style={{ fontWeight: 'bold' }}>permanently remove</Text> all your recorded videos and events.
+              This cannot be undone and there is no possibility to recover this data.
+            </Text>
+          </View>
+        </View>
+
       </View>
     </SafeAreaView>
   );
