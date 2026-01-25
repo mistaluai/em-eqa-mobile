@@ -6,7 +6,7 @@ import { useState } from 'react';
  */
 export const useDataPrivacyControlLogic = () => {
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(true);
-  const [dataRetentionDays, setDataRetentionDays] = useState(30);
+  const [dataRetentionDays, setDataRetentionDays] = useState(90);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const handleDeleteAllData = () => {
