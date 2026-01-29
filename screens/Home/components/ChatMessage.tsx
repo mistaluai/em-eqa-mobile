@@ -1,8 +1,8 @@
-import { CHAT, TYPOGRAPHY } from '@/src/theme';
+import { RADIUS, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { COLORS } from '@/src/theme/colors';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
-
 interface ChatMessageProps {
   message: {
     id: number;
@@ -19,15 +19,54 @@ interface ChatMessageProps {
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onEvidencePress }) => {
   const isUser = message.sender === 'user';
   return (
-    <View style={[CHAT.messageRow, isUser ? CHAT.messageRowUser : CHAT.messageRowAI]}>
-      <AppCard style={[CHAT.bubble, isUser ? CHAT.bubbleUser : CHAT.bubbleAI]}>
-        <Text style={[TYPOGRAPHY.BodyM, isUser ? CHAT.textUser : CHAT.textAI]}>{message.text}</Text>
+    <View style={[styles.messageRow, isUser ? styles.messageRowUser : styles.messageRowAI]}>
+      <AppCard style={[styles.bubble, isUser ? styles.bubbleUser : styles.bubbleAI]}>
+        <Text style={[TYPOGRAPHY.BodyM, isUser ? styles.textUser : styles.textAI]}>{message.text}</Text>
         {message.hasEvidence && (
-          <Pressable onPress={onEvidencePress} style={CHAT.evidenceButton}>
-            <Text style={[TYPOGRAPHY.Caption, CHAT.evidenceText]}>See Evidence</Text>
+          <Pressable onPress={onEvidencePress} style={styles.evidenceButton}>
+            <Text style={[TYPOGRAPHY.Caption, styles.evidenceText]}>See Evidence</Text>
           </Pressable>
         )}
       </AppCard>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  messageRow: {
+    maxWidth: '80%',
+    marginVertical: SPACING.s4,
+  },
+  messageRowUser: {
+    alignSelf: 'flex-end',
+  },
+  messageRowAI: {
+    alignSelf: 'flex-start',
+  },
+  bubble: {
+    padding: SPACING.s12,
+    borderRadius: RADIUS.default,
+  },
+  bubbleUser: {
+    backgroundColor: COLORS.primary,
+    borderBottomRightRadius: SPACING.s4,
+  },
+  bubbleAI: {
+    backgroundColor: COLORS.backgroundNeutral,
+    borderBottomLeftRadius: SPACING.s4,
+  },
+  textUser: {
+    color: COLORS.backgroundLight,
+  } as TextStyle,
+  textAI: {
+    color: COLORS.textPrimary,
+  } as TextStyle,
+  evidenceButton: {
+    marginTop: SPACING.s8,
+    alignSelf: 'flex-end',
+  },
+  evidenceText: {
+    color: COLORS.primary,
+    textDecorationLine: 'underline',
+  } as TextStyle,
+});

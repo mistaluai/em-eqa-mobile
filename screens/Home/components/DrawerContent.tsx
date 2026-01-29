@@ -1,4 +1,4 @@
-import { DRAWER, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { SPACING, TYPOGRAPHY } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -28,8 +28,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={DRAWER.container}>
-      <View style={DRAWER.header}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary }]}>EM-EQA Menu</Text>
         <Pressable onPress={onClose} style={styles.closeButton}>
           <Ionicons name="close-outline" size={32} color={COLORS.textPrimary} />
@@ -43,10 +43,10 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
             navigation.navigate(item.screen as never);
             onClose();
           }}
-          style={DRAWER.item}
+          style={styles.item}
         >
           <Ionicons name={item.icon as any} size={24} color={COLORS.primary} />
-          <Text style={[TYPOGRAPHY.BodyM, DRAWER.itemText, { color: COLORS.textPrimary }]}>
+          <Text style={[TYPOGRAPHY.BodyM, styles.itemText, { color: COLORS.textPrimary }]}>
             {item.name}
           </Text>
         </Pressable>
@@ -54,7 +54,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
 
       <View style={styles.spacer} />
 
-      <Pressable onPress={() => navigation.navigate('Login' as never)} style={DRAWER.item}>
+      <Pressable onPress={() => navigation.navigate('Login' as never)} style={styles.item}>
         <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
         <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary }, styles.logoutText]}>
           Log Out
@@ -65,6 +65,32 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    backgroundColor: COLORS.backgroundLight,
+    padding: SPACING.s24,
+    position: 'absolute',
+    direction: 'ltr',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.s32,
+    paddingTop: SPACING.s12,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: SPACING.s16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.borderDark,
+  },
+  itemText: {
+    color: COLORS.textPrimary,
+    marginLeft: SPACING.s12,
+    fontWeight: '600',
+  },
   closeButton: {
     padding: SPACING.s8,
   },

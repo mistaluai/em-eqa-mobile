@@ -1,8 +1,8 @@
-import { CHAT } from '@/src/theme';
+import { RADIUS, SPACING } from '@/src/theme';
+import { COLORS } from '@/src/theme/colors';
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
 import { ChatMessage } from './ChatMessage';
-
 interface ChatMessageData {
   id: number;
   sender: 'user' | 'ai';
@@ -19,7 +19,7 @@ interface ChatContainerProps {
  * ChatContainer - Pure presentation component for chat messages list
  */
 export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => (
-  <View style={CHAT.container}>
+  <View style={styles.container}>
     <FlatList
       data={messages.slice().reverse()}
       renderItem={({ item }) => (
@@ -29,8 +29,57 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEviden
         />
       )}
       keyExtractor={(item) => item.id.toString()}
-      style={CHAT.history}
+      style={styles.history}
       inverted
     />
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: SPACING.s16,
+    paddingTop: SPACING.s16,
+  },
+  history: {
+    flexGrow: 1,
+  },
+  // These styles likely belong in ChatMessage.tsx, but are kept here 
+  // to complete the merge from CHAT.ts as requested.
+  messageRow: {
+    maxWidth: '80%',
+    marginVertical: SPACING.s4,
+  },
+  messageRowUser: {
+    alignSelf: 'flex-end',
+  },
+  messageRowAI: {
+    alignSelf: 'flex-start',
+  },
+  bubble: {
+    padding: SPACING.s12,
+    borderRadius: RADIUS.default,
+  },
+  bubbleUser: {
+    backgroundColor: COLORS.primary,
+    borderBottomRightRadius: SPACING.s4,
+  },
+  bubbleAI: {
+    backgroundColor: COLORS.backgroundNeutral,
+    borderBottomLeftRadius: SPACING.s4,
+  },
+  textUser: {
+    color: COLORS.backgroundLight,
+  } as TextStyle,
+  textAI: {
+    color: COLORS.textPrimary,
+  } as TextStyle,
+  evidenceButton: {
+    marginTop: SPACING.s8,
+    alignSelf: 'flex-end',
+  },
+  evidenceText: {
+    color: COLORS.primary,
+    textDecorationLine: 'underline',
+  } as TextStyle,
+});
