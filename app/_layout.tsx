@@ -1,10 +1,10 @@
+import { useAuthStore } from '@/services/auth/supabaseAuth';
 import { fontFamily } from '@/src/theme/fonts';
 import * as Font from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { useAuthStore } from '../src/services/auth/supabaseAuth';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();

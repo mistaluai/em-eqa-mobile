@@ -1,28 +1,23 @@
+import Loader from '@/components/LoaderComponent';
+import ClipUploadSyncScreen from '@/screens/ClipUploadSync';
+import DataPrivacyControlScreen from '@/screens/DataPrivacyControl';
+import DeviceConnectionScreen from '@/screens/DeviceConnection';
+import EventDetailsScreen from '@/screens/EventDetails';
+import HomeScreen from '@/screens/Home';
+import LoginScreen from '@/screens/Login';
+import NavigationHubScreen from '@/screens/NavigationHub';
+import OnboardingScreen from '@/screens/Onboarding';
+import ProfileSettingsScreen from '@/screens/ProfileSettings';
+import SignUpScreen from '@/screens/Signup';
+import SystemStatusScreen from '@/screens/SystemStatus';
+import TimelineEventsScreen from '@/screens/TimelineEvents';
+import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { supabase } from '@/services/databases/supabase/supabase_client';
+import { COLORS } from '@/src/theme/colors';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-
-// 1. Import your Supabase client
-import { supabase } from '@/src/services/databases/supabase/supabase_client';
-
-import Loader from '../src/components/LoaderComponent';
-import { COLORS } from '../src/theme/colors';
-
-// Import Screens
-import ClipUploadSyncScreen from '@/src/features/ClipUploadSyncScreen';
-import DataPrivacyControlScreen from '@/src/features/DataPrivacyControlScreen';
-import DeviceConnectionScreen from '@/src/features/DeviceConnectionScreen';
-import EventDetailsScreen from '@/src/features/EventDetailsScreen';
-import HomeScreen from '@/src/features/HomeScreen';
-import LoginScreen from '@/src/features/LoginScreen';
-import NavigationHubScreen from '@/src/features/NavigationHubScreen/NavigationHubScreen';
-import OnboardingScreen from '@/src/features/OnboardingScreen';
-import ProfileSettingsScreen from '@/src/features/ProfileSettingsScreen';
-import SignUpScreen from '@/src/features/SignUpScreen';
-import SystemStatusScreen from '@/src/features/SystemStatusScreen';
-import TimelineEventsScreen from '@/src/features/TimelineEventsScreen';
-import { useAuthStore } from '@/src/services/auth/supabaseAuth';
 
 const Stack = createNativeStackNavigator();
 
