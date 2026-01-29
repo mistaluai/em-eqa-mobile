@@ -1,15 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    KeyboardTypeOptions,
-    Pressable,
-    Text,
-    TextInput,
-    View,
+  KeyboardTypeOptions,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextStyle,
+  View
 } from 'react-native';
-import { COLORS } from '../theme/colors';
 import { TYPOGRAPHY } from '../theme';
-import { InputComponentStyles } from '../theme/styles/components/InputComponentStyle';
+import { COLORS } from '../theme/colors';
+import { RADIUS } from '../theme/radius';
+import { SPACING } from '../theme/spacing';
 
 interface AppInputProps {
   label: string;
@@ -40,18 +43,18 @@ const AppInput: React.FC<AppInputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View style={InputComponentStyles.container}>
-      <Text style={[TYPOGRAPHY.BodyM, InputComponentStyles.label]}>{label}</Text>
+    <View style={styles.container}>
+      <Text style={[TYPOGRAPHY.BodyM, styles.label]}>{label}</Text>
 
       <View
         style={[
-          InputComponentStyles.inputWrapper,
-          !!error && InputComponentStyles.errorBorder,
-          isFocused && InputComponentStyles.focusBorder,
+          styles.inputWrapper,
+          !!error && styles.errorBorder,
+          isFocused && styles.focusBorder,
         ]}
       >
         <TextInput
-          style={InputComponentStyles.input}
+          style={styles.input}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
@@ -70,7 +73,7 @@ const AppInput: React.FC<AppInputProps> = ({
         />
 
         {secureTextEntry && (
-          <Pressable onPress={() => setIsSecure(!isSecure)} style={InputComponentStyles.toggleButton}>
+          <Pressable onPress={() => setIsSecure(!isSecure)} style={styles.toggleButton}>
             <Ionicons
               name={isSecure ? 'eye-off-outline' : 'eye-outline'}
               size={24}
@@ -80,9 +83,50 @@ const AppInput: React.FC<AppInputProps> = ({
         )}
       </View>
 
-      {error && <Text style={[TYPOGRAPHY.Caption, InputComponentStyles.errorText]}>{error}</Text>}
+      {error && <Text style={[TYPOGRAPHY.Caption, styles.errorText]}>{error}</Text>}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  label: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s8,
+    fontWeight: '600',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.backgroundNeutral,
+    borderRadius: RADIUS.default,
+    paddingHorizontal: SPACING.s16,
+    height: 56,
+  },
+  input: {
+    flex: 1,
+    ...TYPOGRAPHY.BodyM,
+    color: COLORS.textPrimary,
+    height: '100%',
+    paddingVertical: 0,
+  } as TextStyle,
+  toggleButton: {
+    paddingLeft: SPACING.s12,
+  },
+  errorBorder: {
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
+  },
+  focusBorder: {
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
+  },
+  errorText: {
+    color: COLORS.secondary,
+    marginTop: SPACING.s4,
+  },
+});
 
 export default AppInput;

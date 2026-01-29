@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { Animated, Dimensions, FlatList, View } from 'react-native';
+import { Animated, Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { COLORS } from '../theme/colors';
-import { SPACING } from '../theme';
-import { CarouselComponentStyles } from '../theme/styles/components/CarouselComponentStyle';
+import { RADIUS } from '../theme/radius';
+import { SPACING } from '../theme/spacing';
 
 const { width } = Dimensions.get('window');
 
@@ -30,7 +30,7 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
   );
 
   return (
-    <View style={CarouselComponentStyles.container}>
+    <View style={styles.container}>
       <FlatList
         ref={flatListRef}
         data={data}
@@ -43,7 +43,7 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
         scrollEventThrottle={16}
         decelerationRate="fast"
       />
-      <View style={CarouselComponentStyles.paginationContainer}>
+      <View style={styles.paginationContainer}>
         {data.map((_, index) => {
           const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
 
@@ -63,10 +63,10 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
             <Animated.View
               key={index.toString()}
               style={[
-                CarouselComponentStyles.dot,
-                { 
-                  width: dotWidth, 
-                  opacity, 
+                styles.dot,
+                {
+                  width: dotWidth,
+                  opacity,
                   backgroundColor: COLORS.primary,
                   marginTop: SPACING.s128,
                 },
@@ -78,5 +78,30 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '50%',
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: SPACING.s24 + 220,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    marginBottom: -SPACING.s128,
+  },
+  dot: {
+    height: SPACING.s8,
+    borderRadius: RADIUS.full,
+    marginHorizontal: SPACING.s4,
+    backgroundColor: COLORS.primary,
+  },
+});
 
 export default AppCarousel;

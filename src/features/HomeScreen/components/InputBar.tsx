@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { COLORS } from '../../../theme/colors';
-import { INPUT_BAR } from '../../../theme';
+import { RADIUS } from '../../../theme/radius';
+import { SPACING } from '../../../theme/spacing';
 
 interface InputBarProps {
   onSend: (message: string) => void;
@@ -29,14 +30,14 @@ export const InputBar: React.FC<InputBarProps> = ({
   };
 
   return (
-    <View style={INPUT_BAR.container}>
-      <Pressable style={INPUT_BAR.voiceButton} onPress={() => inputRef.current?.focus()}>
+    <View style={styles.container}>
+      <Pressable style={styles.voiceButton} onPress={() => inputRef.current?.focus()}>
         <Ionicons name="mic-outline" size={24} color={COLORS.textPrimary} />
       </Pressable>
 
       <TextInput
         ref={inputRef}
-        style={INPUT_BAR.pill}
+        style={styles.pill}
         value={text}
         onChangeText={setText}
         placeholder={placeholder}
@@ -49,7 +50,7 @@ export const InputBar: React.FC<InputBarProps> = ({
 
       <Pressable
         onPress={send}
-        style={[INPUT_BAR.sendButton, { opacity: text.trim() ? 1 : 0.5 }]}
+        style={[styles.sendButton, { opacity: text.trim() ? 1 : 0.5 }]}
         disabled={!text.trim()}
       >
         <Ionicons
@@ -61,3 +62,34 @@ export const InputBar: React.FC<InputBarProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: SPACING.s16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: COLORS.borderLight,
+  },
+  voiceButton: {
+    padding: SPACING.s8,
+  },
+  pill: {
+    flex: 1,
+    height: 48,
+    backgroundColor: COLORS.backgroundNeutral,
+    borderRadius: RADIUS.large,
+    marginHorizontal: SPACING.s12,
+    justifyContent: 'center',
+    paddingHorizontal: SPACING.s16,
+    color: COLORS.textPrimary,
+  },
+  sendButton: {
+    backgroundColor: COLORS.primary,
+    width: 48,
+    height: 48,
+    borderRadius: RADIUS.full,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

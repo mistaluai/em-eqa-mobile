@@ -1,18 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
-import { COLORS } from '../theme/colors';
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { TYPOGRAPHY } from '../theme';
-import { HeaderComponentStyles } from '../theme/styles/components/HeaderComponentStyle';
+import { COLORS } from '../theme/colors';
+import { SPACING } from '../theme/spacing';
 
 interface AppHeaderProps {
   title: string;
 
   // Left Side Props
   showBack?: boolean;
-  leftIconName?: keyof typeof Ionicons.glyphMap; 
-  onLeftIconPress?: () => void; 
+  leftIconName?: keyof typeof Ionicons.glyphMap;
+  onLeftIconPress?: () => void;
 
   // Right Side Props
   rightIconName?: keyof typeof Ionicons.glyphMap;
@@ -23,7 +23,7 @@ interface AppHeaderProps {
 
 const AppHeader: React.FC<AppHeaderProps> = ({
   title,
-  showBack = false, 
+  showBack = false,
   leftIconName,
   onLeftIconPress,
   rightIconName,
@@ -46,24 +46,24 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     : (showBack ? () => navigation.goBack() : undefined);
 
   return (
-    <View style={HeaderComponentStyles.header}>
+    <View style={styles.header}>
       {/* LEFT ICON AREA */}
       {finalLeftIcon && handleLeftPress ? (
         <Pressable
           onPress={handleLeftPress}
-          style={HeaderComponentStyles.iconButton}
+          style={styles.iconButton}
           hitSlop={8}
         >
           {/* Left Icon color is now dark (textPrimary) */}
           <Ionicons name={finalLeftIcon} size={32} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
-        <View style={HeaderComponentStyles.iconPlaceholder} />
+        <View style={styles.iconPlaceholder} />
       )}
 
       {/* CENTER TITLE */}
       {/* Title color is now dark (textPrimary) */}
-      <Text style={[TYPOGRAPHY.HeadlineM, HeaderComponentStyles.title]} numberOfLines={1}>
+      <Text style={[TYPOGRAPHY.HeadlineM, styles.title]} numberOfLines={1}>
         {title}
       </Text>
 
@@ -71,17 +71,46 @@ const AppHeader: React.FC<AppHeaderProps> = ({
       {rightIconName && onRightIconPress ? (
         <Pressable
           onPress={onRightIconPress}
-          style={HeaderComponentStyles.iconButton}
+          style={styles.iconButton}
           hitSlop={8}
         >
           {/* Right Icon color is now dark (textPrimary) */}
           <Ionicons name={rightIconName} size={28} color={COLORS.textPrimary} />
         </Pressable>
       ) : (
-        <View style={HeaderComponentStyles.iconPlaceholder} />
+        <View style={styles.iconPlaceholder} />
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 60,
+    paddingHorizontal: SPACING.s16,
+    backgroundColor: COLORS.backgroundLight,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.borderLight,
+  },
+  title: {
+    flex: 1,
+    textAlign: 'center',
+    marginHorizontal: SPACING.s8,
+    color: COLORS.textPrimary,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconPlaceholder: {
+    width: 40,
+    height: 40,
+  },
+});
 
 export default AppHeader;

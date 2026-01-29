@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN } from '../../theme';
-import { HomeScreenStyles } from '../../theme/styles/HomeScreen/HomeScreenStyle';
+import { COLORS } from '../../theme/colors';
+import { SPACING } from '../../theme/spacing';
 import { ChatContainer } from './components/ChatContainer';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
@@ -16,12 +16,9 @@ import { useHomeLogic } from './hooks/useHomeLogic';
 const HomeScreen: React.FC = () => {
   const {
     isSearchDrawerVisible,
-    isEvidenceModalVisible,
     messages,
     handleSendMessage,
     handleEvidencePress,
-    handleCloseEvidenceModal,
-    handleGoToEventDetails,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
   } = useHomeLogic();
@@ -40,25 +37,25 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={[SCREEN.safeArea, HomeScreenStyles.safeArea]}>
+    <SafeAreaView style={styles.safeArea}>
       <AppHeader
-        title="EM-EQA"
+        title=""
         leftIconName="menu-outline"
         onLeftIconPress={handleOpenSearchDrawer}
       />
 
       <KeyboardAvoidingView
-        style={HomeScreenStyles.keyboardAvoidingView}
+        style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-        <View style={HomeScreenStyles.chatContainer}>
+        <View style={styles.chatContainer}>
           <ChatContainer messages={messages} onEvidencePress={handleEvidencePress} />
         </View>
 
         <View style={[
-          SCREEN.homeInputBarContainer,
-          isKeyboardOpen ? HomeScreenStyles.inputBarContainerKeyboard : HomeScreenStyles.inputBarContainer
+          styles.inputBarContainer,
+          isKeyboardOpen && styles.inputBarContainerKeyboard
         ]}>
           <InputBar onSend={handleSendMessage} onVoiceInput={() => { }} />
         </View>
@@ -68,5 +65,27 @@ const HomeScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  chatContainer: {
+    flex: 1,
+  },
+  inputBarContainer: {
+    // Merged from SCREEN.homeInputBarContainer and HomeScreenStyles.inputBarContainer
+    paddingBottom: 15,
+    marginBottom: 0,
+  },
+  inputBarContainerKeyboard: {
+    // Merged from HomeScreenStyles.inputBarContainerKeyboard
+    marginBottom: SPACING.s12,
+  },
+});
 
 export default HomeScreen;

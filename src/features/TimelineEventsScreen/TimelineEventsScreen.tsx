@@ -1,8 +1,9 @@
 import React from 'react';
-import { FlatList, RefreshControl, Text, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { LIST, SCREEN } from '../../theme';
+import { COLORS } from '../../theme/colors';
+import { SPACING } from '../../theme/spacing';
 import { EventCard } from './components/EventCard';
 import { FilterBar } from './components/FilterBar';
 import { useTimelineEventsLogic } from './hooks/useTimelineEventsLogic';
@@ -17,10 +18,10 @@ const TimelineEventsScreen: React.FC = () => {
   } = useTimelineEventsLogic();
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <AppHeader title="Timeline & Events" showBack={true} />
 
-      <View style={SCREEN.timelineContainer}>
+      <View style={styles.timelineContainer}>
         <FilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
         <FlatList
@@ -35,11 +36,11 @@ const TimelineEventsScreen: React.FC = () => {
             />
           )}
           keyExtractor={(item) => item.id || item.video_url} // Fallback ID
-          contentContainerStyle={LIST.content}
+          contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View style={{ padding: 20, alignItems: 'center' }}>
-              <Text style={{ color: '#888' }}>
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
                 {loading ? "Loading..." : "No events found."}
               </Text>
             </View>
@@ -49,5 +50,26 @@ const TimelineEventsScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  timelineContainer: {
+    flex: 1,
+    paddingHorizontal: SPACING.s24,
+  },
+  listContent: {
+    paddingBottom: SPACING.s24,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#888', // Consider using COLORS.textSecondary if available
+  },
+});
 
 export default TimelineEventsScreen;

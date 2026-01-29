@@ -4,18 +4,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView, // 1. Import ScrollView
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
-import { SignUpFormStyles } from '../../theme/styles/SignUpScreen/SignUpFormStyle';
-import { SignUpScreenStyles } from '../../theme/styles/SignUpScreen/SignUpScreenStyle';
+import { TEXT, TYPOGRAPHY } from '../../theme';
+import { COLORS } from '../../theme/colors';
+import { SPACING } from '../../theme/spacing';
 import { useSignUpLogic } from './hooks/useSignUpLogic';
 
 const SignUpScreen: React.FC = () => {
@@ -70,21 +71,18 @@ const SignUpScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
-        style={SignUpScreenStyles.keyboardAvoidingView}
+        style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : -10}
       >
-        {/* 2. Changed View to ScrollView */}
         <ScrollView
-          style={{ flex: 1 }}
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          // 3. Moved styles to contentContainerStyle
           contentContainerStyle={[
-            SCREEN.scrollContainer,
-            SignUpScreenStyles.scrollContainer,
+            styles.scrollContent,
             {
               // When keyboard opens, align top so we can scroll to bottom fields
               justifyContent: isKeyboardOpen ? 'flex-start' : 'center',
@@ -93,17 +91,15 @@ const SignUpScreen: React.FC = () => {
             },
           ]}
         >
-
-
-          <View style={SignUpScreenStyles.spacer} />
+          <View style={styles.spacer} />
 
           <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>
             Create Account
           </Text>
 
-          <View style={SignUpScreenStyles.titleSpacer} />
+          <View style={styles.titleSpacer} />
 
-          <View style={SCREEN.signUpFormContainer}>
+          <View style={styles.formContainer}>
             <AppInput
               label="Full Name"
               value={fullName}
@@ -114,7 +110,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="John Doe"
             />
 
-            <View style={SignUpFormStyles.spacer} />
+            <View style={styles.formSpacer} />
 
             <AppInput
               label="Username"
@@ -126,7 +122,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="johndoe123"
             />
 
-            <View style={SignUpFormStyles.spacer} />
+            <View style={styles.formSpacer} />
 
             <AppInput
               label="Email Address"
@@ -138,7 +134,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="john@example.com"
             />
 
-            <View style={SignUpFormStyles.spacer} />
+            <View style={styles.formSpacer} />
 
             {/* DATE OF BIRTH PICKER */}
             <Pressable onPress={toggleDatePicker}>
@@ -162,7 +158,7 @@ const SignUpScreen: React.FC = () => {
               />
             )}
 
-            <View style={SignUpFormStyles.spacer} />
+            <View style={styles.formSpacer} />
 
             <AppInput
               label="Password"
@@ -174,7 +170,7 @@ const SignUpScreen: React.FC = () => {
               placeholder="••••••"
             />
 
-            <View style={SignUpFormStyles.spacer} />
+            <View style={styles.formSpacer} />
 
             <AppInput
               label="Confirm Password"
@@ -187,16 +183,16 @@ const SignUpScreen: React.FC = () => {
             />
           </View>
 
-          <View style={SignUpScreenStyles.titleSpacer} />
+          <View style={styles.titleSpacer} />
 
           <AppButton
             title={loading ? "Creating..." : "Create Account"}
             onPress={handleSignUp}
-            style={SCREEN.signUpButton}
+            style={styles.signUpButton}
             disabled={loading}
           />
 
-          <View style={SignUpScreenStyles.loginLinkSpacer} />
+          <View style={styles.loginLinkSpacer} />
 
           <Pressable onPress={handleNavigateToLogin}>
             <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>
@@ -209,5 +205,44 @@ const SignUpScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: SPACING.s32,
+    alignItems: 'center',
+    marginTop: SPACING.s16,
+    // Note: paddingBottom and justifyContent handled dynamically in JSX
+  },
+  spacer: {
+    height: SPACING.s32,
+  },
+  titleSpacer: {
+    height: SPACING.s32,
+  },
+  formContainer: {
+    width: '100%',
+  },
+  formSpacer: {
+    height: SPACING.s16,
+  },
+  signUpButton: {
+    width: '90%',
+    backgroundColor: COLORS.primary,
+  },
+  loginLinkSpacer: {
+    height: SPACING.s24,
+  },
+});
 
 export default SignUpScreen;

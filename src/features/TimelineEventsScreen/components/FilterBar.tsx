@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Filter } from '../../../shared/types';
-import { FilterBarStyles } from '../../../theme/styles/TimelineEventsScreen/FilterBarStyle';
+import { SPACING } from '../../../theme/spacing';
 import { FilterPill } from './FilterPill';
 
 interface FilterBarProps {
@@ -12,7 +12,7 @@ interface FilterBarProps {
 const FILTERS: Filter[] = ['Today', 'Week', 'All'];
 
 export const FilterBar: React.FC<FilterBarProps> = ({ activeFilter, onFilterChange }) => (
-  <View style={FilterBarStyles.filterBar}>
+  <View style={styles.filterBar}>
     {FILTERS.map((filter) => (
       <FilterPill
         key={filter}
@@ -24,3 +24,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({ activeFilter, onFilterChan
   </View>
 );
 
+const styles = StyleSheet.create({
+  filterBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: SPACING.s16,
+    marginHorizontal: 65,
+    gap: SPACING.s12,
+    alignContent: 'center',
+  },
+});

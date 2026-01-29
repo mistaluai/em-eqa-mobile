@@ -1,12 +1,11 @@
-// DeletionConfirmationModal.tsx
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import AppModal from '../../../components/ModalComponent';
-import { COLORS } from '../../../theme/colors';
-import { DeletionConfirmationModalStyles } from '../../../theme/styles/DataPrivacyControlScreen/DeletionConfirmationModalStyle';
 import { TYPOGRAPHY } from '../../../theme';
+import { COLORS } from '../../../theme/colors';
+import { SPACING } from '../../../theme/spacing';
 
 interface DeletionConfirmationModalProps {
   isVisible: boolean;
@@ -20,26 +19,61 @@ export const DeletionConfirmationModal: React.FC<DeletionConfirmationModalProps>
   onConfirm,
 }) => (
   <AppModal isVisible={isVisible} onClose={onClose} position='center'>
-    <View style={DeletionConfirmationModalStyles.container}>
-      <Ionicons name="warning-outline" size={50} color={COLORS.warning} style={DeletionConfirmationModalStyles.iconMargin} />
-      <Text style={[TYPOGRAPHY.HeadlineM, DeletionConfirmationModalStyles.title]}>
+    <View style={styles.container}>
+      <Ionicons
+        name="warning-outline"
+        size={50}
+        color={COLORS.warning}
+        style={styles.iconMargin}
+      />
+      <Text style={[TYPOGRAPHY.HeadlineM, styles.title]}>
         Confirm Deletion
       </Text>
-      <Text style={[TYPOGRAPHY.BodyM, DeletionConfirmationModalStyles.bodyText]}>
+      <Text style={[TYPOGRAPHY.BodyM, styles.bodyText]}>
         Are you sure you want to delete ALL your recorded data? This cannot be undone.
       </Text>
       <AppButton
         title="Delete Forever"
         onPress={onConfirm}
         variant="primary"
-        style={DeletionConfirmationModalStyles.deleteButton}
+        style={styles.deleteButton}
       />
       <AppButton
         title="Cancel"
         onPress={onClose}
         variant="secondary"
-        style={[DeletionConfirmationModalStyles.cancelButton, { borderColor: COLORS.primary }]}
+        style={[styles.cancelButton, { borderColor: COLORS.primary }]}
       />
     </View>
   </AppModal>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
+  iconMargin: {
+    marginBottom: SPACING.s16,
+    // Note: In your Modal JSX, ensure the Icon color is set to COLORS.navPrivacy 
+    // (Currently set to COLORS.warning in component)
+  },
+  title: {
+    color: COLORS.navPrivacy, // Changed to Red to indicate Danger
+    marginBottom: SPACING.s8,
+    fontWeight: '700', // Added boldness for emphasis
+  },
+  bodyText: {
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    marginBottom: SPACING.s24,
+  },
+  deleteButton: {
+    width: '100%',
+    marginBottom: SPACING.s12,
+    backgroundColor: COLORS.navPrivacy, // Danger Red Background
+    borderColor: COLORS.navPrivacy,
+  },
+  cancelButton: {
+    width: '100%',
+  },
+});

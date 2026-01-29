@@ -1,8 +1,10 @@
 import AppHeader from '@/src/components/HeaderComponent';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationHubScreenStyles } from '../../theme/styles/NavigationHubScreen/NavigationHubScreenStyle';
+import { COLORS } from '../../theme/colors';
+import { RADIUS } from '../../theme/radius';
+import { SPACING } from '../../theme/spacing';
 import { NavigationCard } from './components/NavigationCard';
 import { NAV_ITEMS } from './constants';
 import { useNavigationHubLogic } from './hooks/useNavigationHubLogic';
@@ -12,12 +14,12 @@ const NavigationHubScreen: React.FC = () => {
   const { handleCardPress } = useNavigationHubLogic();
 
   return (
-    <SafeAreaView style={NavigationHubScreenStyles.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <AppHeader title="Navigation Hub" showBack={true} />
 
       {/* Navigation List Container */}
-      <View style={NavigationHubScreenStyles.listContainer}>
+      <View style={styles.listContainer}>
         {NAV_ITEMS.map((item) => (
           <NavigationCard
             key={item.id}
@@ -29,5 +31,18 @@ const NavigationHubScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  listContainer: {
+    backgroundColor: COLORS.backgroundLight,
+    borderRadius: RADIUS.default,
+    marginTop: SPACING.s24,
+    paddingHorizontal: SPACING.s16,
+  },
+});
 
 export default NavigationHubScreen;

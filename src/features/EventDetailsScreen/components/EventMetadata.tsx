@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native';
-import { COLORS } from '../../../theme/colors';
-import { EventMetadataStyles } from '../../../theme/styles/EventDetailsScreen/EventMetadataStyle';
+import { StyleSheet, Text, View } from 'react-native';
 import { TYPOGRAPHY } from '../../../theme';
+import { COLORS } from '../../../theme/colors';
+import { RADIUS } from '../../../theme/radius';
+import { SPACING } from '../../../theme/spacing';
 
 interface EventMetadataProps {
   title: string;
@@ -13,16 +14,43 @@ interface EventMetadataProps {
 
 export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, location }) => (
   <>
-    <Text style={[TYPOGRAPHY.HeadlineL, EventMetadataStyles.eventTitle]}>{title}</Text>
-    <View style={EventMetadataStyles.pillsContainer}>
-      <View style={EventMetadataStyles.pill}>
+    <Text style={[TYPOGRAPHY.HeadlineL, styles.eventTitle]}>{title}</Text>
+    <View style={styles.pillsContainer}>
+      <View style={styles.pill}>
         <Ionicons name="time-outline" size={20} color={COLORS.primary} />
-        <Text style={[TYPOGRAPHY.Caption, EventMetadataStyles.pillText]}>{time}</Text>
+        <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{time}</Text>
       </View>
-      <View style={EventMetadataStyles.pill}>
+      <View style={styles.pill}>
         <Ionicons name="location-outline" size={20} color={COLORS.primary} />
-        <Text style={[TYPOGRAPHY.Caption, EventMetadataStyles.pillText]}>{location}</Text>
+        <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{location}</Text>
       </View>
     </View>
   </>
 );
+
+const styles = StyleSheet.create({
+  eventTitle: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s16,
+    fontWeight: '800',
+  },
+  pillsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: SPACING.s32,
+    gap: SPACING.s12,
+  },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: `${COLORS.secondary}30`,
+    paddingHorizontal: SPACING.s12,
+    paddingVertical: SPACING.s8,
+    borderRadius: RADIUS.large,
+  },
+  pillText: {
+    color: COLORS.textSecondary,
+    marginLeft: SPACING.s4,
+    fontWeight: '700',
+  },
+});

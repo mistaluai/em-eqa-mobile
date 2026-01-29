@@ -1,13 +1,12 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '@/src/theme/colors';
-import { DeleteAllMyDataStyles } from '@/src/theme/styles/DataPrivacyControlScreen/DeleteAllMyDataStyle';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN, SECTION, TYPOGRAPHY } from '../../theme';
+import { SCREEN, SECTION, SPACING, TYPOGRAPHY } from '../../theme';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
 import { DeletionConfirmationModal } from './components/DeletionConfirmationModal';
 import { useDataPrivacyControlLogic } from './hooks/useDataPrivacyControlLogic';
@@ -38,7 +37,7 @@ const DataPrivacyControlScreen: React.FC = () => {
       <View style={SCREEN.container}>
 
         {/* Retention Section */}
-        <View style={DeleteAllMyDataStyles.sectionContainer}>
+        <View style={styles.sectionContainer}>
           <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Data Storage</Text>
           <DataRetentionSlider
             retentionDays={dataRetentionDays}
@@ -47,8 +46,8 @@ const DataPrivacyControlScreen: React.FC = () => {
         </View>
 
         {/* Danger Zone / Deletion Section */}
-        <View style={DeleteAllMyDataStyles.dangerZoneContainer}>
-          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title, DeleteAllMyDataStyles.dangerTitle]}>
+        <View style={styles.dangerZoneContainer}>
+          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title, styles.dangerTitle]}>
             Data Deletion
           </Text>
 
@@ -56,17 +55,17 @@ const DataPrivacyControlScreen: React.FC = () => {
             title="Delete All My Events"
             onPress={handleOpenDeleteModal}
             variant="primary"
-            style={[SCREEN.dataPrivacyDeleteButton, DeleteAllMyDataStyles.dangerButton]}
+            style={[SCREEN.dataPrivacyDeleteButton, styles.dangerButton]}
           />
 
-          <View style={DeleteAllMyDataStyles.warningContainer}>
+          <View style={styles.warningContainer}>
             <MaterialCommunityIcons
               name="alert"
               size={16}
               color={COLORS.navPrivacy} // Matches the red text in styles
               style={{ marginTop: 2 }}
             />
-            <Text style={DeleteAllMyDataStyles.warningText}>
+            <Text style={styles.warningText}>
               This action will <Text style={{ fontWeight: 'bold' }}>permanently remove</Text> all your recorded videos and events.
               This cannot be undone and there is no possibility to recover this data.
             </Text>
@@ -77,5 +76,47 @@ const DataPrivacyControlScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    marginBottom: SPACING.s32,
+  },
+  // Creates a visual "Danger Zone" box
+  dangerZoneContainer: {
+    marginTop: SPACING.s24,
+    padding: SPACING.s16,
+    // Using navPrivacy (red-600) with low opacity for the background to keep it "Danger" themed
+    // Alternatively, if you want it purely white/neutral, use COLORS.backgroundNeutral
+    backgroundColor: `${COLORS.navPrivacy}15`, // Adding alpha for a light red tint
+    borderRadius: SPACING.s12,
+    borderWidth: 1,
+    borderColor: COLORS.navPrivacy, // Red border
+  },
+  dangerTitle: {
+    color: COLORS.navPrivacy, // Red title
+    marginBottom: SPACING.s16,
+    marginTop: SPACING.s4,
+  },
+  dangerButton: {
+    backgroundColor: COLORS.navPrivacy, // Strong Red
+    borderColor: COLORS.navPrivacy,
+  },
+  dangerButtonText: {
+    color: COLORS.backgroundLight, // White text
+    fontWeight: '700',
+  },
+  warningContainer: {
+    flexDirection: 'row',
+    marginTop: SPACING.s12,
+    paddingHorizontal: SPACING.s4,
+    gap: SPACING.s8,
+  },
+  warningText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 18,
+    color: COLORS.navPrivacy, // Red text for readability
+  },
+});
 
 export default DataPrivacyControlScreen;

@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import AppCard from '../../../components/AppCard';
 import AppModal from '../../../components/ModalComponent';
-import { COLORS } from '../../../theme/colors';
-import { EvidenceModalStyles } from '../../../theme/styles/HomeScreen/EvidenceModalStyle';
 import { TYPOGRAPHY } from '../../../theme';
+import { COLORS } from '../../../theme/colors';
+import { RADIUS } from '../../../theme/radius';
+import { SPACING } from '../../../theme/spacing';
 
 const { width } = Dimensions.get('window');
 
@@ -23,28 +24,61 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose
     modalWidth={width * 0.95}
     position="center"
   >
-    <View style={EvidenceModalStyles.headerContainer}>
+    <View style={styles.headerContainer}>
       <Pressable onPress={onClose} hitSlop={10}>
         <Ionicons name="close-circle-outline" size={32} color={COLORS.textSecondary} />
       </Pressable>
     </View>
 
-    <Text style={[TYPOGRAPHY.HeadlineM, EvidenceModalStyles.title]}>
+    <Text style={[TYPOGRAPHY.HeadlineM, styles.title]}>
       Evidence Clip
     </Text>
 
-    <View style={EvidenceModalStyles.videoPlaceholder}>
+    <View style={styles.videoPlaceholder}>
       <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
     </View>
 
-    <AppCard style={EvidenceModalStyles.cardSpacer}>
-      <Text style={[TYPOGRAPHY.HeadlineM, EvidenceModalStyles.summaryTitle]}>Summary</Text>
-      <Text style={[TYPOGRAPHY.BodyM, EvidenceModalStyles.summaryText]}>
+    <AppCard style={styles.cardSpacer}>
+      <Text style={[TYPOGRAPHY.HeadlineM, styles.summaryTitle]}>Summary</Text>
+      <Text style={[TYPOGRAPHY.BodyM, styles.summaryText]}>
         Clip timestamp: 14:32 - 14:45. Confirmed commitment to draft the pitch deck.
       </Text>
     </AppCard>
 
-    <View style={EvidenceModalStyles.buttonSpacer} />
+    <View style={styles.buttonSpacer} />
     <AppButton title="Go to Event Details" onPress={onGoToEventDetails || onClose} />
   </AppModal>
 );
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  title: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s16,
+    textAlign: 'center',
+  },
+  videoPlaceholder: {
+    backgroundColor: COLORS.backgroundNeutral,
+    borderRadius: RADIUS.default,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: SPACING.s16,
+  },
+  summaryTitle: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s8,
+  },
+  summaryText: {
+    color: COLORS.textSecondary,
+  },
+  cardSpacer: {
+    marginTop: SPACING.s16,
+  },
+  buttonSpacer: {
+    height: SPACING.s24,
+  },
+});

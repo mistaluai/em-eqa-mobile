@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { COLORS } from '../theme/colors';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TYPOGRAPHY } from '../theme';
-import { CheckboxComponentStyles } from '../theme/styles/components/CheckboxComponentStyle';
+import { COLORS } from '../theme/colors';
+import { RADIUS } from '../theme/radius';
+import { SPACING } from '../theme/spacing';
 
 interface AppCheckboxProps {
   label: string;
@@ -27,16 +28,51 @@ const AppCheckbox: React.FC<AppCheckboxProps> = ({
   return (
     <Pressable
       onPress={handlePress}
-      style={({ pressed }) => [CheckboxComponentStyles.container, disabled && CheckboxComponentStyles.disabled, pressed && CheckboxComponentStyles.pressed]}
+      style={({ pressed }) => [
+        styles.container,
+        disabled && styles.disabled,
+        pressed && styles.pressed
+      ]}
     >
-      <View style={[CheckboxComponentStyles.checkbox, checked && CheckboxComponentStyles.checkedBox]}>
+      <View style={[styles.checkbox, checked && styles.checkedBox]}>
         {/* Checkmark color is white (backgroundLight) */}
         {checked && <Ionicons name="checkmark" size={18} color={COLORS.backgroundLight} />}
       </View>
       {/* Label color is dark (textPrimary) */}
-      <Text style={[TYPOGRAPHY.BodyM, CheckboxComponentStyles.label]}>{label}</Text>
+      <Text style={[TYPOGRAPHY.BodyM, styles.label]}>{label}</Text>
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: SPACING.s8,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: RADIUS.default / 2,
+    borderWidth: 2,
+    borderColor: COLORS.textSecondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: SPACING.s12,
+  },
+  checkedBox: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  label: {
+    color: COLORS.textPrimary,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.9,
+  },
+});
 
 export default AppCheckbox;

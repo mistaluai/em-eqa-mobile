@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  StyleSheet,
   Text,
   View,
   useWindowDimensions
@@ -13,10 +14,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
-import { SCREEN, SPACING, TEXT, TYPOGRAPHY } from '../../theme';
-import { LoginFormStyles } from '../../theme/styles/LoginScreen/LoginFormStyle';
-import { LoginScreenStyles } from '../../theme/styles/LoginScreen/LoginScreenStyle';
-// Ensure this path matches where you saved the hook file
+import { TEXT, TYPOGRAPHY } from '../../theme';
+import { COLORS } from '../../theme/colors';
+import { SPACING } from '../../theme/spacing';
 import { useLoginLogic } from './hooks/useLoginLogic';
 
 const LoginScreen: React.FC = () => {
@@ -31,7 +31,7 @@ const LoginScreen: React.FC = () => {
     setPassword,
     handleLogin,
     handleNavigateToSignUp,
-    handleForgotPassword  // Added this (was missing in your snippet)
+    handleForgotPassword
   } = useLoginLogic();
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -52,16 +52,15 @@ const LoginScreen: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
-        style={LoginScreenStyles.keyboardAvoidingView}
+        style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : -10}
       >
         <View
           style={[
-            SCREEN.scrollContainer,
-            LoginScreenStyles.scrollContainer,
+            styles.scrollContainer,
             {
               justifyContent: isKeyboardOpen ? 'flex-start' : 'center',
               paddingHorizontal: SPACING.s20,
@@ -71,7 +70,7 @@ const LoginScreen: React.FC = () => {
         >
           <View
             style={[
-              LoginScreenStyles.logoContainer,
+              styles.logoContainer,
               {
                 maxHeight: isKeyboardOpen ? 0 : 200,
                 opacity: isKeyboardOpen ? 0 : 1,
@@ -81,7 +80,7 @@ const LoginScreen: React.FC = () => {
           >
             <Image
               source={require('../../../assets/images/em_logo.png')}
-              style={LoginScreenStyles.logoImage}
+              style={styles.logoImage}
             />
           </View>
 
@@ -89,7 +88,7 @@ const LoginScreen: React.FC = () => {
             style={[
               TYPOGRAPHY.HeadlineXL,
               TEXT.title,
-              LoginScreenStyles.title,
+              styles.title,
               {
                 marginBottom: isKeyboardOpen ? SPACING.s96 : SPACING.s24,
                 // Note: React Native uses 'opacity' or 'display', not 'visibility'
@@ -101,7 +100,7 @@ const LoginScreen: React.FC = () => {
             Welcome
           </Text>
 
-          <View style={LoginScreenStyles.formContainer}>
+          <View style={styles.formContainer}>
             {/* 2. INTEGRATION: State is now controlled by Zustand via the Hook */}
             <AppInput
               label="Email Address"
@@ -111,7 +110,7 @@ const LoginScreen: React.FC = () => {
               placeholder="example@email.com"
             />
 
-            <View style={LoginFormStyles.spacer} />
+            <View style={styles.spacer} />
 
             <AppInput
               label="Password"
@@ -120,7 +119,7 @@ const LoginScreen: React.FC = () => {
               secureTextEntry={true}
             />
 
-            <View style={LoginFormStyles.spacerSmall} />
+            <View style={styles.spacerSmall} />
 
             <Pressable onPress={handleForgotPassword}>
               <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>
@@ -129,17 +128,17 @@ const LoginScreen: React.FC = () => {
             </Pressable>
           </View>
 
-          <View style={[LoginScreenStyles.buttonSpacer, { height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }]} />
+          <View style={[styles.buttonSpacer, { height: isKeyboardOpen ? SPACING.s16 : SPACING.s24 }]} />
 
           {/* 3. INTEGRATION: Pass loading state to button */}
           <AppButton
             title="Login"
             onPress={handleLogin}
-            style={LoginScreenStyles.loginButton}
+            style={styles.loginButton}
             disabled={loading} // Prevent double clicks
           />
 
-          <View style={isKeyboardOpen ? LoginScreenStyles.signUpContainerKeyboard : LoginScreenStyles.signUpContainer}>
+          <View style={isKeyboardOpen ? styles.signUpContainerKeyboard : styles.signUpContainer}>
             <Pressable onPress={handleNavigateToSignUp}>
               <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
                 Don't have an account?{' '}
@@ -152,5 +151,59 @@ const LoginScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    marginTop: SPACING.s16,
+    // Note: Padding and justifyContent are handled via inline styles for dynamic behavior
+  },
+  logoContainer: {
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  logoImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: 32,
+    // Additional title styles handled by TYPOGRAPHY.HeadlineXL
+  },
+  formContainer: {
+    width: '100%',
+  },
+  spacer: {
+    height: SPACING.s16,
+  },
+  spacerSmall: {
+    height: SPACING.s12,
+  },
+  buttonSpacer: {
+    height: SPACING.s32,
+  },
+  loginButton: {
+    width: '90%',
+    // Merged from SCREEN defaults to ensure consistency
+    backgroundColor: COLORS.primary,
+  },
+  signUpContainer: {
+    marginTop: SPACING.s32,
+    alignSelf: 'center',
+  },
+  signUpContainerKeyboard: {
+    marginTop: SPACING.s16,
+    alignSelf: 'center',
+  },
+});
 
 export default LoginScreen;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '../../components/HeaderComponent';
-import { SCREEN, SECTION, TYPOGRAPHY } from '../../theme';
+import { TYPOGRAPHY } from '../../theme';
 import { COLORS } from '../../theme/colors';
-import { SystemStatusScreenStyles } from '../../theme/styles/SystemStatusScreen/SystemStatusScreenStyle';
+import { SPACING } from '../../theme/spacing';
 import { StatusBarCard } from './components/StatusBarCard';
 import { StatusGridTile } from './components/StatusGridTile';
 import { useSystemStatusLogic } from './hooks/useSystemStatusLogic';
@@ -13,19 +13,18 @@ const SystemStatusScreen: React.FC = () => {
   useSystemStatusLogic();
 
   return (
-    <SafeAreaView style={SCREEN.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <AppHeader title="System Status" showBack={true} />
 
       <ScrollView
-        style={{ flex: 1 }} // Take up full screen space
-        // FIX: Use specific scrollContent style instead of SCREEN.container
-        contentContainerStyle={SystemStatusScreenStyles.scrollContent}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
 
         {/* SECTION 1: Hardware HUD (Grid) */}
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.titleNoTopMargin]}>Device Health</Text>
-        <View style={SystemStatusScreenStyles.gridContainer}>
+        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitleNoTopMargin]}>Device Health</Text>
+        <View style={styles.gridContainer}>
           <StatusGridTile
             title="Camera Battery"
             icon="battery-charging-outline"
@@ -43,7 +42,7 @@ const SystemStatusScreen: React.FC = () => {
         </View>
 
         {/* SECTION 2: Active Processes (List) */}
-        <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Live Processes</Text>
+        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Live Processes</Text>
 
         <StatusBarCard
           title="Audio Recording"
@@ -71,10 +70,46 @@ const SystemStatusScreen: React.FC = () => {
         />
 
         {/* Extra spacer at the bottom */}
-        <View style={SystemStatusScreenStyles.bottomSpacer} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: SPACING.s24,
+    paddingTop: SPACING.s24,
+    paddingBottom: SPACING.s64, // Extra padding at bottom for scrolling past navigation/safe area
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: SPACING.s12,
+    marginBottom: SPACING.s8,
+  },
+  sectionTitle: {
+    color: COLORS.textPrimary,
+    marginTop: SPACING.s32,
+    marginBottom: SPACING.s16,
+    fontWeight: '700',
+  },
+  sectionTitleNoTopMargin: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s12,
+    fontWeight: '700',
+  },
+  bottomSpacer: {
+    height: SPACING.s32,
+  },
+});
 
 export default SystemStatusScreen;

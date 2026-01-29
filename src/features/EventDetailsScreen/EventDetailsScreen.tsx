@@ -1,10 +1,10 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
-import { EventDetailsScreenStyles } from '../../theme/styles/EventDetailsScreen/EventDetailsScreenStyle';
 import { SCREEN } from '../../theme';
+import { SPACING } from '../../theme/spacing';
 import { EventMetadata } from './components/EventMetadata';
 import { SummaryCard } from './components/SummaryCard';
 import { VideoPlaceholder } from './components/VideoPlaceholder';
@@ -39,13 +39,25 @@ const EventDetailsScreen: React.FC = () => {
           title="Delete Clip"
           onPress={handleDelete}
           variant="primary"
-          style={EventDetailsScreenStyles.deleteButton}
+          style={styles.deleteButton}
         />
 
-        <View style={EventDetailsScreenStyles.bottomSpacer} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  deleteButton: {
+    marginTop: SPACING.s32,
+    width: '80%',
+    alignContent: 'center',
+    alignSelf: 'center',
+  },
+  bottomSpacer: {
+    height: SPACING.s32,
+  },
+});
 
 export default EventDetailsScreen;

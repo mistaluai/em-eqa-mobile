@@ -1,8 +1,9 @@
 import React from 'react';
-import { Pressable, StyleProp, Text, ViewStyle } from 'react-native';
-import { COLORS } from '../theme/colors';
+import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 import { TYPOGRAPHY } from '../theme';
-import { AppButtonStyles } from '../theme/styles/components/AppButtonStyle';
+import { COLORS } from '../theme/colors';
+import { RADIUS } from '../theme/radius';
+import { SPACING } from '../theme/spacing';
 
 interface AppButtonProps {
   title: string;
@@ -23,17 +24,17 @@ const AppButton: React.FC<AppButtonProps> = ({
     switch (variant) {
       case 'secondary':
         return [
-          AppButtonStyles.secondaryButton,
+          styles.secondaryButton,
           { borderColor: COLORS.primary, borderWidth: 1.5, backgroundColor: 'transparent' },
         ];
       case 'danger':
         return [
-          AppButtonStyles.secondaryButton,
+          styles.secondaryButton,
           { borderColor: COLORS.secondary, borderWidth: 1.5, backgroundColor: 'transparent' },
         ];
       case 'primary':
       default:
-        return [AppButtonStyles.primaryButton, { backgroundColor: COLORS.primary,  }];
+        return [styles.primaryButton, { backgroundColor: COLORS.primary }];
     }
   };
 
@@ -41,10 +42,10 @@ const AppButton: React.FC<AppButtonProps> = ({
     switch (variant) {
       case 'secondary':
       case 'danger':
-        return [AppButtonStyles.secondaryText, { color: variant === 'danger' ? COLORS.textSecondary : COLORS.textPrimary }];
+        return [styles.secondaryText, { color: variant === 'danger' ? COLORS.textSecondary : COLORS.textPrimary }];
       case 'primary':
       default:
-        return [AppButtonStyles.primaryText];
+        return [styles.primaryText];
     }
   };
 
@@ -52,11 +53,11 @@ const AppButton: React.FC<AppButtonProps> = ({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        AppButtonStyles.baseButton,
+        styles.baseButton,
         ...getButtonStyles(),
         style,
-        disabled && AppButtonStyles.disabled,
-        pressed && AppButtonStyles.pressed,
+        disabled && styles.disabled,
+        pressed && styles.pressed,
       ]}
       disabled={disabled}
     >
@@ -64,5 +65,35 @@ const AppButton: React.FC<AppButtonProps> = ({
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  baseButton: {
+    paddingVertical: SPACING.s16,
+    paddingHorizontal: SPACING.s24,
+    borderRadius: RADIUS.default,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primaryButton: {
+    // Shadow or other primary specific styles can go here
+  },
+  secondaryButton: {
+    // Secondary specific base styles
+  },
+  primaryText: {
+    color: COLORS.backgroundLight,
+    fontWeight: '600',
+  },
+  secondaryText: {
+    fontWeight: '600',
+    color: COLORS.backgroundLight, // Default, usually overridden in component logic
+  },
+  pressed: {
+    opacity: 0.8,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+});
 
 export default AppButton;

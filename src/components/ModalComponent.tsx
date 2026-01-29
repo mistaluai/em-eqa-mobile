@@ -1,7 +1,9 @@
 import React from 'react';
-import { Dimensions, Modal, Pressable, View, ViewStyle } from 'react-native';
-import { RADIUS } from '../theme';
-import { ModalComponentStyles } from '../theme/styles/components/ModalComponentStyle';
+import { Dimensions, Modal, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { COLORS } from '../theme/colors';
+import { RADIUS } from '../theme/radius';
+import { SHADOW } from '../theme/shadow';
+import { SPACING } from '../theme/spacing';
 
 const { width } = Dimensions.get('window');
 
@@ -36,8 +38,8 @@ const AppModal: React.FC<AppModalProps> = ({
     }
     : {
       height: '100%',
-      borderRadius: 0, 
-      borderTopRightRadius: RADIUS.large, 
+      borderRadius: 0,
+      borderTopRightRadius: RADIUS.large,
       borderBottomRightRadius: RADIUS.large
     };
 
@@ -50,18 +52,18 @@ const AppModal: React.FC<AppModalProps> = ({
       onRequestClose={onClose}
     >
       <Pressable
-        style={[ModalComponentStyles.backdrop, alignmentStyle]}
+        style={[styles.backdrop, alignmentStyle]}
         onPress={onClose}
       >
         <Pressable
           onPress={(e) => e.stopPropagation()}
           style={[
-            ModalComponentStyles.modalContent,
+            styles.modalContent,
             contentShapeStyle,
             { width: modalWidth }
           ]}
         >
-          <View style={ModalComponentStyles.modalBody}>
+          <View style={styles.modalBody}>
             {children}
           </View>
         </Pressable>
@@ -69,5 +71,20 @@ const AppModal: React.FC<AppModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: COLORS.backgroundLight,
+    ...SHADOW.default,
+    overflow: 'hidden',
+  },
+  modalBody: {
+    padding: SPACING.s24,
+  },
+});
 
 export default AppModal;

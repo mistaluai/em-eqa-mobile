@@ -1,8 +1,8 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppInput from '../../../components/InputComponent';
 import { TEXT, TYPOGRAPHY } from '../../../theme';
-import { LoginFormStyles } from '../../../theme/styles/LoginScreen/LoginFormStyle';
+import { SPACING } from '../../../theme/spacing';
 
 interface LoginFormProps {
   email: string;
@@ -26,21 +26,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onSignUp,
 }) => {
   return (
-    <View style={LoginFormStyles.container}>
+    <View style={styles.container}>
       <AppInput
         label="Email Address"
         value={email}
         onChangeText={onEmailChange}
         keyboardType="email-address"
       />
-      <View style={LoginFormStyles.spacer} />
+      <View style={styles.spacer} />
       <AppInput
         label="Password"
         value={password}
         onChangeText={onPasswordChange}
         secureTextEntry={true}
       />
-      <View style={LoginFormStyles.spacerSmall} />
+      <View style={styles.spacerSmall} />
       {onForgotPassword && (
         <Pressable onPress={onForgotPassword}>
           <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>Forgot Password?</Text>
@@ -48,7 +48,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       )}
 
       {onSignUp && (
-        <Pressable onPress={onSignUp} style={LoginFormStyles.signUpContainer}>
+        <Pressable onPress={onSignUp} style={styles.signUpContainer}>
           <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
             Don't have an account?{' '}
             <Text style={TEXT.signupLink}>Sign up</Text>
@@ -58,3 +58,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  spacer: {
+    height: SPACING.s16,
+  },
+  spacerSmall: {
+    height: SPACING.s12,
+  },
+  signUpContainer: {
+    marginTop: SPACING.s32,
+    alignSelf: 'center',
+  },
+});

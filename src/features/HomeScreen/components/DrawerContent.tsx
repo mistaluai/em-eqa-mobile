@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { COLORS } from '../../../theme/colors';
-import { DrawerContentStyles } from '../../../theme/styles/HomeScreen/DrawerContentStyle';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { DRAWER, TYPOGRAPHY } from '../../../theme';
+import { COLORS } from '../../../theme/colors';
+import { SPACING } from '../../../theme/spacing';
 
 interface NavItem {
   name: string;
@@ -32,7 +32,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
     <View style={DRAWER.container}>
       <View style={DRAWER.header}>
         <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary }]}>EM-EQA Menu</Text>
-        <Pressable onPress={onClose} style={DrawerContentStyles.closeButton}>
+        <Pressable onPress={onClose} style={styles.closeButton}>
           <Ionicons name="close-outline" size={32} color={COLORS.textPrimary} />
         </Pressable>
       </View>
@@ -53,14 +53,26 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
         </Pressable>
       ))}
 
-      <View style={DrawerContentStyles.spacer} />
+      <View style={styles.spacer} />
 
       <Pressable onPress={() => navigation.navigate('Login' as never)} style={DRAWER.item}>
         <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
-        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary }, DrawerContentStyles.logoutText]}>
+        <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary }, styles.logoutText]}>
           Log Out
         </Text>
       </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  closeButton: {
+    padding: SPACING.s8,
+  },
+  spacer: {
+    marginTop: 6,
+  },
+  logoutText: {
+    marginLeft: SPACING.s12,
+  },
+});
