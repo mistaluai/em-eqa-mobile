@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
@@ -18,6 +19,8 @@ export const InputBar: React.FC<InputBarProps> = ({
   onSend,
   placeholder = 'Ask your assistant...',
 }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const [text, setText] = useState('');
   const inputRef = useRef<TextInput>(null);
 
@@ -62,7 +65,7 @@ export const InputBar: React.FC<InputBarProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',

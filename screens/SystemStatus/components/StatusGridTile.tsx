@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -19,6 +20,8 @@ export const StatusGridTile: React.FC<StatusGridTileProps> = ({
     detail,
     color
 }) => {
+    const styles = useThemeStyles(createStyles);
+    const COLORS = useThemeColor();
     return (
         <View style={styles.container}>
             {/* Header Icon & Title */}
@@ -44,7 +47,7 @@ export const StatusGridTile: React.FC<StatusGridTileProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.backgroundNeutral,

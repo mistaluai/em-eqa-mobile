@@ -1,4 +1,6 @@
 import { COLORS } from '@/theme/colors';
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { NavItemData } from './types';
 
 export const NAV_ITEMS: NavItemData[] = [
@@ -8,7 +10,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Manage pairing and connection settings.',
     icon: 'camera', // Ionicons name
     screen: 'DeviceConnectionScreen',
-    color: COLORS.navDevice
+    color: COLORS.components.navigation.device
   },
   {
     id: 'timeline',
@@ -16,7 +18,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Review daily summaries and history.',
     icon: 'calendar',
     screen: 'TimelineEventsScreen',
-    color: COLORS.navTimeline
+    color: COLORS.components.navigation.timeline
   },
   {
     id: 'sync',
@@ -24,7 +26,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Monitor cloud synchronization status.',
     icon: 'cloud-upload',
     screen: 'ClipSyncScreen',
-    color: COLORS.navSync
+    color: COLORS.components.navigation.sync
   },
   {
     id: 'privacy',
@@ -32,7 +34,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Retention rules and deletion.',
     icon: 'cloud',
     screen: 'DataPrivacyScreen',
-    color: COLORS.navPrivacy
+    color: COLORS.components.navigation.privacy
   },
   {
     id: 'profile',
@@ -40,7 +42,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Personal info and recording triggers.',
     icon: 'person',
     screen: 'ProfileSettingsScreen',
-    color: COLORS.navProfile
+    color: COLORS.components.navigation.profile
   },
   {
     id: 'status',
@@ -48,7 +50,7 @@ export const NAV_ITEMS: NavItemData[] = [
     description: 'Health, battery, and operations.',
     icon: 'pulse',
     screen: 'SystemStatusScreen',
-    color: COLORS.navStatus
+    color: COLORS.components.navigation.status
   },
   {
     id: 'logout',

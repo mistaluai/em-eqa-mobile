@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +10,8 @@ import { StatusGridTile } from './components/StatusGridTile';
 import { useSystemStatusLogic } from './hooks/useSystemStatusLogic';
 
 const SystemStatusScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   useSystemStatusLogic();
 
   return (
@@ -29,14 +32,14 @@ const SystemStatusScreen: React.FC = () => {
             icon="battery-charging-outline"
             value="82%"
             detail="~4h Remaining"
-            color={COLORS.navStatus}
+            color={COLORS.components.navigation.status}
           />
           <StatusGridTile
             title="Cloud Storage"
             icon="server-outline"
             value="72%"
             detail="28GB Free"
-            color={COLORS.navDevice}
+            color={COLORS.components.navigation.device}
           />
         </View>
 
@@ -48,7 +51,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="mic-outline"
           statusText="Active"
           detailText="Session: 00:12:20"
-          statusColor={COLORS.navPrivacy}
+          statusColor={COLORS.components.navigation.privacy}
         />
 
         <StatusBarCard
@@ -56,7 +59,7 @@ const SystemStatusScreen: React.FC = () => {
           iconName="cloud-upload-outline"
           statusText="Syncing (3/10)"
           detailText="7 clips queued"
-          statusColor={COLORS.navSync}
+          statusColor={COLORS.components.navigation.sync}
           progress={30}
         />
 
@@ -75,7 +78,7 @@ const SystemStatusScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,

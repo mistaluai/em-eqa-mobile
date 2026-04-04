@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -9,6 +10,8 @@ interface AppCardProps {
 }
 
 const AppCard: React.FC<AppCardProps> = ({ children, style }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   return (
     <View style={[styles.card, style]}>
       {children}
@@ -16,7 +19,7 @@ const AppCard: React.FC<AppCardProps> = ({ children, style }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   card: {
     backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.default,

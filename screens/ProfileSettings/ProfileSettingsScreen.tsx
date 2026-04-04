@@ -1,3 +1,5 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -22,10 +24,11 @@ import { Avatar } from '../../components/Avatar';
 
 // Hook
 import { LAYOUT, RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
 const ProfileSettingsScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   // 1. Destructure everything from your custom hook
   const {
     fullName,
@@ -185,7 +188,7 @@ const ProfileSettingsScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   // Main Background
   screenBackground: {
     backgroundColor: COLORS.backgroundNeutral,

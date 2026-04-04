@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { SCREEN, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +14,8 @@ import { useClipUploadSyncLogic } from './hooks/useClipUploadSyncLogic';
  * Handles composition and rendering using hooks and components
  */
 const ClipUploadSyncScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const {
     status,
     completedClips,
@@ -64,7 +67,7 @@ const ClipUploadSyncScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   bottomSpacer: {
     height: SPACING.s32,
   },

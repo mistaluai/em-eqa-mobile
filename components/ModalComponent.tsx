@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Dimensions, Modal, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -21,6 +22,8 @@ const AppModal: React.FC<AppModalProps> = ({
   modalWidth = width * 0.85,
   position = 'left', // Defaulting to 'left' so your Drawer keeps working
 }: AppModalProps) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
   // 1. Determine Alignment Styles
   const alignmentStyle: ViewStyle = position === 'center'
@@ -70,7 +73,7 @@ const AppModal: React.FC<AppModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

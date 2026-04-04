@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 
@@ -18,6 +19,8 @@ const AppButton: React.FC<AppButtonProps> = ({
   style,
   disabled = false,
 }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const getButtonStyles = () => {
     switch (variant) {
       case 'secondary':
@@ -64,7 +67,7 @@ const AppButton: React.FC<AppButtonProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   baseButton: {
     paddingVertical: SPACING.s16,
     paddingHorizontal: SPACING.s24,

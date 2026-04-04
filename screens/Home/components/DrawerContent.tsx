@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -25,6 +26,8 @@ interface DrawerContentProps {
 }
 
 export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const navigation = useNavigation();
 
   return (
@@ -64,7 +67,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ onClose }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: COLORS.backgroundLight,

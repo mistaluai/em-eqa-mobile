@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -9,13 +10,18 @@ interface VideoPlaceholderProps {
   onPress?: () => void;
 }
 
-export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ onPress }) => (
-  <View style={styles.container}>
-    <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
-  </View>
-);
+export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ onPress }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-const styles = StyleSheet.create({
+  return (
+    <View style={styles.container}>
+      <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
+    </View>
+  );
+};
+
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     width: '100%',
     aspectRatio: (16 / 9) / 1.25,

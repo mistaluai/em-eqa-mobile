@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -14,39 +15,46 @@ interface StatusBarCardProps {
   progress?: number;
 }
 
-export const StatusBarCard: React.FC<StatusBarCardProps> = ({
-  title,
-  iconName,
-  statusText,
-  detailText,
-  statusColor,
-  progress,
-}) => (
-  <View>
-    <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>{title}</Text>
-    <AppCard style={styles.statusCard}>
-      <View style={styles.cardContent}>
-        <Ionicons name={iconName as any} size={32} color={statusColor} style={styles.iconMargin} />
-        <View style={styles.textBlock}>
-          <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }]}>{statusText}</Text>
-          <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{detailText}</Text>
+export const StatusBarCard: React.FC<StatusBarCardProps> = (
+  {
+    title,
+    iconName,
+    statusText,
+    detailText,
+    statusColor,
+    progress,
+  }
+) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
+
+  return (
+    <View>
+      <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>{title}</Text>
+      <AppCard style={styles.statusCard}>
+        <View style={styles.cardContent}>
+          <Ionicons name={iconName as any} size={32} color={statusColor} style={styles.iconMargin} />
+          <View style={styles.textBlock}>
+            <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }]}>{statusText}</Text>
+            <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{detailText}</Text>
+          </View>
+          {progress !== undefined && (
+            <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }, styles.progressText]}>
+              {progress}%
+            </Text>
+          )}
         </View>
         {progress !== undefined && (
-          <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }, styles.progressText]}>
-            {progress}%
-          </Text>
+          <View style={styles.progressBarTrack}>
+            <View style={[styles.progressBarFill, { width: `${progress}%`, backgroundColor: statusColor }]} />
+          </View>
         )}
-      </View>
-      {progress !== undefined && (
-        <View style={styles.progressBarTrack}>
-          <View style={[styles.progressBarFill, { width: `${progress}%`, backgroundColor: statusColor }]} />
-        </View>
-      )}
-    </AppCard>
-  </View>
-);
+      </AppCard>
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   sectionTitle: {
     color: COLORS.textPrimary,
     marginBottom: SPACING.s8, // Space between the small title and the card

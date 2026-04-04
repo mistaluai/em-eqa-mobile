@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
@@ -19,13 +20,20 @@ interface SlideContentProps {
 }
 
 // Placeholder component
-const Placeholder: React.FC<{ children: React.ReactNode; size: number }> = ({ children, size }) => (
-  <View style={[styles.placeholderBase, { width: size, height: size }]}>
-    <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary }]}>{children}</Text>
-  </View>
-);
+const Placeholder: React.FC<{ children: React.ReactNode; size: number }> = ({ children, size }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
+
+  return (
+    <View style={[styles.placeholderBase, { width: size, height: size }]}>
+      <Text style={[TYPOGRAPHY.BodyL, { color: COLORS.textSecondary }]}>{children}</Text>
+    </View>
+  );
+};
 
 export const SlideContent: React.FC<SlideContentProps> = ({ item }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   // This function now exclusively handles the rendering of the top visual content (Icon/Mockup)
   const renderContent = () => {
     switch (item.type) {
@@ -91,7 +99,7 @@ export const SlideContent: React.FC<SlideContentProps> = ({ item }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   slide: {
     width: width,
     height: '100%',

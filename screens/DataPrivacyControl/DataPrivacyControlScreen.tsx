@@ -1,10 +1,12 @@
+import { COLORS } from '@/theme/colors';
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SCREEN, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
@@ -15,6 +17,8 @@ import { useDataPrivacyControlLogic } from './hooks/useDataPrivacyControlLogic';
  * DataPrivacyControlScreen - Main screen component for privacy and data control
  */
 const DataPrivacyControlScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const {
     dataRetentionDays,
     isDeleteModalVisible,
@@ -62,7 +66,7 @@ const DataPrivacyControlScreen: React.FC = () => {
             <MaterialCommunityIcons
               name="alert"
               size={16}
-              color={COLORS.navPrivacy} // Matches the red text in styles
+              color={COLORS.components.navigation.privacy} // Matches the red text in styles
               style={{ marginTop: 2 }}
             />
             <Text style={styles.warningText}>
@@ -77,7 +81,7 @@ const DataPrivacyControlScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   sectionContainer: {
     marginBottom: SPACING.s32,
   },
@@ -87,19 +91,19 @@ const styles = StyleSheet.create({
     padding: SPACING.s16,
     // Using navPrivacy (red-600) with low opacity for the background to keep it "Danger" themed
     // Alternatively, if you want it purely white/neutral, use COLORS.backgroundNeutral
-    backgroundColor: `${COLORS.navPrivacy}15`, // Adding alpha for a light red tint
+    backgroundColor: `${COLORS.components.navigation.privacy}15`, // Adding alpha for a light red tint
     borderRadius: SPACING.s12,
     borderWidth: 1,
-    borderColor: COLORS.navPrivacy, // Red border
+    borderColor: COLORS.components.navigation.privacy, // Red border
   },
   dangerTitle: {
-    color: COLORS.navPrivacy, // Red title
+    color: COLORS.components.navigation.privacy, // Red title
     marginBottom: SPACING.s16,
     marginTop: SPACING.s4,
   },
   dangerButton: {
-    backgroundColor: COLORS.navPrivacy, // Strong Red
-    borderColor: COLORS.navPrivacy,
+    backgroundColor: COLORS.components.navigation.privacy, // Strong Red
+    borderColor: COLORS.components.navigation.privacy,
   },
   dangerButtonText: {
     color: COLORS.backgroundLight, // White text
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     lineHeight: 18,
-    color: COLORS.navPrivacy, // Red text for readability
+    color: COLORS.components.navigation.privacy, // Red text for readability
   },
 });
 

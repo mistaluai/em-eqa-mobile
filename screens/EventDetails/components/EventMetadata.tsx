@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -10,23 +11,28 @@ interface EventMetadataProps {
   location: string;
 }
 
-export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, location }) => (
-  <>
-    <Text style={[TYPOGRAPHY.HeadlineL, styles.eventTitle]}>{title}</Text>
-    <View style={styles.pillsContainer}>
-      <View style={styles.pill}>
-        <Ionicons name="time-outline" size={20} color={COLORS.primary} />
-        <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{time}</Text>
-      </View>
-      <View style={styles.pill}>
-        <Ionicons name="location-outline" size={20} color={COLORS.primary} />
-        <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{location}</Text>
-      </View>
-    </View>
-  </>
-);
+export const EventMetadata: React.FC<EventMetadataProps> = ({ title, time, location }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-const styles = StyleSheet.create({
+  return (
+    <>
+      <Text style={[TYPOGRAPHY.HeadlineL, styles.eventTitle]}>{title}</Text>
+      <View style={styles.pillsContainer}>
+        <View style={styles.pill}>
+          <Ionicons name="time-outline" size={20} color={COLORS.primary} />
+          <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{time}</Text>
+        </View>
+        <View style={styles.pill}>
+          <Ionicons name="location-outline" size={20} color={COLORS.primary} />
+          <Text style={[TYPOGRAPHY.Caption, styles.pillText]}>{location}</Text>
+        </View>
+      </View>
+    </>
+  );
+};
+
+const createStyles = (COLORS: any) => StyleSheet.create({
   eventTitle: {
     color: COLORS.textPrimary,
     marginBottom: SPACING.s16,

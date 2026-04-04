@@ -1,34 +1,40 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export const LivePreviewBox: React.FC<{ isActive: boolean }> = ({ isActive }) => (
-  <View style={[styles.container, isActive && styles.activeContainer]}>
-    {isActive ? (
-      <>
-        {/* Mock Video Feed Background */}
-        <View style={styles.mockVideoFeed}>
-          <Ionicons name="videocam" size={48} color={COLORS.backgroundLight} style={{ opacity: 0.5 }} />
-        </View>
+export const LivePreviewBox: React.FC<{ isActive: boolean }> = ({ isActive }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-        {/* Live Indicator Overlay */}
-        <View style={styles.liveBadge}>
-          <View style={styles.redDot} />
-          <Text style={styles.liveText}>LIVE</Text>
-        </View>
-      </>
-    ) : (
-      <View style={styles.offlineContainer}>
-        <Ionicons name="eye-off-outline" size={48} color={COLORS.textSecondary} />
-        <Text style={styles.offlineText}>Camera Offline</Text>
-      </View>
-    )}
-  </View>
-);
+  return (
+    <View style={[styles.container, isActive && styles.activeContainer]}>
+      {isActive ? (
+        <>
+          {/* Mock Video Feed Background */}
+          <View style={styles.mockVideoFeed}>
+            <Ionicons name="videocam" size={48} color={COLORS.backgroundLight} style={{ opacity: 0.5 }} />
+          </View>
 
-const styles = StyleSheet.create({
+          {/* Live Indicator Overlay */}
+          <View style={styles.liveBadge}>
+            <View style={styles.redDot} />
+            <Text style={styles.liveText}>LIVE</Text>
+          </View>
+        </>
+      ) : (
+        <View style={styles.offlineContainer}>
+          <Ionicons name="eye-off-outline" size={48} color={COLORS.textSecondary} />
+          <Text style={styles.offlineText}>Camera Offline</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     width: '100%',
     aspectRatio: 4 / 3, // Standard camera aspect ratio
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.navPrivacy, // Red
+    backgroundColor: COLORS.components.navigation.privacy, // Red
     marginRight: 6,
   },
   liveText: {

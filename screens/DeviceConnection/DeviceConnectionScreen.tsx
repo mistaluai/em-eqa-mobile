@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { SCREEN, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
@@ -12,6 +13,8 @@ import { useDeviceConnectionLogic } from './hooks/useDeviceConnectionLogic';
 
 // --- Ripple Animation Component ---
 const RippleLoader = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
 
@@ -57,6 +60,8 @@ const RippleLoader = () => {
 
 // --- Main Screen ---
 const DeviceConnectionScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const { status, deviceName, deviceModel, batteryLevel, handleReconnect } = useDeviceConnectionLogic();
   const isConnected = status === 'connected';
 
@@ -99,7 +104,7 @@ const DeviceConnectionScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: SPACING.s24,

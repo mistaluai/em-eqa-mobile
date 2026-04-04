@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React, { useRef } from 'react';
 import { Animated, Dimensions, FlatList, StyleSheet, View } from 'react-native';
 
@@ -14,6 +15,8 @@ interface AppCarouselProps<T> {
 }
 
 const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, flatListRef }: AppCarouselProps<T>) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const handleOnScroll = Animated.event(
@@ -78,7 +81,7 @@ const AppCarousel = <T extends any>({ data, renderItem, keyExtractor, onScroll, 
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

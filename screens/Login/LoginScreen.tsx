@@ -1,3 +1,5 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import React, { useEffect, useState } from 'react';
 import {
   Image,
@@ -13,12 +15,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { useLoginLogic } from './hooks/useLoginLogic';
 
 const LoginScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const { width } = useWindowDimensions();
 
   // 1. INTEGRATION: Destructure all necessary values and functions
@@ -151,7 +154,7 @@ const LoginScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,

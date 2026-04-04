@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
 import { ChatMessage } from './ChatMessage';
@@ -18,24 +19,29 @@ interface ChatContainerProps {
 /**
  * ChatContainer - Pure presentation component for chat messages list
  */
-export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => (
-  <View style={styles.container}>
-    <FlatList
-      data={messages.slice().reverse()}
-      renderItem={({ item }) => (
-        <ChatMessage
-          message={item}
-          onEvidencePress={() => onEvidencePress?.(item.id)}
-        />
-      )}
-      keyExtractor={(item) => item.id.toString()}
-      style={styles.history}
-      inverted
-    />
-  </View>
-);
+export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-const styles = StyleSheet.create({
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={messages.slice().reverse()}
+        renderItem={({ item }) => (
+          <ChatMessage
+            message={item}
+            onEvidencePress={() => onEvidencePress?.(item.id)}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        style={styles.history}
+        inverted
+      />
+    </View>
+  );
+};
+
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: SPACING.s16,

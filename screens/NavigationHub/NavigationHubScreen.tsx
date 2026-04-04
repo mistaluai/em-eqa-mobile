@@ -1,6 +1,7 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import AppHeader from '@/components/HeaderComponent';
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +11,8 @@ import { useNavigationHubLogic } from './hooks/useNavigationHubLogic';
 
 // --- Main Screen Component ---
 const NavigationHubScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const { handleCardPress } = useNavigationHubLogic();
 
   return (
@@ -31,7 +34,7 @@ const NavigationHubScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,

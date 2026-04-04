@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -20,6 +21,8 @@ interface EventCardProps {
 }
 
 export const EventCard: React.FC<EventCardProps> = ({ clip, isLast }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const navigation = useNavigation<any>();
 
   // 2. Helper to extract time from ISO string (e.g. "2023-10-01T14:30:00" -> "14:30")
@@ -72,7 +75,7 @@ export const EventCard: React.FC<EventCardProps> = ({ clip, isLast }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   // Main Row Layout
   rowContainer: {
     flexDirection: 'row',

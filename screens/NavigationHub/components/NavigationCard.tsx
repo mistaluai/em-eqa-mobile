@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -11,6 +12,8 @@ interface NavigationCardProps {
 }
 
 export const NavigationCard: React.FC<NavigationCardProps> = ({ item, onPress }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -41,7 +44,7 @@ export const NavigationCard: React.FC<NavigationCardProps> = ({ item, onPress })
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',

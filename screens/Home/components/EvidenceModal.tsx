@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -15,40 +16,41 @@ interface EvidenceModalProps {
   onGoToEventDetails?: () => void;
 }
 
-export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose, onGoToEventDetails }) => (
-  <AppModal
-    isVisible={isVisible}
-    onClose={onClose}
-    modalWidth={width * 0.95}
-    position="center"
-  >
-    <View style={styles.headerContainer}>
-      <Pressable onPress={onClose} hitSlop={10}>
-        <Ionicons name="close-circle-outline" size={32} color={COLORS.textSecondary} />
-      </Pressable>
-    </View>
+export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose, onGoToEventDetails }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-    <Text style={[TYPOGRAPHY.HeadlineM, styles.title]}>
-      Evidence Clip
-    </Text>
-
-    <View style={styles.videoPlaceholder}>
-      <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
-    </View>
-
-    <AppCard style={styles.cardSpacer}>
-      <Text style={[TYPOGRAPHY.HeadlineM, styles.summaryTitle]}>Summary</Text>
-      <Text style={[TYPOGRAPHY.BodyM, styles.summaryText]}>
-        Clip timestamp: 14:32 - 14:45. Confirmed commitment to draft the pitch deck.
+  return (
+    <AppModal
+      isVisible={isVisible}
+      onClose={onClose}
+      modalWidth={width * 0.95}
+      position="center"
+    >
+      <View style={styles.headerContainer}>
+        <Pressable onPress={onClose} hitSlop={10}>
+          <Ionicons name="close-circle-outline" size={32} color={COLORS.textSecondary} />
+        </Pressable>
+      </View>
+      <Text style={[TYPOGRAPHY.HeadlineM, styles.title]}>
+        Evidence Clip
       </Text>
-    </AppCard>
+      <View style={styles.videoPlaceholder}>
+        <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
+      </View>
+      <AppCard style={styles.cardSpacer}>
+        <Text style={[TYPOGRAPHY.HeadlineM, styles.summaryTitle]}>Summary</Text>
+        <Text style={[TYPOGRAPHY.BodyM, styles.summaryText]}>
+          Clip timestamp: 14:32 - 14:45. Confirmed commitment to draft the pitch deck.
+        </Text>
+      </AppCard>
+      <View style={styles.buttonSpacer} />
+      <AppButton title="Go to Event Details" onPress={onGoToEventDetails || onClose} />
+    </AppModal>
+  );
+};
 
-    <View style={styles.buttonSpacer} />
-    <AppButton title="Go to Event Details" onPress={onGoToEventDetails || onClose} />
-  </AppModal>
-);
-
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',

@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { LAYOUT, RADIUS, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -17,8 +18,10 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   deviceModel,
   batteryLevel,
 }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const isConnected = status === 'connected';
-  const statusColor = isConnected ? COLORS.navStatus : COLORS.textSecondary;
+  const statusColor = isConnected ? COLORS.components.navigation.status : COLORS.textSecondary;
   const statusText = isConnected ? 'Active' : 'Offline';
 
   return (
@@ -53,7 +56,7 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   glassContainer: {
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.95)', // High opacity for glass effect

@@ -1,6 +1,7 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import AppHeader from '@/components/HeaderComponent';
 import { SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +15,8 @@ import { useHomeLogic } from './hooks/useHomeLogic';
  * Handles composition and rendering using hooks and components
  */
 const HomeScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const {
     isSearchDrawerVisible,
     messages,
@@ -66,7 +69,7 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,

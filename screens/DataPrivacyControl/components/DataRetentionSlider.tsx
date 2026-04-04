@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
@@ -17,6 +18,8 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   onRetentionDaysChange,
   retentionOptions = DEFAULT_RETENTION_OPTIONS,
 }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   return (
     <AppCard style={styles.card}>
       {/* Mapped 'HeadlineS' to 'BodyL' (18px) + Bold 
@@ -65,7 +68,7 @@ export const DataRetentionSlider: React.FC<DataRetentionSliderProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   card: {
     backgroundColor: COLORS.backgroundNeutral, // Soft Gray surface
     padding: SPACING.s16,

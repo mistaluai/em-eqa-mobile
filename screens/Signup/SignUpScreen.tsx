@@ -1,3 +1,5 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import {
@@ -13,12 +15,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { useSignUpLogic } from './hooks/useSignUpLogic';
 
 const SignUpScreen: React.FC = () => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const {
     fullName,
     setFullName,
@@ -205,7 +208,7 @@ const SignUpScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,

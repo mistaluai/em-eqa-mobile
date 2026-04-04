@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -17,6 +18,8 @@ const AppCheckbox: React.FC<AppCheckboxProps> = ({
   onPress,
   disabled = false,
 }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const handlePress = () => {
     if (!disabled) {
       onPress(!checked);
@@ -42,7 +45,7 @@ const AppCheckbox: React.FC<AppCheckboxProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',

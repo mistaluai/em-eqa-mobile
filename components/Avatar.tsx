@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -41,6 +42,8 @@ export const Avatar: React.FC<AvatarProps> = ({
     showEditBadge = false,
     style,
 }) => {
+    const styles = useThemeStyles(createStyles);
+    const COLORS = useThemeColor();
     // Dynamic styles based on size
     const containerStyle = {
         width: size,
@@ -72,13 +75,13 @@ export const Avatar: React.FC<AvatarProps> = ({
                     />
                 ) : (
                     // Fallback Placeholder
-                    <View style={[styles.placeholder, containerStyle]}>
+                    (<View style={[styles.placeholder, containerStyle]}>
                         <Ionicons
                             name="person"
                             size={size * 0.5}
                             color={COLORS.textSecondary}
                         />
-                    </View>
+                    </View>)
                 )}
 
                 {/* Edit Badge (Camera Icon) */}
@@ -92,7 +95,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
     container: {
         // Ensures the badge aligns relative to this container
         position: 'relative',

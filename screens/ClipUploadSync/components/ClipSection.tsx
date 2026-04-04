@@ -1,6 +1,8 @@
+import { COLORS } from '@/theme/colors';
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 // ClipSection.tsx
 import { TEXT, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { Clip } from '../../../shared/types';
@@ -24,6 +26,7 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
   // Default title color is now primary dark text
   titleColor = COLORS.textPrimary,
 }) => {
+  const COLORS = useThemeColor();
   if (clips.length === 0) return null;
 
   // Note: TEXT.sectionTitle and TEXT.retryAll will need to be updated 
@@ -48,10 +51,10 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
         //   variant="secondary"
         //   style={{  alignSelf: 'flex-end', borderRadius : 32 ,}} 
         // />
-        <Pressable onPress={onClearAll}>
+        (<Pressable onPress={onClearAll}>
           {/* Link text style relies on TEXT.retryAll being updated to use COLORS.secondary */}
           <Text style={[TYPOGRAPHY.Caption, TEXT.clearAll,]}>Pause All Uploads</Text>
-        </Pressable>
+        </Pressable>)
       )}
       {title === 'Failed Uploads' && (
         <Pressable onPress={() => console.log('Retry All')}>

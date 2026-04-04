@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import AppCard from '../../../components/AppCard';
@@ -17,6 +18,8 @@ interface ChatMessageProps {
  * ChatMessage - Pure presentation component for individual chat message
  */
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onEvidencePress }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   const isUser = message.sender === 'user';
   return (
     <View style={[styles.messageRow, isUser ? styles.messageRowUser : styles.messageRowAI]}>
@@ -32,7 +35,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onEvidencePre
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   messageRow: {
     maxWidth: '80%',
     marginVertical: SPACING.s4,

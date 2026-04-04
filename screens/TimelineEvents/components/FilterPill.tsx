@@ -1,5 +1,6 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { Filter } from '../../../shared/types';
@@ -10,25 +11,30 @@ interface FilterPillProps {
   onPress: (filter: Filter) => void;
 }
 
-export const FilterPill: React.FC<FilterPillProps> = ({ filter, activeFilter, onPress }) => (
-  <Pressable
-    onPress={() => onPress(filter)}
-    style={[
-      styles.filterPill,
-      activeFilter === filter && styles.activeFilterPill,
-    ]}
-  >
-    <Text style={[
-      TYPOGRAPHY.Caption,
-      styles.filterText,
-      activeFilter === filter && styles.activeFilterText
-    ]}>
-      {filter}
-    </Text>
-  </Pressable>
-);
+export const FilterPill: React.FC<FilterPillProps> = ({ filter, activeFilter, onPress }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-const styles = StyleSheet.create({
+  return (
+    <Pressable
+      onPress={() => onPress(filter)}
+      style={[
+        styles.filterPill,
+        activeFilter === filter && styles.activeFilterPill,
+      ]}
+    >
+      <Text style={[
+        TYPOGRAPHY.Caption,
+        styles.filterText,
+        activeFilter === filter && styles.activeFilterText
+      ]}>
+        {filter}
+      </Text>
+    </Pressable>
+  );
+};
+
+const createStyles = (COLORS: any) => StyleSheet.create({
   filterPill: {
     paddingHorizontal: SPACING.s16,
     paddingVertical: SPACING.s8,

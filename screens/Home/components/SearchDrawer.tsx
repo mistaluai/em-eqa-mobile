@@ -1,3 +1,5 @@
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useThemeColor } from "@/theme/useThemeColor";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
@@ -18,7 +20,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 // 1. IMPORT STORES AND COMPONENT
 import { LAYOUT, SPACING } from '@/theme';
-import { COLORS } from '@/theme/colors';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
@@ -32,26 +33,40 @@ interface SearchDrawerProps {
 }
 
 // ... MenuItem and ChatHistoryItem components remain the same ...
-const MenuItem = ({ icon, label, onPress, isNewChat = false }: { icon: string, label: string, onPress?: () => void, isNewChat?: boolean }) => (
-  <TouchableOpacity style={[LAYOUT.flexRowCenter, styles.menuItem]} onPress={onPress}>
-    <Ionicons name={icon as any} size={20} color={COLORS.textPrimary} style={styles.menuIcon} />
-    <Text style={[styles.menuLabel, isNewChat && styles.newChatLabel]}>{label}</Text>
-    {isNewChat && (
-      <View style={styles.newChatIconContainer}>
-        <Ionicons name="create-outline" size={20} color={COLORS.textPrimary} />
-      </View>
-    )}
-  </TouchableOpacity>
-);
+const MenuItem = (
+  { icon, label, onPress, isNewChat = false }: { icon: string, label: string, onPress?: () => void, isNewChat?: boolean }
+) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
-const ChatHistoryItem = ({ title }: { title: string }) => (
-  <TouchableOpacity style={styles.chatItem}>
-    <Text style={styles.chatItemText} numberOfLines={1}>{title}</Text>
-  </TouchableOpacity>
-);
+  return (
+    <TouchableOpacity style={[LAYOUT.flexRowCenter, styles.menuItem]} onPress={onPress}>
+      <Ionicons name={icon as any} size={20} color={COLORS.textPrimary} style={styles.menuIcon} />
+      <Text style={[styles.menuLabel, isNewChat && styles.newChatLabel]}>{label}</Text>
+      {isNewChat && (
+        <View style={styles.newChatIconContainer}>
+          <Ionicons name="create-outline" size={20} color={COLORS.textPrimary} />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+const ChatHistoryItem = ({ title }: { title: string }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
+
+  return (
+    <TouchableOpacity style={styles.chatItem}>
+      <Text style={styles.chatItemText} numberOfLines={1}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
 
 // --- Updated Content Component ---
 const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
 
   // 2. GET USER DATA
   const { full_name } = useAuthStore();
@@ -141,6 +156,8 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
 
 // ... The SearchDrawer export remains exactly the same ...
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
+  const styles = useThemeStyles(createStyles);
+  const COLORS = useThemeColor();
   // ... same animation and modal logic ...
   const navigation = useNavigation<any>();
   const slideAnim = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
@@ -224,7 +241,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (COLORS: any) => StyleSheet.create({
   // --- Global Drawer Styles (Merged) ---
   backdrop: {
     ...StyleSheet.absoluteFillObject,
