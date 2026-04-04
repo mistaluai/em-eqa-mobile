@@ -1,4 +1,4 @@
-import { SPACING, TEXT, TYPOGRAPHY } from '@/src/theme';
+import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppInput from '../../../components/InputComponent';

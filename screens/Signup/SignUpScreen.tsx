@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SPACING, TEXT, TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { useSignUpLogic } from './hooks/useSignUpLogic';

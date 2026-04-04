@@ -1,6 +1,6 @@
 // UploadStatusDashboard.tsx
-import { CARD, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { CARD, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { View } from 'react-native';
 import { UploadStatus } from '../../../shared/types';

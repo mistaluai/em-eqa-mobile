@@ -1,5 +1,5 @@
-import { RADIUS, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React, { useRef } from 'react';
 import { Animated, Dimensions, FlatList, StyleSheet, View } from 'react-native';
 

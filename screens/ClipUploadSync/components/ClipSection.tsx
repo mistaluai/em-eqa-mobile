@@ -1,6 +1,6 @@
 // ClipSection.tsx
-import { TEXT, TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { TEXT, TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { Clip } from '../../../shared/types';

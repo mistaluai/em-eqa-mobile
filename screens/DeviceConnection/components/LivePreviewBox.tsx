@@ -1,5 +1,5 @@
-import { RADIUS } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';

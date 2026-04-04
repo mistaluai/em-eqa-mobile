@@ -1,6 +1,6 @@
 import AppHeader from '@/components/HeaderComponent';
-import { RADIUS, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

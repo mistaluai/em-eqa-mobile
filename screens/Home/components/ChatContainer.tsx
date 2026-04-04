@@ -1,5 +1,5 @@
-import { RADIUS, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
 import { ChatMessage } from './ChatMessage';

@@ -21,8 +21,8 @@ import { Avatar } from '../../components/Avatar';
 // Theme
 
 // Hook
-import { LAYOUT, RADIUS, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { LAYOUT, RADIUS, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
 const ProfileSettingsScreen: React.FC = () => {

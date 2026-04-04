@@ -1,5 +1,5 @@
-import { RADIUS, SPACING, TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 

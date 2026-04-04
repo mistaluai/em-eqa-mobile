@@ -1,6 +1,6 @@
 import AppHeader from '@/components/HeaderComponent';
-import { SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

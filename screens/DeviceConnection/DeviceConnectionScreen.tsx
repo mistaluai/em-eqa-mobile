@@ -1,5 +1,5 @@
-import { SCREEN, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { SCREEN, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';

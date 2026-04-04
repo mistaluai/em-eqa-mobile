@@ -1,6 +1,6 @@
 // ProgressCard.tsx
-import { CARD, SPACING, TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { CARD, SPACING, TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';

@@ -1,4 +1,4 @@
-import { SPACING } from '@/src/theme';
+import { SPACING } from '@/theme';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Filter } from '../../../shared/types';

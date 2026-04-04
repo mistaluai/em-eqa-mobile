@@ -1,5 +1,5 @@
-import { RADIUS, SHADOW, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SHADOW, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { Dimensions, Modal, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 

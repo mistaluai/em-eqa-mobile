@@ -1,5 +1,5 @@
-import { TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import AppCard from '../../../components/AppCard';

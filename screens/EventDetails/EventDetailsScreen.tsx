@@ -1,4 +1,4 @@
-import { SCREEN, SPACING } from '@/src/theme';
+import { SCREEN, SPACING } from '@/theme';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

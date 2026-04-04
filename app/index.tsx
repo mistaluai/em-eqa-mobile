@@ -13,7 +13,7 @@ import SystemStatusScreen from '@/screens/SystemStatus';
 import TimelineEventsScreen from '@/screens/TimelineEvents';
 import { useAuthStore } from '@/services/auth/supabaseAuth';
 import { supabase } from '@/services/databases/supabase/supabase_client';
-import { COLORS } from '@/src/theme/colors';
+import { COLORS } from '@/theme/colors';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import React, { useEffect, useState } from 'react';

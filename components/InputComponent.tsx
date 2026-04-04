@@ -1,5 +1,5 @@
-import { RADIUS, SPACING, TYPOGRAPHY } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {

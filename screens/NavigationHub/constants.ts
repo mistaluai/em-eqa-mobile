@@ -1,4 +1,4 @@
-import { COLORS } from '@/src/theme/colors';
+import { COLORS } from '@/theme/colors';
 import { NavItemData } from './types';
 
 export const NAV_ITEMS: NavItemData[] = [

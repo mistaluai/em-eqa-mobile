@@ -17,8 +17,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // 1. IMPORT STORES AND COMPONENT
-import { LAYOUT, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { LAYOUT, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';

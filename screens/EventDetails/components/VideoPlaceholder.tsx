@@ -1,5 +1,5 @@
-import { RADIUS, SHADOW, SPACING } from '@/src/theme';
-import { COLORS } from '@/src/theme/colors';
+import { RADIUS, SHADOW, SPACING } from '@/theme';
+import { COLORS } from '@/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
