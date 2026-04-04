@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SCREEN, SECTION, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { SCREEN, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
@@ -116,6 +116,26 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     color: COLORS.navPrivacy, // Red text for readability
+  },
+});
+
+const SECTION = StyleSheet.create({
+  title: {
+    color: COLORS.textPrimary,
+    marginTop: SPACING.s32,
+    marginBottom: SPACING.s16,
+    fontWeight: '700',
+  },
+  titleWithTopMargin: {
+    color: COLORS.textPrimary,
+    marginTop: SPACING.s32,
+    marginBottom: SPACING.s16,
+    fontWeight: '700',
+  },
+  titleNoTopMargin: {
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s12,
+    fontWeight: '700',
   },
 });
 

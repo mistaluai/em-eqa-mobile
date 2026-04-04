@@ -1,9 +1,9 @@
+import AppHeader from '@/components/HeaderComponent';
 import { SPACING } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppHeader from '../../components/HeaderComponent';
 import { ChatContainer } from './components/ChatContainer';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
@@ -38,12 +38,12 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <AppHeader
+      {<AppHeader
         title=""
         leftIconName="menu-outline"
         onLeftIconPress={handleOpenSearchDrawer}
-      />
-
+      />}
+      {/* <TestUpload></TestUpload> */}
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}

@@ -1,4 +1,4 @@
-import { RADIUS, SPACING } from '@/src/theme';
+import { LAYOUT, RADIUS, SPACING } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -24,7 +24,7 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   return (
     <View style={styles.glassContainer}>
       {/* Row 1: Header & Status */}
-      <View style={styles.row}>
+      <View style={[LAYOUT.flexRowBetween, styles.row]}>
         <View>
           <Text style={styles.label}>Device</Text>
           <Text style={styles.deviceName}>{deviceName}</Text>
@@ -40,11 +40,11 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
 
       {/* Row 2: Details (Model & Battery) */}
       <View style={styles.detailsRow}>
-        <View style={styles.detailItem}>
+        <View style={[LAYOUT.flexRowCenter, styles.detailItem]}>
           <Ionicons name="hardware-chip-outline" size={18} color={COLORS.textSecondary} />
           <Text style={styles.detailText}>{deviceModel}</Text>
         </View>
-        <View style={styles.detailItem}>
+        <View style={[LAYOUT.flexRowCenter, styles.detailItem]}>
           <Ionicons name={batteryLevel > 20 ? "battery-half-outline" : "battery-dead-outline"} size={18} color={COLORS.textSecondary} />
           <Text style={styles.detailText}>{batteryLevel}% Battery</Text>
         </View>
@@ -69,9 +69,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,1)', // Highlight border
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: SPACING.s12,
   },
   label: {
@@ -113,8 +110,6 @@ const styles = StyleSheet.create({
     gap: SPACING.s24,
   },
   detailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: SPACING.s8,
   },
   detailText: {

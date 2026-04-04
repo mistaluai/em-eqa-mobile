@@ -17,7 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // 1. IMPORT STORES AND COMPONENT
-import { SPACING } from '@/src/theme';
+import { LAYOUT, SPACING } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
@@ -33,7 +33,7 @@ interface SearchDrawerProps {
 
 // ... MenuItem and ChatHistoryItem components remain the same ...
 const MenuItem = ({ icon, label, onPress, isNewChat = false }: { icon: string, label: string, onPress?: () => void, isNewChat?: boolean }) => (
-  <TouchableOpacity style={styles.menuItem} onPress={onPress}>
+  <TouchableOpacity style={[LAYOUT.flexRowCenter, styles.menuItem]} onPress={onPress}>
     <Ionicons name={icon as any} size={20} color={COLORS.textPrimary} style={styles.menuIcon} />
     <Text style={[styles.menuLabel, isNewChat && styles.newChatLabel]}>{label}</Text>
     {isNewChat && (
@@ -72,7 +72,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
     <View style={styles.contentContainer}>
       {/* 1. Search Bar Area */}
       <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
+        <View style={[LAYOUT.flexRowCenter, styles.searchBar]}>
           <Ionicons name="search" size={20} color={COLORS.textSecondary} style={{ marginRight: 8 }} />
           <TextInput
             style={styles.searchBarInput}
@@ -108,6 +108,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
       <Pressable
         onPress={handleProfilePress}
         style={({ pressed }) => [
+          LAYOUT.flexRowCenter,
           styles.userProfile,
           { opacity: pressed ? 0.7 : 1 },
         ]}
@@ -201,7 +202,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
           { opacity: fadeAnim }
         ]}
       >
-        <Pressable style={{ flex: 1 }} onPress={closeDrawer} />
+        <Pressable style={LAYOUT.flex1} onPress={closeDrawer} />
       </Animated.View>
 
       <Animated.View
@@ -262,12 +263,10 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s12,
   },
   searchBar: {
-    flexDirection: 'row',
     // Using backgroundNeutral (Soft Gray) for the input pill background
     backgroundColor: COLORS.backgroundNeutral,
     borderRadius: 24,
     height: 44,
-    alignItems: 'center',
     paddingHorizontal: SPACING.s16,
   },
   searchBarInput: {
@@ -283,8 +282,6 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s12,
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingVertical: SPACING.s12,
     paddingHorizontal: SPACING.s4,
   },
@@ -340,8 +337,6 @@ const styles = StyleSheet.create({
 
   // --- User Profile Footer ---
   userProfile: {
-    flexDirection: 'row',
-    alignItems: 'center',
     // Modern Card Styling
     backgroundColor: COLORS.backgroundNeutral, // Creates the card shape against the white background
     borderRadius: 16,                          // Rounded edges

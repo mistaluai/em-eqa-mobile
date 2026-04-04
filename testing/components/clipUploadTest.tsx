@@ -1,6 +1,6 @@
-import { useAuthStore } from '@/src/services/auth/supabaseAuth';
-import { supabase } from '@/src/services/databases/supabase/supabase_client';
-import { useClipsStore } from '@/src/services/userdata/supabaseClips';
+import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { supabase } from '@/services/databases/supabase/supabase_client';
+import { useClipsStore } from '@/services/userdata/supabaseClips';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Button, StyleSheet, Text, View } from 'react-native';

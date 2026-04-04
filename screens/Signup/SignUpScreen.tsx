@@ -106,7 +106,7 @@ const SignUpScreen: React.FC = () => {
               keyboardType="default"
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="John Doe"
+              placeholder="Luai Waleed"
             />
 
             <View style={styles.formSpacer} />
@@ -118,7 +118,7 @@ const SignUpScreen: React.FC = () => {
               keyboardType="default"
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="johndoe123"
+              placeholder="luai_dev"
             />
 
             <View style={styles.formSpacer} />
@@ -130,7 +130,7 @@ const SignUpScreen: React.FC = () => {
               keyboardType="email-address"
               onFocus={handleFocus}
               onBlur={handleBlur}
-              placeholder="john@example.com"
+              placeholder="luai@example.com"
             />
 
             <View style={styles.formSpacer} />

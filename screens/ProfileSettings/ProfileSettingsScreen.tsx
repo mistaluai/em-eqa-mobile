@@ -21,7 +21,7 @@ import { Avatar } from '../../components/Avatar';
 // Theme
 
 // Hook
-import { RADIUS, SPACING } from '@/src/theme';
+import { LAYOUT, RADIUS, SPACING } from '@/src/theme';
 import { COLORS } from '@/src/theme/colors';
 import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
@@ -50,10 +50,10 @@ const ProfileSettingsScreen: React.FC = () => {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
+        style={LAYOUT.flex1}
       >
         <ScrollView
-          style={{ flex: 1 }}
+          style={LAYOUT.flex1}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -95,7 +95,7 @@ const ProfileSettingsScreen: React.FC = () => {
           {/* 2. Personal Information Group */}
           <Text style={styles.sectionLabel}>Personal Information</Text>
           <View style={styles.settingsGroup}>
-            <View style={styles.settingRow}>
+            <View style={[LAYOUT.flexRowCenter, styles.settingRow]}>
               <View style={styles.rowIconContainer}>
                 <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} />
               </View>
@@ -108,6 +108,7 @@ const ProfileSettingsScreen: React.FC = () => {
 
             <View
               style={[
+                LAYOUT.flexRowCenter,
                 styles.settingRow,
                 styles.lastRow,
               ]}
@@ -128,6 +129,7 @@ const ProfileSettingsScreen: React.FC = () => {
           <View style={styles.settingsGroup}>
             <Pressable
               style={[
+                LAYOUT.flexRowCenter,
                 styles.settingRow,
                 styles.lastRow,
               ]}
@@ -271,8 +273,6 @@ const styles = StyleSheet.create({
   },
   // --- Row Item ---
   settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingVertical: SPACING.s16,
     paddingHorizontal: SPACING.s16,
     backgroundColor: COLORS.backgroundLight,

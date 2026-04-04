@@ -17,9 +17,18 @@ export const useHomeLogic = () => {
   const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: 1, sender: 'ai', text: 'Welcome back, John. I have summarized your events from the last 2 hours. You were highly engaged in a meeting about the Q4 budget.', hasEvidence: true },
-    { id: 2, sender: 'user', text: 'What did I agree to do next?', hasEvidence: false },
-    { id: 3, sender: 'ai', text: 'You agreed to draft the initial pitch deck by Friday. I have the full clip if you want to verify the commitment.', hasEvidence: true },
+    {
+      id: 2,
+      sender: 'user',
+      text: 'When was the last time I took Panadol?',
+      hasEvidence: false
+    },
+    {
+      id: 3,
+      sender: 'ai',
+      text: 'You took two Panadol tablets at 10:15 AM standing by the kitchen counter. I have isolated that clip for verification.',
+      hasEvidence: true
+    },
   ]);
 
   const handleSendMessage = (messageText: string) => {
