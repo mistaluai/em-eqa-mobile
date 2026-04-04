@@ -1,10 +1,10 @@
-import { fontFamily } from '@/src/theme/fonts';
+import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { fontFamily } from '@/theme/fonts';
 import * as Font from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { useAuthStore } from '../src/services/auth/supabaseAuth';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -14,11 +14,11 @@ const RootLayout = () => {
   const { initialize, initialized } = useAuthStore();
 
   const [fontsLoaded] = Font.useFonts({
-    [fontFamily.regular]: require("../src/theme/fonts/Inter_18pt-Regular.ttf"),
-    [fontFamily.medium]: require("../src/theme/fonts/Inter_18pt-Medium.ttf"),
-    [fontFamily.semibold]: require("../src/theme/fonts/Inter_18pt-SemiBold.ttf"),
-    [fontFamily.bold]: require("../src/theme/fonts/Inter_18pt-Bold.ttf"),
-    [fontFamily.extrabold]: require("../src/theme/fonts/Inter_18pt-ExtraBold.ttf"),
+    [fontFamily.regular]: require("../assets/fonts/Inter_18pt-Regular.ttf"),
+    [fontFamily.medium]: require("../assets/fonts/Inter_18pt-Medium.ttf"),
+    [fontFamily.semibold]: require("../assets/fonts/Inter_18pt-SemiBold.ttf"),
+    [fontFamily.bold]: require("../assets/fonts/Inter_18pt-Bold.ttf"),
+    [fontFamily.extrabold]: require("../assets/fonts/Inter_18pt-ExtraBold.ttf"),
   });
 
   // 3. Trigger Auth Check immediately when app mounts
