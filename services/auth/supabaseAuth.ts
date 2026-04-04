@@ -1,43 +1,20 @@
 import { Alert } from 'react-native'
 import { create } from 'zustand'
+import { AuthState } from '../../shared/types'
 import { supabase } from '../databases/supabase/supabase_client'
-
-interface AuthState {
-    userid: string
-    email: string
-    password: string
-    full_name: string
-    avatar_path: string | null;
-    username: string
-    dob: Date
-    loading: boolean
-    setEmail: (email: string) => void
-    setPassword: (password: string) => void
-    setFullname: (full_name: string) => void
-    setUsername: (username: string) => void
-    setDOB: (dob: Date) => void
-    signInWithEmail: () => Promise<void>
-    signUp: () => Promise<void>
-    signOut: () => Promise<void>
-    setAvatarPath: (path: string) => void;
-    loadUserProfile: (uid: string) => Promise<void>;
-    initialized: boolean;
-    initialize: () => Promise<void>;
-}
 
 export const useAuthStore = create<AuthState>((set, get) => ({
     userid: '',
     initialized: false,
     email: '',
-    password: '',
-    loading: false,
     full_name: '',
     username: '',
     avatar_path: null,
     dob: new Date(),
-    // Simple actions to update state
+    loading: false,
+
+    // Profile Setters (For updating authenticated profile)
     setEmail: (email) => set({ email }),
-    setPassword: (password) => set({ password }),
     setFullname: (full_name) => set({ full_name }),
     setUsername: (username) => set({ username }),
     setDOB: (dob) => set({ dob }),
@@ -62,13 +39,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     },
 
     // The Logic: Sign In
-    signInWithEmail: async () => {
+    signInWithEmail: async (email: string, pass: string) => {
         set({ loading: true })
-        const { email, password } = get() // Read current state
 
         const { error } = await supabase.auth.signInWithPassword({
             email: email,
-            password: password,
+            password: pass,
         })
 
         const { data: { user } } = await supabase.auth.getUser()
@@ -79,29 +55,26 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         if (error) Alert.alert(error.message)
         set({ loading: false })
-
     },
 
     // The Logic: Sign Up
-    signUp: async () => {
+    signUp: async (email: string, pass: string, fullName: string, username: string, dob: Date) => {
         set({ loading: true })
-        const { email, password, full_name, username, dob } = get()
 
         const {
             data: { session },
             error,
         } = await supabase.auth.signUp({
             email: email,
-            password: password,
+            password: pass,
             options: {
                 data: {
-                    full_name: full_name,
+                    full_name: fullName,
                     username: username,
                     date_of_birth: dob.toISOString().split('T')[0],
                     avatar_url: ''
                 }
             }
-
         })
 
         const { data: { user } } = await supabase.auth.getUser()
@@ -124,7 +97,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         set({
             email: '',
-            password: '',
             full_name: '',
             username: '',
             userid: '',

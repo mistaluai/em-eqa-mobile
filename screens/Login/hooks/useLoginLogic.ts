@@ -1,7 +1,7 @@
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import { useAuthStore } from '../../../services/auth/supabaseAuth';
 
 /**
  * Custom hook for LoginScreen logic
@@ -10,14 +10,14 @@ import { Alert } from 'react-native';
 export const useLoginLogic = () => {
   const navigation = useNavigation();
 
-  // 1. Destructure everything you need from the Global Store
+  // 1. Local Form State
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // 2. Destructure action and loading from the Global Store
   const {
-    email,
-    password,
-    loading,          // Useful to disable the button while logging in
-    setEmail,
-    setPassword,
-    signInWithEmail   // The async action we wrote earlier
+    loading,
+    signInWithEmail
   } = useAuthStore();
 
   // 2. The Login Handler
@@ -31,7 +31,7 @@ export const useLoginLogic = () => {
     console.log('Attempting login with:', email);
 
     // Call the store action
-    await signInWithEmail();
+    await signInWithEmail(email, password);
   };
 
   const handleForgotPassword = () => {

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { useAuthStore } from '../../../services/auth/supabaseAuth'
+import { useAuthStore } from '../../../services/auth/supabaseAuth';
 
 /**
  * Custom hook for SignUpScreen logic
@@ -10,30 +10,24 @@ import { useAuthStore } from '../../../services/auth/supabaseAuth'
 export const useSignUpLogic = () => {
   const navigation = useNavigation();
 
-  // 1. Local State: We keep confirmPassword local because it's 
-  // just for validation and doesn't need to be stored globally.
+  // 1. Local Form State
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [dob, setDOB] = useState<Date>(new Date());
 
-  // 2. Global Store: Destructure values and setters
+  // 2. Global Store: Destructure action and loading
   const {
-    email,
-    password,
-    full_name,
-    username,
-    dob,
     loading,
-    setEmail,
-    setPassword,
-    setFullname,
-    setUsername,
-    setDOB,
     signUp
   } = useAuthStore();
 
   // 3. The Sign Up Handler
   const handleSignUp = async () => {
     // Basic Validation
-    if (!email || !password || !full_name) {
+    if (!email || !password || !fullName) {
       Alert.alert('Missing Data', 'Please fill in all required fields.');
       return;
     }
@@ -45,7 +39,7 @@ export const useSignUpLogic = () => {
 
     // Call the store action
     // The store handles the Supabase call and alerts for errors/success
-    await signUp();
+    await signUp(email, password, fullName, username, dob);
   };
 
   const handleNavigateToLogin = () => {
@@ -53,10 +47,8 @@ export const useSignUpLogic = () => {
   };
 
   return {
-    // MAPPING: The UI expects camelCase 'fullName', 
-    // but the store uses snake_case 'full_name'. We map them here.
-    fullName: full_name,
-    setFullName: setFullname,
+    fullName,
+    setFullName,
 
     email,
     setEmail,
