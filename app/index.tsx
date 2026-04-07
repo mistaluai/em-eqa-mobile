@@ -1,5 +1,3 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import Loader from '@/components/LoaderComponent';
 import ClipUploadSyncScreen from '@/screens/ClipUploadSync';
 import DataPrivacyControlScreen from '@/screens/DataPrivacyControl';
@@ -15,8 +13,11 @@ import SystemStatusScreen from '@/screens/SystemStatus';
 import TimelineEventsScreen from '@/screens/TimelineEvents';
 import { useAuthStore } from '@/services/auth/supabaseAuth';
 import { supabase } from '@/services/databases/supabase/supabase_client';
+import { runChatsDatabaseTests } from '@/services/databases/watermelondb/tests/testChatsDatabase';
+import { useThemeColor } from "@/theme/useThemeColor";
+import { useThemeStyles } from "@/theme/useThemeStyles";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Session } from '@supabase/supabase-js'; // Import Session type
+import { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -33,6 +34,9 @@ const Index = () => {
   const [onboardingDone, setOnboardingDone] = useState(false);
 
   useEffect(() => {
+    // 🧪 Run the database testing suite on application mount
+    runChatsDatabaseTests();
+
     // A. Check initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
