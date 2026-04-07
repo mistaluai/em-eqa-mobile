@@ -2,11 +2,11 @@ import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 import Chat from './models/Chat'
 import Message from './models/Message'
-import { localChatsSchema } from './schema'
+import { localDBSchema } from './schema'
 
 
 const adapter = new SQLiteAdapter({
-    schema: localChatsSchema,
+    schema: localDBSchema,
     dbName: 'chatsDB',
     //   migrations,
     jsi: true,
@@ -16,7 +16,7 @@ const adapter = new SQLiteAdapter({
 
 })
 
-export const database = new Database({
+export const localDatabase = new Database({
     adapter,
     modelClasses: [
         Chat,

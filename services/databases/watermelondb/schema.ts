@@ -1,6 +1,6 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
-export const localChatsSchema = appSchema({
+export const localDBSchema = appSchema({
     version: 1,
     tables: [
         tableSchema(

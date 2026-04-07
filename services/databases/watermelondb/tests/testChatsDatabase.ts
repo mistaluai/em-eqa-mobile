@@ -1,4 +1,4 @@
-import { database } from '../database';
+import { localDatabase } from '../database';
 import Chat from '../models/Chat';
 
 export const runChatsDatabaseTests = async () => {
@@ -6,8 +6,8 @@ export const runChatsDatabaseTests = async () => {
         console.log('Starting WatermelonDB Tests');
 
         console.log('Creating a new Chat');
-        const newChat = await database.write(async () => {
-            return await database.get<Chat>('chats').create((chat) => {
+        const newChat = await localDatabase.write(async () => {
+            return await localDatabase.get<Chat>('chats').create((chat) => {
                 chat.title = 'Test Chat Conversation';
             });
         });
