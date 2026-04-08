@@ -5,7 +5,7 @@ import { RADIUS } from '../../radius';
 import { SHADOW } from '../../shadow';
 import { SPACING } from '../../spacing';
 
-export const CARD = {
+export const createCardStyles = (COLORS: any) => ({
   default: {
     backgroundColor: COLORS.backgroundNeutral,
     padding: SPACING.s16,
@@ -96,5 +96,8 @@ export const CARD = {
     color: COLORS.textSecondary,
     marginLeft: 'auto' as const,
   } as TextStyle,
-} as const;
+});
+
+import { lightTheme } from '../../colors';
+export const CARD = createCardStyles(lightTheme);
 

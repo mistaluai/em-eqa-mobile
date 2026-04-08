@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
+import { SPACING, TYPOGRAPHY, createScreenStyles, createTextStyles } from '@/theme';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { useSignUpLogic } from './hooks/useSignUpLogic';
@@ -95,7 +95,7 @@ const SignUpScreen: React.FC = () => {
         >
           <View style={styles.spacer} />
 
-          <Text style={[TYPOGRAPHY.HeadlineXL, TEXT.title]}>
+          <Text style={[TYPOGRAPHY.HeadlineXL, styles.title]}>
             Create Account
           </Text>
 
@@ -197,9 +197,9 @@ const SignUpScreen: React.FC = () => {
           <View style={styles.loginLinkSpacer} />
 
           <Pressable onPress={handleNavigateToLogin}>
-            <Text style={[TYPOGRAPHY.BodyM, TEXT.login]}>
+            <Text style={[TYPOGRAPHY.BodyM, styles.login]}>
               Have an account?{' '}
-              <Text style={TEXT.signupLink}>Login</Text>
+              <Text style={styles.signupLink}>Login</Text>
             </Text>
           </Pressable>
         </ScrollView>
@@ -208,43 +208,49 @@ const SignUpScreen: React.FC = () => {
   );
 };
 
-const createStyles = (COLORS: any) => StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundLight,
-  },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: SPACING.s32,
-    alignItems: 'center',
-    marginTop: SPACING.s16,
-    // Note: paddingBottom and justifyContent handled dynamically in JSX
-  },
-  spacer: {
-    height: SPACING.s32,
-  },
-  titleSpacer: {
-    height: SPACING.s32,
-  },
-  formContainer: {
-    width: '100%',
-  },
-  formSpacer: {
-    height: SPACING.s16,
-  },
-  signUpButton: {
-    width: '90%',
-    backgroundColor: COLORS.primary,
-  },
-  loginLinkSpacer: {
-    height: SPACING.s24,
-  },
-});
+const createStyles = (COLORS: any) => {
+  const screen = createScreenStyles(COLORS);
+  const text = createTextStyles(COLORS);
+  
+  return StyleSheet.create({
+    ...screen,
+    ...text,
+    safeArea: {
+      flex: 1,
+      backgroundColor: COLORS.backgroundLight,
+    },
+    keyboardAvoidingView: {
+      flex: 1,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    scrollContent: {
+      flexGrow: 1,
+      paddingHorizontal: SPACING.s32,
+      alignItems: 'center',
+      marginTop: SPACING.s16,
+    },
+    spacer: {
+      height: SPACING.s32,
+    },
+    titleSpacer: {
+      height: SPACING.s32,
+    },
+    formContainer: {
+      width: '100%',
+    },
+    formSpacer: {
+      height: SPACING.s16,
+    },
+    signUpButton: {
+      width: '90%',
+      backgroundColor: COLORS.primary,
+    },
+    loginLinkSpacer: {
+      height: SPACING.s24,
+    },
+  });
+};
 
 export default SignUpScreen;

@@ -5,7 +5,7 @@ import { RADIUS } from '../../radius';
 import { SHADOW } from '../../shadow';
 import { SPACING } from '../../spacing';
 
-export const SCREEN = {
+export const createScreenStyles = (COLORS: any) => ({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.backgroundLight,
@@ -151,5 +151,8 @@ export const SCREEN = {
     backgroundColor: COLORS.borderLight,
     marginHorizontal: SPACING.s16,
   } as ViewStyle,
-} as const;
+});
+
+import { lightTheme } from '../../colors';
+export const SCREEN = createScreenStyles(lightTheme);
 
