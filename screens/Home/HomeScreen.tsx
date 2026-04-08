@@ -19,8 +19,9 @@ const HomeScreen: React.FC = () => {
   const COLORS = useThemeColor();
   const {
     isSearchDrawerVisible,
-    messages,
+    activeChat,
     handleSendMessage,
+    handleSelectChat,
     handleEvidencePress,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
@@ -53,7 +54,7 @@ const HomeScreen: React.FC = () => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <View style={styles.chatContainer}>
-          <ChatContainer messages={messages} onEvidencePress={handleEvidencePress} />
+          <ChatContainer chat={activeChat} onEvidencePress={handleEvidencePress} />
         </View>
 
         <View style={[
@@ -64,7 +65,11 @@ const HomeScreen: React.FC = () => {
         </View>
       </KeyboardAvoidingView>
 
-      <SearchDrawer visible={isSearchDrawerVisible} onClose={handleCloseSearchDrawer} />
+      <SearchDrawer 
+        visible={isSearchDrawerVisible} 
+        onClose={handleCloseSearchDrawer} 
+        onChatSelect={handleSelectChat}
+      />
     </SafeAreaView>
   );
 };

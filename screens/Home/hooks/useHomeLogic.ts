@@ -1,12 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'ai';
-  text: string;
-  hasEvidence?: boolean;
-}
+import Chat from '../../../services/databases/watermelondb/models/Chat';
+import { chatService } from '../../../services/userChats/chatService';
 
 /**
  * Custom hook for HomeScreen logic
@@ -16,31 +11,22 @@ export const useHomeLogic = () => {
   const navigation = useNavigation();
   const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 2,
-      sender: 'user',
-      text: 'When was the last time I took Panadol?',
-      hasEvidence: false
-    },
-    {
-      id: 3,
-      sender: 'ai',
-      text: 'You took two Panadol tablets at 10:15 AM standing by the kitchen counter. I have isolated that clip for verification.',
-      hasEvidence: true
-    },
-  ]);
+  const [activeChat, setActiveChat] = useState<Chat | null>(null);
 
-  const handleSendMessage = (messageText: string) => {
-    if (messageText.trim()) {
-      const newMessage: ChatMessage = {
-        id: messages.length + 1,
-        sender: 'user',
-        text: messageText.trim(),
-        hasEvidence: false,
-      };
-      setMessages(prev => [newMessage, ...prev]);
+  const handleSendMessage = async (messageText: string) => {
+    try {
+      const resultingChat = await chatService.sendMessage(messageText, activeChat);
+      if (resultingChat && resultingChat.id !== activeChat?.id) {
+        setActiveChat(resultingChat);
+      }
+    } catch (error) {
+      console.error('Failed to send message via hook:', error);
     }
+  };
+
+  const handleSelectChat = (chat: Chat | null) => {
+    setActiveChat(chat);
+    handleCloseSearchDrawer();
   };
 
   const handleEvidencePress = () => {
@@ -56,14 +42,6 @@ export const useHomeLogic = () => {
     navigation.navigate('EventDetails' as never);
   };
 
-  // const handleOpenDrawer = () => {
-  //   setIsDrawerOpen(true);
-  // };
-
-  // const handleCloseDrawer = () => {
-  //   setIsDrawerOpen(false);
-  // };
-
   const handleOpenSearchDrawer = () => {
     setIsSearchDrawerVisible(true);
   };
@@ -75,8 +53,9 @@ export const useHomeLogic = () => {
   return {
     isSearchDrawerVisible,
     isEvidenceModalVisible,
-    messages,
+    activeChat,
     handleSendMessage,
+    handleSelectChat,
     handleEvidencePress,
     handleCloseEvidenceModal,
     handleGoToEventDetails,

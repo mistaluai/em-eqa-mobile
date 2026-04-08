@@ -4,22 +4,21 @@ import { RADIUS, SPACING } from '@/theme';
 import React from 'react';
 import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
 import { ChatMessage } from './ChatMessage';
-interface ChatMessageData {
-  id: number;
-  sender: 'user' | 'ai';
-  text: string;
-  hasEvidence?: boolean;
-}
+import Chat from '../../../services/databases/watermelondb/models/Chat';
+import Message from '../../../services/databases/watermelondb/models/Message';
+import { withObservables } from '@nozbe/watermelondb/react';
+import { of as of$ } from 'rxjs';
 
 interface ChatContainerProps {
-  messages: ChatMessageData[];
-  onEvidencePress?: (messageId: number) => void;
+  chat?: Chat | null;
+  messages: Message[];
+  onEvidencePress?: (messageId: string) => void;
 }
 
 /**
- * ChatContainer - Pure presentation component for chat messages list
+ * ChatContainerComponent - Pure presentation component for chat messages list
  */
-export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => {
+const ChatContainerComponent: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
@@ -40,6 +39,10 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEviden
     </View>
   );
 };
+
+export const ChatContainer = withObservables(['chat'], ({ chat }: { chat?: Chat | null }) => ({
+  messages: chat ? chat.messages.observe() : of$([]),
+}))(ChatContainerComponent);
 
 const createStyles = (COLORS: any) => StyleSheet.create({
   container: {

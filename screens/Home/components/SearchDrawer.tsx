@@ -23,6 +23,10 @@ import { LAYOUT, SPACING } from '@/theme';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
+import Chat from '../../../services/databases/watermelondb/models/Chat';
+import { localDatabase } from '../../../services/databases/watermelondb/database';
+import { Q } from '@nozbe/watermelondb';
+import { withObservables } from '@nozbe/watermelondb/react';
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
@@ -30,6 +34,7 @@ const DRAWER_WIDTH = width * 0.85;
 interface SearchDrawerProps {
   visible: boolean;
   onClose: () => void;
+  onChatSelect: (chat: Chat | null) => void;
 }
 
 // ... MenuItem and ChatHistoryItem components remain the same ...
@@ -52,19 +57,19 @@ const MenuItem = (
   );
 };
 
-const ChatHistoryItem = ({ title }: { title: string }) => {
+const ChatHistoryItem = ({ title, onPress }: { title: string, onPress: () => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
   return (
-    <TouchableOpacity style={styles.chatItem}>
+    <TouchableOpacity style={styles.chatItem} onPress={onPress}>
       <Text style={styles.chatItemText} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 // --- Updated Content Component ---
-const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+const DrawerSidebarContentComponent = ({ onNavigate, chats, onChatSelect }: { onNavigate: (screen: string) => void, chats: Chat[], onChatSelect: (chat: Chat | null) => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
@@ -77,11 +82,6 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
   const handleProfilePress = () => {
     onNavigate('NavigationHubScreen');
   };
-
-  const historyItems = [
-    "Medicine Query",
-    "Interaction Chat",
-  ];
 
   return (
     <View style={styles.contentContainer}>
@@ -99,7 +99,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
 
       {/* 2. Top Navigation Actions */}
       <View style={styles.topMenuContainer}>
-        <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
+        <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} onPress={() => onChatSelect(null)} />
         <MenuItem icon="calendar-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
@@ -114,8 +114,8 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {historyItems.map((item, index) => (
-          <ChatHistoryItem key={index} title={item} />
+        {chats.map((chat) => (
+          <ChatHistoryItem key={chat.id} title={chat.title} onPress={() => onChatSelect(chat)} />
         ))}
       </ScrollView>
 
@@ -154,8 +154,12 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
   );
 };
 
+const DrawerSidebarContent = withObservables([], () => ({
+  chats: localDatabase.collections.get<Chat>('chats').query(Q.sortBy('updated_at', Q.desc)).observe(),
+}))(DrawerSidebarContentComponent);
+
 // ... The SearchDrawer export remains exactly the same ...
-export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
+export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, onChatSelect }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   // ... same animation and modal logic ...
@@ -233,7 +237,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
       >
         <SafeAreaView style={styles.safeAreaContent}>
           <Pressable style={styles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            <DrawerSidebarContent onNavigate={handleNavigation} />
+            <DrawerSidebarContent onNavigate={handleNavigation} onChatSelect={onChatSelect} />
           </Pressable>
         </SafeAreaView>
       </Animated.View>
