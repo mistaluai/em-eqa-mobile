@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChatContainer } from './components/ChatContainer';
 import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
+import { EvidenceModal } from './components/EvidenceModal';
 import { useHomeLogic } from './hooks/useHomeLogic';
 
 /**
@@ -19,11 +20,15 @@ const HomeScreen: React.FC = () => {
   const COLORS = useThemeColor();
   const {
     isSearchDrawerVisible,
+    isEvidenceModalVisible,
+    selectedEvidence,
     activeChat,
     handleSendMessage,
     handleSelectChat,
     handleDeleteChat,
     handleEvidencePress,
+    handleCloseEvidenceModal,
+    handleGoToEventDetails,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
   } = useHomeLogic();
@@ -71,6 +76,13 @@ const HomeScreen: React.FC = () => {
         onClose={handleCloseSearchDrawer} 
         onChatSelect={handleSelectChat}
         onChatDelete={handleDeleteChat}
+      />
+
+      <EvidenceModal 
+        isVisible={isEvidenceModalVisible} 
+        evidence={selectedEvidence}
+        onClose={handleCloseEvidenceModal} 
+        onGoToEventDetails={handleGoToEventDetails}
       />
     </SafeAreaView>
   );

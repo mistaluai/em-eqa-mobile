@@ -31,7 +31,13 @@ export const chatService = {
       // We simulate this entirely in the service layer for now.
       setTimeout(async () => {
         try {
-          await chat!.addMessage(false, 'This is a simulated AI response orchestrated from the service layer.', 'mock_clip_id_123');
+          await chat!.addMessage(false, 'This is a simulated AI response orchestrated from the service layer.', {
+            vide_url: "https://cngbqbgivklpaijkbexa.supabase.co/storage/v1/object/public/clips/8daf3d4f-efe4-4a37-87ce-e73171e9b01d/1769122412368.mp4",
+            title: "Network Connectivity Test using Ping",
+            summary: "request timing out, and three replies received from 192.168.1.10 with varying response times (2ms, 19ms, 2ms). The ping statistics indicate 75% packet reception and an average round trip time of 19ms, with a minimum of 2ms and a maximum of 19ms.",
+            timestamp: new Date(),
+            location: "{lat: 37.7749,  long: -122.4194}"
+          });
         } catch (error) {
           console.error('Failed to add simulated AI message:', error);
         }

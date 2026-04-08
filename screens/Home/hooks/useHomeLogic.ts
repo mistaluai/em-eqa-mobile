@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Chat from '../../../services/databases/watermelondb/models/Chat';
 import { chatService } from '../../../services/userChats/chatService';
 
+import { EvidenceType } from '../../../shared/types/evidence';
+
 /**
  * Custom hook for HomeScreen logic
  * Handles drawer states, chat input, messages, and navigation
@@ -11,6 +13,7 @@ export const useHomeLogic = () => {
   const navigation = useNavigation();
   const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
+  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceType | null>(null);
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
 
   const handleSendMessage = async (messageText: string) => {
@@ -40,17 +43,19 @@ export const useHomeLogic = () => {
     }
   };
 
-  const handleEvidencePress = () => {
+  const handleEvidencePress = (evidence: EvidenceType) => {
+    setSelectedEvidence(evidence);
     setIsEvidenceModalVisible(true);
   };
 
   const handleCloseEvidenceModal = () => {
+    setSelectedEvidence(null);
     setIsEvidenceModalVisible(false);
   };
 
   const handleGoToEventDetails = () => {
     setIsEvidenceModalVisible(false);
-    navigation.navigate('EventDetails' as never);
+    (navigation as any).navigate('EventDetails', { evidence: selectedEvidence });
   };
 
   const handleOpenSearchDrawer = () => {
@@ -64,6 +69,7 @@ export const useHomeLogic = () => {
   return {
     isSearchDrawerVisible,
     isEvidenceModalVisible,
+    selectedEvidence,
     activeChat,
     handleSendMessage,
     handleSelectChat,

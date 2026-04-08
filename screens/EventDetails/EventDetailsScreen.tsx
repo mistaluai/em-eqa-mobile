@@ -9,30 +9,28 @@ import { SummaryCard } from './components/SummaryCard';
 import { VideoPlaceholder } from './components/VideoPlaceholder';
 import { useEventDetailsLogic } from './hooks/useEventDetailsLogic';
 
-const event = {
-  title: ' Budget Planning Meeting',
-  time: '2024-12-05, 14:30 - 15:15',
-  location: 'Conference Room Alpha',
-  summary: 'Detailed discussion on final Q4 budget forecasts, including resource allocation changes and signing off on key expenditures. Key decisions made on marketing spend.',
-};
-
 /**
  * EventDetailsScreen - Main screen component for event details
  * Handles composition and rendering using hooks and components
  */
 const EventDetailsScreen: React.FC = () => {
-  const { handleDelete } = useEventDetailsLogic();
+  const { handleDelete, evidence } = useEventDetailsLogic();
+
+  const title = evidence?.title || 'Unknown Event';
+  const time = evidence?.timestamp ? new Date(evidence.timestamp).toLocaleString() : 'Unknown Time';
+  const location = evidence?.location || 'Unknown Location';
+  const summary = evidence?.summary || 'No summary available.';
 
   return (
     <SafeAreaView style={SCREEN.safeArea}>
       <AppHeader title="Event Details" showBack={true} />
 
-      <ScrollView contentContainerStyle={SCREEN.container}>
-        <VideoPlaceholder />
+      <ScrollView contentContainerStyle={[SCREEN.container, { flex: undefined, flexGrow: 1 }]}>
+        <VideoPlaceholder url={evidence?.vide_url || null} />
 
-        <EventMetadata title={event.title} time={event.time} location={event.location} />
+        <EventMetadata title={title} time={time} location={location} />
 
-        <SummaryCard summary={event.summary} />
+        <SummaryCard summary={summary} />
 
         <AppButton
           title="Delete Clip"

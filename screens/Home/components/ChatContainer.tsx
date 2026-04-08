@@ -8,11 +8,12 @@ import Chat from '../../../services/databases/watermelondb/models/Chat';
 import Message from '../../../services/databases/watermelondb/models/Message';
 import { withObservables } from '@nozbe/watermelondb/react';
 import { of as of$ } from 'rxjs';
+import { EvidenceType } from '../../../shared/types/evidence';
 
 interface ChatContainerProps {
   chat?: Chat | null;
   messages: Message[];
-  onEvidencePress?: (messageId: string) => void;
+  onEvidencePress?: (evidence: EvidenceType) => void;
 }
 
 /**
@@ -29,7 +30,9 @@ const ChatContainerComponent: React.FC<ChatContainerProps> = ({ messages, onEvid
         renderItem={({ item }) => (
           <ChatMessage
             message={item}
-            onEvidencePress={() => onEvidencePress?.(item.id)}
+            onEvidencePress={() => {
+              if (item.evidence) onEvidencePress?.(item.evidence);
+            }}
           />
         )}
         keyExtractor={(item) => item.id.toString()}

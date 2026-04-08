@@ -2,23 +2,52 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import AppCard from '../../../components/AppCard';
 import AppModal from '../../../components/ModalComponent';
+import { EvidenceType } from '../../../shared/types/evidence';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 const { width } = Dimensions.get('window');
 
 interface EvidenceModalProps {
   isVisible: boolean;
+  evidence: EvidenceType | null;
   onClose: () => void;
   onGoToEventDetails?: () => void;
 }
 
-export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose, onGoToEventDetails }) => {
+export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, evidence, onClose, onGoToEventDetails }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
+
+  const player = useVideoPlayer(evidence?.vide_url || null, (player) => {
+    player.loop = true;
+    player.muted = true;
+    if (evidence) {
+      player.play();
+    }
+  });
+
+  // Manage playback state when modal visibility toggles
+  useEffect(() => {
+    if (isVisible && player && evidence) {
+      player.play();
+    } else if (!isVisible && player) {
+      player.pause();
+    }
+  }, [isVisible, player, evidence]);
+
+  // Don't render internal constraints if no evidence exists
+  if (!evidence) {
+    return (
+      <AppModal isVisible={isVisible} onClose={onClose} modalWidth={width * 0.95} position="center">
+         <View />
+      </AppModal>
+    );
+  }
 
   return (
     <AppModal
@@ -33,15 +62,20 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, onClose
         </Pressable>
       </View>
       <Text style={[TYPOGRAPHY.HeadlineM, styles.title]}>
-        Evidence Clip
+        {evidence.title || 'Evidence Clip'}
       </Text>
       <View style={styles.videoPlaceholder}>
-        <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
+        <VideoView 
+          player={player} 
+          style={styles.absoluteVideo} 
+          allowsFullscreen 
+          allowsPictureInPicture 
+        />
       </View>
       <AppCard style={styles.cardSpacer}>
         <Text style={[TYPOGRAPHY.HeadlineM, styles.summaryTitle]}>Summary</Text>
         <Text style={[TYPOGRAPHY.BodyM, styles.summaryText]}>
-          Clip timestamp: 14:32 - 14:45. Confirmed commitment to draft the pitch deck.
+          {evidence.summary}
         </Text>
       </AppCard>
       <View style={styles.buttonSpacer} />
@@ -67,6 +101,10 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.s16,
+    overflow: 'hidden',
+  },
+  absoluteVideo: {
+    ...StyleSheet.absoluteFillObject,
   },
   summaryTitle: {
     color: COLORS.textPrimary,

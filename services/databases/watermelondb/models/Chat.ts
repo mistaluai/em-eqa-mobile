@@ -1,6 +1,7 @@
 import { Model, Query, Q } from "@nozbe/watermelondb";
 import { children, date, readonly, text, writer } from "@nozbe/watermelondb/decorators";
 import Message from "./Message";
+import { EvidenceType } from "@/shared/types/evidence";
 
 export default class Chat extends Model {
     static table = 'chats';
@@ -12,14 +13,14 @@ export default class Chat extends Model {
     @readonly @date('updated_at') updatedAt!: Date;
     @children('messages') messages!: Query<Message>;
 
-    @writer async addMessage(isUser: boolean, content: string, evidence?: string) {
+    @writer async addMessage(isUser: boolean, content: string, evidence?: EvidenceType) {
         const status = 'pending';
         await this.collections.get<Message>('messages').create((message: Message) => {
             message.chat.set(this);
             message.role = isUser ? 'user' : 'model';
             message.content = content;
             message.status = status;
-            message.evidence = evidence;
+            message.evidence = evidence ?? null;
         });
     }
 
