@@ -13,7 +13,6 @@ import SystemStatusScreen from '@/screens/SystemStatus';
 import TimelineEventsScreen from '@/screens/TimelineEvents';
 import { useAuthStore } from '@/services/auth/supabaseAuth';
 import { supabase } from '@/services/databases/supabase/supabase_client';
-import { runChatsDatabaseTests } from '@/services/databases/watermelondb/tests/testChatsDatabase';
 import { useThemeColor } from "@/theme/useThemeColor";
 import { useThemeStyles } from "@/theme/useThemeStyles";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -34,8 +33,8 @@ const Index = () => {
   const [onboardingDone, setOnboardingDone] = useState(false);
 
   useEffect(() => {
-    // 🧪 Run the database testing suite on application mount
-    runChatsDatabaseTests();
+    // Run the database testing suite on application mount
+    // runChatsDatabaseTests();
 
     // A. Check initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
