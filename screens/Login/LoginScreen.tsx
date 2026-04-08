@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SPACING, TEXT, TYPOGRAPHY } from '@/theme';
+import { SPACING, TYPOGRAPHY, createScreenStyles, createTextStyles } from '@/theme';
 import AppButton from '../../components/AppButton';
 import AppInput from '../../components/InputComponent';
 import { useLoginLogic } from './hooks/useLoginLogic';
@@ -89,7 +89,6 @@ const LoginScreen: React.FC = () => {
           <Text
             style={[
               TYPOGRAPHY.HeadlineXL,
-              TEXT.title,
               styles.title,
               {
                 marginBottom: isKeyboardOpen ? SPACING.s96 : SPACING.s24,
@@ -124,7 +123,7 @@ const LoginScreen: React.FC = () => {
             <View style={styles.spacerSmall} />
 
             <Pressable onPress={handleForgotPassword}>
-              <Text style={[TYPOGRAPHY.Caption, TEXT.forgotPassword]}>
+              <Text style={[TYPOGRAPHY.Caption, styles.forgotPassword]}>
                 Forgot Password?
               </Text>
             </Pressable>
@@ -142,9 +141,9 @@ const LoginScreen: React.FC = () => {
 
           <View style={isKeyboardOpen ? styles.signUpContainerKeyboard : styles.signUpContainer}>
             <Pressable onPress={handleNavigateToSignUp}>
-              <Text style={[TYPOGRAPHY.BodyM, TEXT.signup]}>
+              <Text style={[TYPOGRAPHY.BodyM, styles.signup]}>
                 Don't have an account?{' '}
-                <Text style={TEXT.signupLink}>Sign up</Text>
+                <Text style={styles.signupLink}>Sign up</Text>
               </Text>
             </Pressable>
           </View>
@@ -154,58 +153,62 @@ const LoginScreen: React.FC = () => {
   );
 };
 
-const createStyles = (COLORS: any) => StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundLight,
-  },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    alignItems: 'center',
-    marginTop: SPACING.s16,
-    // Note: Padding and justifyContent are handled via inline styles for dynamic behavior
-  },
-  logoContainer: {
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  logoImage: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  title: {
-    fontSize: 32,
-    // Additional title styles handled by TYPOGRAPHY.HeadlineXL
-  },
-  formContainer: {
-    width: '100%',
-  },
-  spacer: {
-    height: SPACING.s16,
-  },
-  spacerSmall: {
-    height: SPACING.s12,
-  },
-  buttonSpacer: {
-    height: SPACING.s32,
-  },
-  loginButton: {
-    width: '90%',
-    // Merged from SCREEN defaults to ensure consistency
-    backgroundColor: COLORS.primary,
-  },
-  signUpContainer: {
-    marginTop: SPACING.s32,
-    alignSelf: 'center',
-  },
-  signUpContainerKeyboard: {
-    marginTop: SPACING.s16,
-    alignSelf: 'center',
-  },
-});
+const createStyles = (COLORS: any) => {
+  const screen = createScreenStyles(COLORS);
+  const text = createTextStyles(COLORS);
+  
+  return StyleSheet.create({
+    ...screen,
+    ...text,
+    safeArea: {
+      flex: 1,
+      backgroundColor: COLORS.backgroundLight,
+    },
+    keyboardAvoidingView: {
+      flex: 1,
+    },
+    scrollContainer: {
+      flexGrow: 1,
+      alignItems: 'center',
+      marginTop: SPACING.s16,
+    },
+    logoContainer: {
+      alignItems: 'center',
+      overflow: 'hidden',
+    },
+    logoImage: {
+      width: 200,
+      height: 200,
+      resizeMode: 'contain',
+    },
+    title: {
+      fontSize: 32,
+    },
+    formContainer: {
+      width: '100%',
+    },
+    spacer: {
+      height: SPACING.s16,
+    },
+    spacerSmall: {
+      height: SPACING.s12,
+    },
+    buttonSpacer: {
+      height: SPACING.s32,
+    },
+    loginButton: {
+      width: '90%',
+      backgroundColor: COLORS.primary,
+    },
+    signUpContainer: {
+      marginTop: SPACING.s32,
+      alignSelf: 'center',
+    },
+    signUpContainerKeyboard: {
+      marginTop: SPACING.s16,
+      alignSelf: 'center',
+    },
+  });
+};
 
 export default LoginScreen;

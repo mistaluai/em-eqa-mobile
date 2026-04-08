@@ -15,16 +15,23 @@ export const useHomeLogic = () => {
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceType | null>(null);
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
+  const [isAiTyping, setIsAiTyping] = useState(false);
 
   const handleSendMessage = async (messageText: string) => {
     try {
+      setIsAiTyping(true);
       const resultingChat = await chatService.sendMessage(messageText, activeChat);
       if (resultingChat && resultingChat.id !== activeChat?.id) {
         setActiveChat(resultingChat);
       }
     } catch (error) {
+      setIsAiTyping(false);
       console.error('Failed to send message via hook:', error);
     }
+  };
+
+  const handleAiResponseReceived = () => {
+    setIsAiTyping(false);
   };
 
   const handleSelectChat = (chat: Chat | null) => {
@@ -69,6 +76,7 @@ export const useHomeLogic = () => {
   return {
     isSearchDrawerVisible,
     isEvidenceModalVisible,
+    isAiTyping,
     selectedEvidence,
     activeChat,
     handleSendMessage,
@@ -79,5 +87,6 @@ export const useHomeLogic = () => {
     handleGoToEventDetails,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
+    handleAiResponseReceived,
   };
 };

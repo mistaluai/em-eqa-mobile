@@ -3,7 +3,7 @@ import { TextStyle } from 'react-native';
 import { COLORS } from '../../colors';
 import { SPACING } from '../../spacing';
 
-export const TEXT = {
+export const createTextStyles = (COLORS: any) => ({
   title: {
     color: COLORS.textPrimary,
     alignSelf: 'flex-start' as const,
@@ -56,5 +56,8 @@ export const TEXT = {
     fontWeight: '600' as const,
     paddingLeft: 222,
   } as TextStyle,
-} as const;
+});
+
+import { lightTheme } from '../../colors';
+export const TEXT = createTextStyles(lightTheme);
 

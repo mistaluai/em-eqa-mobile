@@ -1,5 +1,5 @@
 import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
+import { useGlobalStyles } from "@/theme";
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -28,7 +28,7 @@ import { useProfileSettingsLogic } from './hooks/useProfileSettingsLogic';
 
 const ProfileSettingsScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
-  const COLORS = useThemeColor();
+  const { SCREEN, COLORS } = useGlobalStyles();
   // 1. Destructure everything from your custom hook
   const {
     fullName,
@@ -82,13 +82,8 @@ const ProfileSettingsScreen: React.FC = () => {
               <View style={styles.infoBadge}>
                 <Text style={styles.badgeText}>Age {age}</Text>
               </View>
-              <View
-                style={[
-                  styles.infoBadge,
-                  { backgroundColor: '#E0F2FE' },
-                ]}
-              >
-                <Text style={[styles.badgeText, { color: '#0284C7' }]}>
+              <View style={styles.planBadge}>
+                <Text style={styles.planBadgeText}>
                   Free Plan
                 </Text>
               </View>
@@ -191,7 +186,7 @@ const ProfileSettingsScreen: React.FC = () => {
 const createStyles = (COLORS: any) => StyleSheet.create({
   // Main Background
   screenBackground: {
-    backgroundColor: COLORS.backgroundNeutral,
+    backgroundColor: COLORS.backgroundLight,
     flex: 1,
   },
   contentContainer: {
@@ -243,7 +238,7 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     marginTop: SPACING.s4,
   },
   infoBadge: {
-    backgroundColor: '#E5E5EA',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     paddingHorizontal: SPACING.s12,
     paddingVertical: 4,
     borderRadius: 6,
@@ -252,6 +247,17 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: COLORS.textSecondary,
+  },
+  planBadge: {
+    backgroundColor: COLORS.primary + '15',
+    paddingHorizontal: SPACING.s12,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  planBadgeText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.primary,
   },
   // --- Section Labels ---
   sectionLabel: {

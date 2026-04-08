@@ -1,12 +1,10 @@
-import { COLORS } from '@/theme/colors';
 import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
+import { useGlobalStyles, TYPOGRAPHY, SPACING } from '@/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SCREEN, SPACING, TYPOGRAPHY } from '@/theme';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 import { DataRetentionSlider } from './components/DataRetentionSlider';
@@ -18,7 +16,7 @@ import { useDataPrivacyControlLogic } from './hooks/useDataPrivacyControlLogic';
  */
 const DataPrivacyControlScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
-  const COLORS = useThemeColor();
+  const { SCREEN, COLORS } = useGlobalStyles();
   const {
     dataRetentionDays,
     isDeleteModalVisible,
@@ -42,7 +40,7 @@ const DataPrivacyControlScreen: React.FC = () => {
 
         {/* Retention Section */}
         <View style={styles.sectionContainer}>
-          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title]}>Data Storage</Text>
+          <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Data Storage</Text>
           <DataRetentionSlider
             retentionDays={dataRetentionDays}
             onRetentionDaysChange={setDataRetentionDays}
@@ -51,7 +49,7 @@ const DataPrivacyControlScreen: React.FC = () => {
 
         {/* Danger Zone / Deletion Section */}
         <View style={styles.dangerZoneContainer}>
-          <Text style={[TYPOGRAPHY.HeadlineM, SECTION.title, styles.dangerTitle]}>
+          <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle, styles.dangerTitle]}>
             Data Deletion
           </Text>
 
@@ -121,26 +119,13 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     lineHeight: 18,
     color: COLORS.components.navigation.privacy, // Red text for readability
   },
-});
-
-const SECTION = StyleSheet.create({
-  title: {
+  sectionTitle: {
     color: COLORS.textPrimary,
     marginTop: SPACING.s32,
     marginBottom: SPACING.s16,
-    fontWeight: '700',
-  },
-  titleWithTopMargin: {
-    color: COLORS.textPrimary,
-    marginTop: SPACING.s32,
-    marginBottom: SPACING.s16,
-    fontWeight: '700',
-  },
-  titleNoTopMargin: {
-    color: COLORS.textPrimary,
-    marginBottom: SPACING.s12,
     fontWeight: '700',
   },
 });
+
 
 export default DataPrivacyControlScreen;
