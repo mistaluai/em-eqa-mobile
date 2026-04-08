@@ -42,5 +42,18 @@ export const chatService = {
       console.error('Service Error - Failed to process message:', error);
       throw error;
     }
+  },
+
+  /**
+   * Deletes a chat and its associated messages permanently.
+   * @param chat The Chat instance to delete.
+   */
+  async deleteChat(chat: Chat): Promise<void> {
+    try {
+      await chat.markAsDeleted();
+    } catch (error) {
+      console.error('Service Error - Failed to delete chat:', error);
+      throw error;
+    }
   }
 };

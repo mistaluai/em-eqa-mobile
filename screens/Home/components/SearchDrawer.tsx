@@ -14,7 +14,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -36,6 +37,7 @@ interface SearchDrawerProps {
   visible: boolean;
   onClose: () => void;
   onChatSelect: (chat: Chat | null) => void;
+  onChatDelete?: (chat: Chat) => void;
 }
 
 // ... MenuItem and ChatHistoryItem components remain the same ...
@@ -58,19 +60,19 @@ const MenuItem = (
   );
 };
 
-const ChatHistoryItem = ({ title, onPress }: { title: string, onPress: () => void }) => {
+const ChatHistoryItem = ({ title, onPress, onLongPress }: { title: string, onPress: () => void, onLongPress?: () => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
   return (
-    <TouchableOpacity style={styles.chatItem} onPress={onPress}>
+    <TouchableOpacity style={styles.chatItem} onPress={onPress} onLongPress={onLongPress}>
       <Text style={styles.chatItemText} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 // --- Updated Content Component ---
-const ObservableChatListComponent = ({ chats, onChatSelect }: { chats: Chat[], onChatSelect: (chat: Chat | null) => void }) => {
+const ObservableChatListComponent = ({ chats, onChatSelect, onChatDelete }: { chats: Chat[], onChatSelect: (chat: Chat | null) => void, onChatDelete?: (chat: Chat) => void }) => {
   const styles = useThemeStyles(createStyles);
 
   return (
@@ -86,7 +88,21 @@ const ObservableChatListComponent = ({ chats, onChatSelect }: { chats: Chat[], o
         showsVerticalScrollIndicator={false}
       >
         {chats.map((chat) => (
-          <ChatHistoryItem key={chat.id} title={chat.title} onPress={() => onChatSelect(chat)} />
+          <ChatHistoryItem 
+            key={chat.id} 
+            title={chat.title} 
+            onPress={() => onChatSelect(chat)} 
+            onLongPress={() => {
+              Alert.alert(
+                "Delete Chat",
+                "Are you sure you want to permanently delete this chat?",
+                [
+                  { text: "Cancel", style: "cancel" },
+                  { text: "Delete", style: "destructive", onPress: () => onChatDelete?.(chat) }
+                ]
+              );
+            }}
+          />
         ))}
       </ScrollView>
     </>
@@ -99,7 +115,7 @@ const ObservableChatList = withObservables(['searchQuery'], ({ searchQuery }: { 
   ).observe(),
 }))(ObservableChatListComponent);
 
-const DrawerSidebarLayout = ({ onNavigate, onChatSelect }: { onNavigate: (screen: string) => void, onChatSelect: (chat: Chat | null) => void }) => {
+const DrawerSidebarLayout = ({ onNavigate, onChatSelect, onChatDelete }: { onNavigate: (screen: string) => void, onChatSelect: (chat: Chat | null) => void, onChatDelete?: (chat: Chat) => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
@@ -139,7 +155,7 @@ const DrawerSidebarLayout = ({ onNavigate, onChatSelect }: { onNavigate: (screen
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
 
-      <ObservableChatList searchQuery={debouncedSearchText} onChatSelect={onChatSelect} />
+      <ObservableChatList searchQuery={debouncedSearchText} onChatSelect={onChatSelect} onChatDelete={onChatDelete} />
 
       {/* 4. Footer User Profile */}
       <Pressable
@@ -172,7 +188,7 @@ const DrawerSidebarLayout = ({ onNavigate, onChatSelect }: { onNavigate: (screen
 };
 
 // ... The SearchDrawer export remains exactly the same ...
-export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, onChatSelect }) => {
+export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, onChatSelect, onChatDelete }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   // ... same animation and modal logic ...
@@ -250,7 +266,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, on
       >
         <SafeAreaView style={styles.safeAreaContent}>
           <Pressable style={styles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            <DrawerSidebarLayout onNavigate={handleNavigation} onChatSelect={onChatSelect} />
+            <DrawerSidebarLayout onNavigate={handleNavigation} onChatSelect={onChatSelect} onChatDelete={onChatDelete} />
           </Pressable>
         </SafeAreaView>
       </Animated.View>

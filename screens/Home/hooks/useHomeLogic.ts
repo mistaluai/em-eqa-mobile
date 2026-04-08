@@ -29,6 +29,17 @@ export const useHomeLogic = () => {
     handleCloseSearchDrawer();
   };
 
+  const handleDeleteChat = async (chat: Chat) => {
+    try {
+      if (activeChat?.id === chat.id) {
+        setActiveChat(null);
+      }
+      await chatService.deleteChat(chat);
+    } catch (error) {
+      console.error('Failed to delete chat via hook:', error);
+    }
+  };
+
   const handleEvidencePress = () => {
     setIsEvidenceModalVisible(true);
   };
@@ -56,6 +67,7 @@ export const useHomeLogic = () => {
     activeChat,
     handleSendMessage,
     handleSelectChat,
+    handleDeleteChat,
     handleEvidencePress,
     handleCloseEvidenceModal,
     handleGoToEventDetails,

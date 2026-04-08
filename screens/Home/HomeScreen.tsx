@@ -22,6 +22,7 @@ const HomeScreen: React.FC = () => {
     activeChat,
     handleSendMessage,
     handleSelectChat,
+    handleDeleteChat,
     handleEvidencePress,
     handleOpenSearchDrawer,
     handleCloseSearchDrawer,
@@ -69,6 +70,7 @@ const HomeScreen: React.FC = () => {
         visible={isSearchDrawerVisible} 
         onClose={handleCloseSearchDrawer} 
         onChatSelect={handleSelectChat}
+        onChatDelete={handleDeleteChat}
       />
     </SafeAreaView>
   );
