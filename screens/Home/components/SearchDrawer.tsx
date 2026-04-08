@@ -2,7 +2,7 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -23,6 +23,7 @@ import { LAYOUT, SPACING } from '@/theme';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
+import { useDebounce } from '../hooks/useDebounce';
 import Chat from '../../../services/databases/watermelondb/models/Chat';
 import { localDatabase } from '../../../services/databases/watermelondb/database';
 import { Q } from '@nozbe/watermelondb';
@@ -69,15 +70,47 @@ const ChatHistoryItem = ({ title, onPress }: { title: string, onPress: () => voi
 };
 
 // --- Updated Content Component ---
-const DrawerSidebarContentComponent = ({ onNavigate, chats, onChatSelect }: { onNavigate: (screen: string) => void, chats: Chat[], onChatSelect: (chat: Chat | null) => void }) => {
+const ObservableChatListComponent = ({ chats, onChatSelect }: { chats: Chat[], onChatSelect: (chat: Chat | null) => void }) => {
+  const styles = useThemeStyles(createStyles);
+
+  return (
+    <>
+      <View style={styles.sectionTitleContainer}>
+        <Text style={styles.sectionTitle}>Today</Text>
+      </View>
+
+      {/* 3. Scrollable Chat History */}
+      <ScrollView
+        style={styles.scrollArea}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {chats.map((chat) => (
+          <ChatHistoryItem key={chat.id} title={chat.title} onPress={() => onChatSelect(chat)} />
+        ))}
+      </ScrollView>
+    </>
+  );
+};
+
+const ObservableChatList = withObservables(['searchQuery'], ({ searchQuery }: { searchQuery: string }) => ({
+  chats: localDatabase.collections.get<Chat>('chats').query(
+    ...Chat.buildSearchQuery(searchQuery)
+  ).observe(),
+}))(ObservableChatListComponent);
+
+const DrawerSidebarLayout = ({ onNavigate, onChatSelect }: { onNavigate: (screen: string) => void, onChatSelect: (chat: Chat | null) => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
   // 2. GET USER DATA
   const { full_name } = useAuthStore();
 
-  // 3. GET AVATAR DATA (This hook automatically handles downloading if needed)
+  // 3. GET AVATAR DATA
   const { avatarUri } = useAvatarMedia();
+
+  const [searchText, setSearchText] = useState('');
+  const debouncedSearchText = useDebounce(searchText, 300);
 
   const handleProfilePress = () => {
     onNavigate('NavigationHubScreen');
@@ -93,6 +126,8 @@ const DrawerSidebarContentComponent = ({ onNavigate, chats, onChatSelect }: { on
             style={styles.searchBarInput}
             placeholder="Search"
             placeholderTextColor={COLORS.textSecondary}
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
       </View>
@@ -104,22 +139,9 @@ const DrawerSidebarContentComponent = ({ onNavigate, chats, onChatSelect }: { on
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
 
-      <View style={styles.sectionTitleContainer}>
-        <Text style={styles.sectionTitle}>Today</Text>
-      </View>
+      <ObservableChatList searchQuery={debouncedSearchText} onChatSelect={onChatSelect} />
 
-      {/* 3. Scrollable Chat History */}
-      <ScrollView
-        style={styles.scrollArea}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {chats.map((chat) => (
-          <ChatHistoryItem key={chat.id} title={chat.title} onPress={() => onChatSelect(chat)} />
-        ))}
-      </ScrollView>
-
-      {/* 4. Footer User Profile (UPDATED) */}
+      {/* 4. Footer User Profile */}
       <Pressable
         onPress={handleProfilePress}
         style={({ pressed }) => [
@@ -128,35 +150,26 @@ const DrawerSidebarContentComponent = ({ onNavigate, chats, onChatSelect }: { on
           { opacity: pressed ? 0.7 : 1 },
         ]}
       >
-        {/* Replace hardcoded View with Avatar Component */}
         <Avatar
           uri={avatarUri}
           size={36}
           style={{
             marginRight: 12,
-            // 1. Remove Shadow Overrides
-            elevation: 0,                 // Android
-            shadowOpacity: 0,             // iOS
-            shadowColor: 'transparent',   // Safety
+            elevation: 0,
+            shadowOpacity: 0,
+            shadowColor: 'transparent',
             shadowOffset: { width: 0, height: 0 },
             shadowRadius: 0
           }}
         />
-
-        {/* Display Actual Name */}
         <Text style={styles.userName}>
           {full_name || 'User'}
         </Text>
-
         <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.textSecondary} style={{ marginLeft: 'auto' }} />
       </Pressable>
     </View>
   );
 };
-
-const DrawerSidebarContent = withObservables([], () => ({
-  chats: localDatabase.collections.get<Chat>('chats').query(Q.sortBy('updated_at', Q.desc)).observe(),
-}))(DrawerSidebarContentComponent);
 
 // ... The SearchDrawer export remains exactly the same ...
 export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, onChatSelect }) => {
@@ -237,7 +250,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, on
       >
         <SafeAreaView style={styles.safeAreaContent}>
           <Pressable style={styles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            <DrawerSidebarContent onNavigate={handleNavigation} onChatSelect={onChatSelect} />
+            <DrawerSidebarLayout onNavigate={handleNavigation} onChatSelect={onChatSelect} />
           </Pressable>
         </SafeAreaView>
       </Animated.View>

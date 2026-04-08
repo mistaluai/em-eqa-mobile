@@ -1,4 +1,4 @@
-import { Model, Query } from "@nozbe/watermelondb";
+import { Model, Query, Q } from "@nozbe/watermelondb";
 import { children, date, readonly, text, writer } from "@nozbe/watermelondb/decorators";
 import Message from "./Message";
 
@@ -26,5 +26,18 @@ export default class Chat extends Model {
     @writer async markAsDeleted(): Promise<void> {
         await this.messages.destroyAllPermanently();
         await super.markAsDeleted();
+    }
+
+    static buildSearchQuery(searchQuery: string) {
+        if (!searchQuery) {
+            return [Q.sortBy('updated_at', Q.desc)];
+        }
+        return [
+            Q.experimentalJoinTables(['messages']),
+            Q.or(
+                Q.where('title', Q.like(`%${Q.sanitizeLikeString(searchQuery)}%`)),
+                Q.on('messages', 'content', Q.like(`%${Q.sanitizeLikeString(searchQuery)}%`))
+            )
+        ];
     }
 }
