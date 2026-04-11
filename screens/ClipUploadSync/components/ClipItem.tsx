@@ -1,7 +1,4 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
-// ClipItem.tsx
-import { CARD, SPACING, TYPOGRAPHY } from '@/theme';
+import { useGlobalStyles, SPACING, TYPOGRAPHY } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -15,7 +12,7 @@ interface ClipItemProps {
 }
 
 export const ClipItem: React.FC<ClipItemProps> = ({ clip, onAction }) => {
-  const COLORS = useThemeColor();
+  const { CARD, COLORS } = useGlobalStyles();
 
   return (
     <AppCard style={CARD.clip}>

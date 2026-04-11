@@ -1,6 +1,5 @@
 import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
-import { SCREEN, SPACING } from '@/theme';
+import { useGlobalStyles, SPACING } from '@/theme';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +14,7 @@ import { useClipUploadSyncLogic } from './hooks/useClipUploadSyncLogic';
  */
 const ClipUploadSyncScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
-  const COLORS = useThemeColor();
+  const { SCREEN, COLORS } = useGlobalStyles();
   const {
     status,
     completedClips,

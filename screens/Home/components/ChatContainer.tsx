@@ -4,24 +4,40 @@ import { RADIUS, SPACING } from '@/theme';
 import React from 'react';
 import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
 import { ChatMessage } from './ChatMessage';
-interface ChatMessageData {
-  id: number;
-  sender: 'user' | 'ai';
-  text: string;
-  hasEvidence?: boolean;
-}
+import Chat from '../../../services/databases/watermelondb/models/Chat';
+import Message from '../../../services/databases/watermelondb/models/Message';
+import { withObservables } from '@nozbe/watermelondb/react';
+import { of as of$ } from 'rxjs';
+import { EvidenceType } from '../../../shared/types/evidence';
+import { TypingIndicator } from './TypingIndicator';
+import { ChatGreeting } from './ChatGreeting';
+import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { useEffect } from 'react';
 
 interface ChatContainerProps {
-  messages: ChatMessageData[];
-  onEvidencePress?: (messageId: number) => void;
+  chat?: Chat | null;
+  messages: Message[];
+  onEvidencePress?: (evidence: EvidenceType) => void;
+  isTyping?: boolean;
+  onAiResponseReceived?: () => void;
 }
 
 /**
- * ChatContainer - Pure presentation component for chat messages list
+ * ChatContainerComponent - Pure presentation component for chat messages list
  */
-export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEvidencePress }) => {
+const ChatContainerComponent: React.FC<ChatContainerProps> = ({ messages, onEvidencePress, isTyping, onAiResponseReceived }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
+  const { full_name } = useAuthStore();
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === 'model') {
+        onAiResponseReceived?.();
+      }
+    }
+  }, [messages, onAiResponseReceived]);
 
   return (
     <View style={styles.container}>
@@ -30,62 +46,32 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({ messages, onEviden
         renderItem={({ item }) => (
           <ChatMessage
             message={item}
-            onEvidencePress={() => onEvidencePress?.(item.id)}
+            onEvidencePress={() => {
+              if (item.evidence) onEvidencePress?.(item.evidence);
+            }}
           />
         )}
         keyExtractor={(item) => item.id.toString()}
-        style={styles.history}
+        contentContainerStyle={styles.history}
         inverted
+        ListHeaderComponent={isTyping ? <TypingIndicator /> : null}
+        ListEmptyComponent={<ChatGreeting userName={full_name} />}
       />
     </View>
   );
 };
 
+export const ChatContainer = withObservables(['chat'], ({ chat }: { chat?: Chat | null }) => ({
+  messages: chat ? chat.messages.observe() : of$([]),
+}))(ChatContainerComponent);
+
 const createStyles = (COLORS: any) => StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: SPACING.s16,
-    paddingTop: SPACING.s16,
   },
   history: {
-    flexGrow: 1,
+    paddingHorizontal: SPACING.s16,
+    paddingTop: SPACING.s16,
+    paddingBottom: SPACING.s16,
   },
-  // These styles likely belong in ChatMessage.tsx, but are kept here 
-  // to complete the merge from CHAT.ts as requested.
-  messageRow: {
-    maxWidth: '80%',
-    marginVertical: SPACING.s4,
-  },
-  messageRowUser: {
-    alignSelf: 'flex-end',
-  },
-  messageRowAI: {
-    alignSelf: 'flex-start',
-  },
-  bubble: {
-    padding: SPACING.s12,
-    borderRadius: RADIUS.default,
-  },
-  bubbleUser: {
-    backgroundColor: COLORS.primary,
-    borderBottomRightRadius: SPACING.s4,
-  },
-  bubbleAI: {
-    backgroundColor: COLORS.backgroundNeutral,
-    borderBottomLeftRadius: SPACING.s4,
-  },
-  textUser: {
-    color: COLORS.backgroundLight,
-  } as TextStyle,
-  textAI: {
-    color: COLORS.textPrimary,
-  } as TextStyle,
-  evidenceButton: {
-    marginTop: SPACING.s8,
-    alignSelf: 'flex-end',
-  },
-  evidenceText: {
-    color: COLORS.primary,
-    textDecorationLine: 'underline',
-  } as TextStyle,
 });

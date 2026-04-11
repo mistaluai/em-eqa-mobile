@@ -1,22 +1,36 @@
 import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, SPACING } from '@/theme';
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 interface VideoPlaceholderProps {
-  onPress?: () => void;
+  url: string | null;
 }
 
-export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ onPress }) => {
+export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({ url }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
+  const player = useVideoPlayer(url, (player) => {
+    if (url) {
+      player.play();
+    }
+  });
+
+  if (!url) return null;
+
   return (
     <View style={styles.container}>
-      <Ionicons name="play-circle-outline" size={80} color={COLORS.textSecondary} />
+      <VideoView 
+        player={player} 
+        style={styles.absoluteVideo} 
+        allowsFullscreen 
+        allowsPictureInPicture 
+        nativeControls={true}
+        contentFit="cover"
+      />
     </View>
   );
 };
@@ -30,6 +44,10 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.s24,
+    overflow: 'hidden',
     ...SHADOW.default,
+  },
+  absoluteVideo: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

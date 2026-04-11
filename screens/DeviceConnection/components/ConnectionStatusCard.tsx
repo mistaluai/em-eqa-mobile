@@ -59,7 +59,7 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
 const createStyles = (COLORS: any) => StyleSheet.create({
   glassContainer: {
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)', // High opacity for glass effect
+    backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,
     padding: SPACING.s20,
     // Soft shadow for elevation
@@ -69,7 +69,7 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     shadowRadius: 12,
     elevation: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,1)', // Highlight border
+    borderColor: COLORS.borderLight,
   },
   row: {
     marginBottom: SPACING.s12,

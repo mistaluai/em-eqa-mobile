@@ -2,7 +2,7 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -14,7 +14,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,6 +24,11 @@ import { LAYOUT, SPACING } from '@/theme';
 import { Avatar } from '../../../components/Avatar';
 import { useAuthStore } from '../../../services/auth/supabaseAuth';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
+import { useDebounce } from '../hooks/useDebounce';
+import Chat from '../../../services/databases/watermelondb/models/Chat';
+import { localDatabase } from '../../../services/databases/watermelondb/database';
+import { Q } from '@nozbe/watermelondb';
+import { withObservables } from '@nozbe/watermelondb/react';
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
@@ -30,6 +36,8 @@ const DRAWER_WIDTH = width * 0.85;
 interface SearchDrawerProps {
   visible: boolean;
   onClose: () => void;
+  onChatSelect: (chat: Chat | null) => void;
+  onChatDelete?: (chat: Chat) => void;
 }
 
 // ... MenuItem and ChatHistoryItem components remain the same ...
@@ -52,36 +60,77 @@ const MenuItem = (
   );
 };
 
-const ChatHistoryItem = ({ title }: { title: string }) => {
+const ChatHistoryItem = ({ title, onPress, onLongPress }: { title: string, onPress: () => void, onLongPress?: () => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
   return (
-    <TouchableOpacity style={styles.chatItem}>
+    <TouchableOpacity style={styles.chatItem} onPress={onPress} onLongPress={onLongPress}>
       <Text style={styles.chatItemText} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 // --- Updated Content Component ---
-const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+const ObservableChatListComponent = ({ chats, onChatSelect, onChatDelete }: { chats: Chat[], onChatSelect: (chat: Chat | null) => void, onChatDelete?: (chat: Chat) => void }) => {
+  const styles = useThemeStyles(createStyles);
+
+  return (
+    <>
+      <View style={styles.sectionTitleContainer}>
+        <Text style={styles.sectionTitle}>Today</Text>
+      </View>
+
+      {/* 3. Scrollable Chat History */}
+      <ScrollView
+        style={styles.scrollArea}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {chats.map((chat) => (
+          <ChatHistoryItem 
+            key={chat.id} 
+            title={chat.title} 
+            onPress={() => onChatSelect(chat)} 
+            onLongPress={() => {
+              Alert.alert(
+                "Delete Chat",
+                "Are you sure you want to permanently delete this chat?",
+                [
+                  { text: "Cancel", style: "cancel" },
+                  { text: "Delete", style: "destructive", onPress: () => onChatDelete?.(chat) }
+                ]
+              );
+            }}
+          />
+        ))}
+      </ScrollView>
+    </>
+  );
+};
+
+const ObservableChatList = withObservables(['searchQuery'], ({ searchQuery }: { searchQuery: string }) => ({
+  chats: localDatabase.collections.get<Chat>('chats').query(
+    ...Chat.buildSearchQuery(searchQuery)
+  ).observe(),
+}))(ObservableChatListComponent);
+
+const DrawerSidebarLayout = ({ onNavigate, onChatSelect, onChatDelete }: { onNavigate: (screen: string) => void, onChatSelect: (chat: Chat | null) => void, onChatDelete?: (chat: Chat) => void }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
   // 2. GET USER DATA
   const { full_name } = useAuthStore();
 
-  // 3. GET AVATAR DATA (This hook automatically handles downloading if needed)
+  // 3. GET AVATAR DATA
   const { avatarUri } = useAvatarMedia();
+
+  const [searchText, setSearchText] = useState('');
+  const debouncedSearchText = useDebounce(searchText, 300);
 
   const handleProfilePress = () => {
     onNavigate('NavigationHubScreen');
   };
-
-  const historyItems = [
-    "Medicine Query",
-    "Interaction Chat",
-  ];
 
   return (
     <View style={styles.contentContainer}>
@@ -93,33 +142,22 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
             style={styles.searchBarInput}
             placeholder="Search"
             placeholderTextColor={COLORS.textSecondary}
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
       </View>
 
       {/* 2. Top Navigation Actions */}
       <View style={styles.topMenuContainer}>
-        <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} />
+        <MenuItem icon="chatbubble-ellipses-outline" label="New chat" isNewChat={true} onPress={() => onChatSelect(null)} />
         <MenuItem icon="calendar-outline" label="Timeline & Events" onPress={() => onNavigate('TimelineEvents')} />
         <MenuItem icon="camera-outline" label="Camera Connection" onPress={() => onNavigate('DeviceConnection')} />
       </View>
 
-      <View style={styles.sectionTitleContainer}>
-        <Text style={styles.sectionTitle}>Today</Text>
-      </View>
+      <ObservableChatList searchQuery={debouncedSearchText} onChatSelect={onChatSelect} onChatDelete={onChatDelete} />
 
-      {/* 3. Scrollable Chat History */}
-      <ScrollView
-        style={styles.scrollArea}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {historyItems.map((item, index) => (
-          <ChatHistoryItem key={index} title={item} />
-        ))}
-      </ScrollView>
-
-      {/* 4. Footer User Profile (UPDATED) */}
+      {/* 4. Footer User Profile */}
       <Pressable
         onPress={handleProfilePress}
         style={({ pressed }) => [
@@ -128,26 +166,21 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
           { opacity: pressed ? 0.7 : 1 },
         ]}
       >
-        {/* Replace hardcoded View with Avatar Component */}
         <Avatar
           uri={avatarUri}
           size={36}
           style={{
             marginRight: 12,
-            // 1. Remove Shadow Overrides
-            elevation: 0,                 // Android
-            shadowOpacity: 0,             // iOS
-            shadowColor: 'transparent',   // Safety
+            elevation: 0,
+            shadowOpacity: 0,
+            shadowColor: 'transparent',
             shadowOffset: { width: 0, height: 0 },
             shadowRadius: 0
           }}
         />
-
-        {/* Display Actual Name */}
         <Text style={styles.userName}>
           {full_name || 'User'}
         </Text>
-
         <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.textSecondary} style={{ marginLeft: 'auto' }} />
       </Pressable>
     </View>
@@ -155,7 +188,7 @@ const DrawerSidebarContent = ({ onNavigate }: { onNavigate: (screen: string) => 
 };
 
 // ... The SearchDrawer export remains exactly the same ...
-export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) => {
+export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose, onChatSelect, onChatDelete }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   // ... same animation and modal logic ...
@@ -233,7 +266,7 @@ export const SearchDrawer: React.FC<SearchDrawerProps> = ({ visible, onClose }) 
       >
         <SafeAreaView style={styles.safeAreaContent}>
           <Pressable style={styles.drawerPressable} onPress={(e) => e.stopPropagation()}>
-            <DrawerSidebarContent onNavigate={handleNavigation} />
+            <DrawerSidebarLayout onNavigate={handleNavigation} onChatSelect={onChatSelect} onChatDelete={onChatDelete} />
           </Pressable>
         </SafeAreaView>
       </Animated.View>

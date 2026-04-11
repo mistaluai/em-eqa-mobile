@@ -1,8 +1,4 @@
-import { COLORS } from '@/theme/colors';
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
-// ClipSection.tsx
-import { TEXT, TYPOGRAPHY } from '@/theme';
+import { useGlobalStyles, TYPOGRAPHY } from '@/theme';
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { Clip } from '../../../shared/types';
@@ -23,10 +19,11 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
   onClipAction,
   onClearAll,
   onPauseAll,
-  // Default title color is now primary dark text
-  titleColor = COLORS.textPrimary,
+  titleColor, // Will default manually below
 }) => {
-  const COLORS = useThemeColor();
+  const { TEXT, COLORS } = useGlobalStyles();
+  const finalTitleColor = titleColor || COLORS.textPrimary;
+  
   if (clips.length === 0) return null;
 
   // Note: TEXT.sectionTitle and TEXT.retryAll will need to be updated 
@@ -34,7 +31,7 @@ export const ClipSection: React.FC<ClipSectionProps> = ({
 
   return (
     <>
-      <Text style={[TYPOGRAPHY.HeadlineM, TEXT.sectionTitle, { color: titleColor }]}>{title}</Text>
+      <Text style={[TYPOGRAPHY.HeadlineM, TEXT.sectionTitle, { color: finalTitleColor }]}>{title}</Text>
       {clips.map((clip, index) => (
         <ClipItem key={index} clip={clip} onAction={() => onClipAction(clip.name)} />
       ))}
