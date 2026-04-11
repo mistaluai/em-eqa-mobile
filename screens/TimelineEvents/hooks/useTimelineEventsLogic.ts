@@ -1,7 +1,7 @@
-import { useClipsStore } from '@/services/userdata/supabaseClips';
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
+import { useClipsStore } from '@/services/databases/supabase/supabaseClips';
+import { Filter } from '@/shared/types';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
-import { Filter } from '../../../shared/types';
 
 export const useTimelineEventsLogic = () => {
   const { userid } = useAuthStore();

@@ -1,7 +1,7 @@
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
 
 /**
  * Custom hook for LoginScreen logic

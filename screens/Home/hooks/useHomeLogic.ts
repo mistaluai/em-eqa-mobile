@@ -1,7 +1,7 @@
+import { chatService } from '@/services/userChats/chatService';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import Chat from '../../../services/databases/watermelondb/models/Chat';
-import { chatService } from '../../../services/userChats/chatService';
 
 import { EvidenceType } from '../../../shared/types/evidence';
 

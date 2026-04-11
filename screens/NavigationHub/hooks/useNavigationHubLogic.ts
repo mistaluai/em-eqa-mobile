@@ -1,5 +1,5 @@
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
 import { useNavigation } from '@react-navigation/native';
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
 /**
  * Navigation logic for NavigationHubScreen
  * Dynamically routes each card to its appropriate screen or action.
