@@ -1,9 +1,10 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
+import { useThemeStyles } from "@/theme/useThemeStyles";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Alert,
   Animated,
   Dimensions,
   Easing,
@@ -14,21 +15,19 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
-  Alert
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // 1. IMPORT STORES AND COMPONENT
 import { LAYOUT, SPACING } from '@/theme';
+import { withObservables } from '@nozbe/watermelondb/react';
 import { Avatar } from '../../../components/Avatar';
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
+import { useAuthStore } from '../../../services/databases/supabase/supabaseAuth';
+import { localDatabase } from '../../../services/databases/watermelondb/database';
+import Chat from '../../../services/databases/watermelondb/models/Chat';
 import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
 import { useDebounce } from '../hooks/useDebounce';
-import Chat from '../../../services/databases/watermelondb/models/Chat';
-import { localDatabase } from '../../../services/databases/watermelondb/database';
-import { Q } from '@nozbe/watermelondb';
-import { withObservables } from '@nozbe/watermelondb/react';
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.85;
@@ -88,10 +87,10 @@ const ObservableChatListComponent = ({ chats, onChatSelect, onChatDelete }: { ch
         showsVerticalScrollIndicator={false}
       >
         {chats.map((chat) => (
-          <ChatHistoryItem 
-            key={chat.id} 
-            title={chat.title} 
-            onPress={() => onChatSelect(chat)} 
+          <ChatHistoryItem
+            key={chat.id}
+            title={chat.title}
+            onPress={() => onChatSelect(chat)}
             onLongPress={() => {
               Alert.alert(
                 "Delete Chat",

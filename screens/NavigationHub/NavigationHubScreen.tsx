@@ -1,7 +1,7 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import AppHeader from '@/components/HeaderComponent';
 import { RADIUS, SPACING } from '@/theme';
+import { useThemeColor } from '@/theme/useThemeColor';
+import { useThemeStyles } from '@/theme/useThemeStyles';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

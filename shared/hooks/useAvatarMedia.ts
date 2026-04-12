@@ -1,10 +1,9 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
 // Adjust path to your actual store file
-import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { useAvatarStore } from '@/services/databases/supabase/supabaseAvatar';
 import { useEffect } from 'react';
-import { useAvatarStore } from '../../services/userdata/supabaseAvatar';
-
+import { useAuthStore } from '../../services/databases/supabase/supabaseAuth';
 
 export const useAvatarMedia = () => {
     const { avatarUri, setAvatarUri, uploadAvatar, downloadAvatar, uploading, updateUserAvatarPath } = useAvatarStore();

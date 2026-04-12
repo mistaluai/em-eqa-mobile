@@ -1,8 +1,8 @@
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
+import { useAvatarStore } from '@/services/databases/supabase/supabaseAvatar';
+import { useAvatarMedia } from '@/shared/hooks/useAvatarMedia';
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { useAuthStore } from '../../../services/auth/supabaseAuth';
-import { useAvatarStore } from '../../../services/userdata/supabaseAvatar';
-import { useAvatarMedia } from '../../../shared/hooks/useAvatarMedia';
 
 export const useProfileSettingsLogic = () => {
   // 1. Get Global Auth State (User Data)

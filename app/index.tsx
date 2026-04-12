@@ -11,7 +11,8 @@ import ProfileSettingsScreen from '@/screens/ProfileSettings';
 import SignUpScreen from '@/screens/Signup';
 import SystemStatusScreen from '@/screens/SystemStatus';
 import TimelineEventsScreen from '@/screens/TimelineEvents';
-import { useAuthStore } from '@/services/auth/supabaseAuth';
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
+import { syncPendingMessages } from '@/services/databases/supabase/supabaseSyncChats';
 import { supabase } from '@/services/databases/supabase/supabase_client';
 import { useThemeColor } from "@/theme/useThemeColor";
 import { useThemeStyles } from "@/theme/useThemeStyles";
@@ -51,6 +52,9 @@ const Index = () => {
       setIsLoading(false);
     });
 
+
+    //Sync user messages, add other syncs here too
+    syncPendingMessages();
     return () => subscription.unsubscribe();
   }, []);
 

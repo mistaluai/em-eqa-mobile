@@ -1,7 +1,7 @@
+import { AuthState } from '@/shared/types'
 import { Alert } from 'react-native'
 import { create } from 'zustand'
-import { AuthState } from '../../shared/types'
-import { supabase } from '../databases/supabase/supabase_client'
+import { supabase } from './supabase_client'
 
 export const useAuthStore = create<AuthState>((set, get) => ({
     userid: '',

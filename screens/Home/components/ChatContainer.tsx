@@ -1,18 +1,17 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
+import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
+import { SPACING } from '@/theme';
 import { useThemeColor } from "@/theme/useThemeColor";
-import { RADIUS, SPACING } from '@/theme';
-import React from 'react';
-import { FlatList, StyleSheet, TextStyle, View } from 'react-native';
-import { ChatMessage } from './ChatMessage';
+import { useThemeStyles } from "@/theme/useThemeStyles";
+import { withObservables } from '@nozbe/watermelondb/react';
+import React, { useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { of as of$ } from 'rxjs';
 import Chat from '../../../services/databases/watermelondb/models/Chat';
 import Message from '../../../services/databases/watermelondb/models/Message';
-import { withObservables } from '@nozbe/watermelondb/react';
-import { of as of$ } from 'rxjs';
 import { EvidenceType } from '../../../shared/types/evidence';
-import { TypingIndicator } from './TypingIndicator';
 import { ChatGreeting } from './ChatGreeting';
-import { useAuthStore } from '@/services/auth/supabaseAuth';
-import { useEffect } from 'react';
+import { ChatMessage } from './ChatMessage';
+import { TypingIndicator } from './TypingIndicator';
 
 interface ChatContainerProps {
   chat?: Chat | null;

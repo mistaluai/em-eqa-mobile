@@ -1,9 +1,11 @@
+import { useRemoteChats } from '@/services/databases/supabase/supabaseChats';
+import { chatService } from '@/services/userChats/chatService';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import Chat from '../../../services/databases/watermelondb/models/Chat';
-import { chatService } from '../../../services/userChats/chatService';
-
 import { EvidenceType } from '../../../shared/types/evidence';
+
+// 1. Import your remote chats hook (adjust the path if needed)
 
 /**
  * Custom hook for HomeScreen logic
@@ -11,6 +13,10 @@ import { EvidenceType } from '../../../shared/types/evidence';
  */
 export const useHomeLogic = () => {
   const navigation = useNavigation();
+
+  // 2. Initialize the remote service
+  const remoteService = useRemoteChats();
+
   const [isSearchDrawerVisible, setIsSearchDrawerVisible] = useState(false);
   const [isEvidenceModalVisible, setIsEvidenceModalVisible] = useState(false);
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceType | null>(null);
@@ -20,13 +26,18 @@ export const useHomeLogic = () => {
   const handleSendMessage = async (messageText: string) => {
     try {
       setIsAiTyping(true);
-      const resultingChat = await chatService.sendMessage(messageText, activeChat);
+
+      // 3. Pass remoteService as the third argument
+      const resultingChat = await chatService.sendMessage(messageText, activeChat, remoteService);
+
       if (resultingChat && resultingChat.id !== activeChat?.id) {
         setActiveChat(resultingChat);
       }
     } catch (error) {
-      setIsAiTyping(false);
       console.error('Failed to send message via hook:', error);
+    } finally {
+      // Safely reset the typing state whether the request succeeds or fails
+      setIsAiTyping(false);
     }
   };
 
@@ -44,7 +55,8 @@ export const useHomeLogic = () => {
       if (activeChat?.id === chat.id) {
         setActiveChat(null);
       }
-      await chatService.deleteChat(chat);
+      // 4. Pass remoteService as the second argument
+      await chatService.deleteChat(chat, remoteService);
     } catch (error) {
       console.error('Failed to delete chat via hook:', error);
     }

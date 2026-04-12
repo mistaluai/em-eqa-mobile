@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '../databases/supabase/supabase_client';
+import { supabase } from './supabase_client';
 
 
 interface ClipFile {

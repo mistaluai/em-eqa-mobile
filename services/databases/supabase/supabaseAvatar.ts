@@ -1,7 +1,8 @@
 import * as ImagePicker from 'expo-image-picker';
 import { create } from 'zustand';
-import { useAuthStore } from '../auth/supabaseAuth';
-import { supabase } from '../databases/supabase/supabase_client';
+import { supabase } from './supabase_client';
+import { useAuthStore } from './supabaseAuth';
+
 
 interface AvatarState {
     uploading: boolean;

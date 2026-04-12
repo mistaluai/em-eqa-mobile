@@ -1,6 +1,6 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, TYPOGRAPHY } from '@/theme';
+import { useThemeColor } from '@/theme/useThemeColor';
+import { useThemeStyles } from '@/theme/useThemeStyles';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
