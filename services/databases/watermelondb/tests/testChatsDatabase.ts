@@ -1,3 +1,4 @@
+import { EvidenceType } from '@/shared/types/evidence';
 import { localDatabase } from '../database';
 import Chat from '../models/Chat';
 
@@ -14,8 +15,18 @@ export const runChatsDatabaseTests = async () => {
         console.log(`Chat Created - ID: ${newChat.id}, Title: ${newChat.title}`);
 
         console.log('Adding Messages to the Chat');
-        await newChat.addMessage(true, 'Test message 1');
-        await newChat.addMessage(false, 'Test message 2', '["evidence 1", "evidence 2"]');
+        // createLocalMessage is a @writer, it handles its own database.write block
+        await newChat.createLocalMessage(true, 'Test message 1');
+
+        const testEvidence: EvidenceType = {
+            vide_url: 'http://example.com/video.mp4',
+            title: 'Evidence 1',
+            summary: 'Testing evidence summary',
+            timestamp: new Date(),
+            location: 'Test Location'
+        };
+
+        await newChat.createLocalMessage(false, 'Test message 2', testEvidence);
         console.log('Messages added successfully');
 
         console.log('Fetching Data Back');
@@ -26,7 +37,8 @@ export const runChatsDatabaseTests = async () => {
         });
 
         console.log('Testing Deletion');
-        await newChat.markAsDeleted();
+        // markAsDeletedLocally is a @writer that also deletes child messages
+        await newChat.markAsDeletedLocally();
         console.log(`Chat marked as deleted and child messages permanently destroyed`);
 
         console.log('All Database Tests Passed');
