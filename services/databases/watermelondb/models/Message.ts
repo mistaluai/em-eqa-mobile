@@ -1,11 +1,9 @@
-import { Model, Relation } from "@nozbe/watermelondb";
+import { EvidenceType } from "@/shared/types/evidence";
+import { Model, Q, Relation } from "@nozbe/watermelondb";
 import { date, immutableRelation, json, readonly, text } from "@nozbe/watermelondb/decorators";
 import Chat from "./Chat";
-import { EvidenceType } from "@/shared/types/evidence";
 
 const sanitizeEvidence = (rawEvidence: any): EvidenceType | null => {
-    // 1. Typescript interfaces don't exist at runtime, so we can't use `typeof === EvidenceType`.
-    // 2. We must manually verify that at least some core keys exist on the parsed object!
     if (typeof rawEvidence !== 'object' || rawEvidence === null || Array.isArray(rawEvidence)) {
         return null;
     }
@@ -26,9 +24,17 @@ export default class Message extends Model {
     @text('role') role!: string;
     @text('content') content!: string;
     @text('status') status!: string;
-    
+
     // The property type is no longer a string, it's EvidenceType!
-    @json('evidence', sanitizeEvidence) evidence?: EvidenceType | null; 
-    
+    @json('evidence', sanitizeEvidence) evidence?: EvidenceType | null;
+
     @readonly @date('created_at') createdAt!: Date;
+
+
+    static getUnsyncedMessages() {
+        return [
+            Q.where('status', 'pending'),
+            Q.sortBy('created_at', Q.asc)
+        ];
+    }
 }
