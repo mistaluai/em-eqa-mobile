@@ -18,9 +18,36 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, Button, SafeAreaView } from 'react-native';
+import { useBLE } from '@/services/hardware/bluetooth/useBLE';
 
 const Stack = createNativeStackNavigator();
+
+const createStyles = (COLORS: any) => StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    backgroundColor: COLORS.backgroundLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  testOverlayContainer: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 9999,
+  },
+  testOverlayBox: {
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  testOverlayText: {
+    color: '#fff',
+    marginBottom: 5,
+    fontSize: 12,
+  }
+});
 
 const Index = () => {
   const styles = useThemeStyles(createStyles);
@@ -63,6 +90,7 @@ const Index = () => {
   }
 
   return (
+    <View style={{ flex: 1 }}>
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
@@ -103,16 +131,47 @@ const Index = () => {
         </Stack.Group>)
       )}
     </Stack.Navigator>
+    <BLETestOverlay />
+    </View>
   );
 };
 
-const createStyles = (COLORS: any) => StyleSheet.create({
-  loaderContainer: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-});
+const BLETestOverlay = () => {
+  const { requestPermissions, scanForDevices, connectToDevice, provisionWifi, piDevice, connectedDevice, provisioningStatus } = useBLE();
+  const COLORS = useThemeColor();
+  const styles = useThemeStyles(createStyles);
+
+  useEffect(() => {
+    if (piDevice) {
+      connectToDevice(piDevice);
+    }
+  }, [piDevice]);
+
+  useEffect(() => {
+    if (connectedDevice) {
+      provisionWifi('Test_SSID', 'Test_PASS').then((ip) => {
+        console.log('Provisioning successful, got IP:', ip);
+      });
+    }
+  }, [connectedDevice]);
+
+  const startTest = async () => {
+    const perm = await requestPermissions();
+    if (perm) {
+      scanForDevices();
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.testOverlayContainer} pointerEvents="box-none">
+      <View style={styles.testOverlayBox}>
+        <Text style={styles.testOverlayText}>{provisioningStatus || "Ready to Test"}</Text>
+        <Button title="Start BLE Test" onPress={startTest} />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+
 
 export default Index;
