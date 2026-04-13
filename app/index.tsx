@@ -150,7 +150,11 @@ const BLETestOverlay = () => {
   useEffect(() => {
     if (connectedDevice) {
       provisionWifi('Test_SSID', 'Test_PASS').then((ip) => {
-        console.log('Provisioning successful, got IP:', ip);
+        if (ip) {
+          console.log('Provisioning successful, got IP:', ip);
+        } else {
+          console.log('Provisioning finished but no IP returned.');
+        }
       });
     }
   }, [connectedDevice]);
