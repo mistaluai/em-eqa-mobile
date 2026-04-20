@@ -72,19 +72,50 @@ export function useBLE() {
     }
   };
 
-  const scanForDevices = () => {
+  const scanForDevices = async () => {
+    // 1. Check if we are on a physical device
+    if (!ExpoDevice.isDevice) {
+      setProvisioningStatus('BLE Error: Not supported on Emulators. Use a real device.');
+      return;
+    }
+
+    // 2. Check Bluetooth State
+    const state = await bleManager.state();
+    if (state !== 'PoweredOn') {
+      setProvisioningStatus('BLE Error: Bluetooth is disabled. Please turn it on.');
+      return;
+    }
+
     setIsScanning(true);
     setProvisioningStatus('Scanning for PiCamera...');
+    
     bleManager.startDeviceScan(null, null, (error, device) => {
       if (error) {
         console.error("Scan error", error);
-        setProvisioningStatus(`Scan error: ${error.message}`);
+        
+        let errorMessage = 'Scan failed.';
+        if (error.errorCode === 102) {
+          errorMessage = 'Bluetooth disabled or hardware error.';
+        } else if (error.errorCode === 2) {
+          errorMessage = 'Bluetooth unauthorized.';
+        } else if (error.message.includes('Location')) {
+          errorMessage = 'Location services required for BLE.';
+        } else {
+          errorMessage = `Scan error: ${error.message}`;
+        }
+
+        setProvisioningStatus(errorMessage);
         setIsScanning(false);
         return;
       }
+
+      if (device) {
+        console.log(`Discovered device: [${device.id}] Name: ${device.name || 'N/A'}, LocalName: ${device.localName || 'N/A'}`);
+      }
+
       if (
         device &&
-        (device.localName === "PiCamera" || device.name === "PiCamera")
+        (device.localName?.includes("PiCamera") || device.name?.includes("PiCamera"))
       ) {
         setPiDevice(device);
         setProvisioningStatus('Found PiCamera. Ready to connect.');
@@ -98,9 +129,12 @@ export function useBLE() {
     try {
       setProvisioningStatus('Connecting...');
       const deviceConnection = await bleManager.connectToDevice(device.id);
-      setConnectedDevice(deviceConnection);
+      
       setProvisioningStatus('Discovering Services...');
       await deviceConnection.discoverAllServicesAndCharacteristics();
+      
+      // ONLY set as connected AFTER services are discovered
+      setConnectedDevice(deviceConnection);
       bleManager.stopDeviceScan();
       setProvisioningStatus('Connected & Ready.');
       return deviceConnection;
