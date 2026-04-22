@@ -63,7 +63,8 @@ export default class Clip extends Model {
     static async getOneUnsyncedClip(database: Database): Promise<Clip | null> {
         const clips = await database.get<Clip>('clips').query(
             Q.where('remote_sync_status', 'unsynced'),
-            Q.take(1)
+            Q.where('recording_status', 'recorded'),
+            Q.take(1) // Performance optimization: only fetch one record
         ).fetch()
 
         return clips.length > 0 ? clips[0] : null
