@@ -29,7 +29,15 @@
   },
   "plugins": [
     "expo-router",
-    "expo-video"
+    "expo-video",
+    [
+      "react-native-ble-plx",
+      {
+        "isBackgroundEnabled": false,
+        "modes": ["central"],
+        "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices for provisioning."
+      }
+    ]
   ],
   "experiments": {
     "typedRoutes": true,
