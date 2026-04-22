@@ -36,6 +36,7 @@ const Index = () => {
   useEffect(() => {
     // Run the database testing suite on application mount
     // runChatsDatabaseTests();
+    // runClipsDatabaseTests();
 
     // A. Check initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
