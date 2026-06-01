@@ -1,55 +1,55 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import { LAYOUT, RADIUS, SPACING } from '@/theme';
+import { useThemeColor } from "@/theme/useThemeColor";
+import { useThemeStyles } from "@/theme/useThemeStyles";
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 interface ConnectionStatusCardProps {
-  status: 'connected' | 'disconnected' | 'searching';
+  status: 'disconnected' | 'scanning' | 'found' | 'connected' | 'provisioned';
   deviceName: string;
-  deviceModel: string;
-  batteryLevel: number;
+  deviceIP: string;
 }
 
 export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   status,
   deviceName,
-  deviceModel,
-  batteryLevel,
+  deviceIP,
 }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
-  const isConnected = status === 'connected';
-  const statusColor = isConnected ? COLORS.components.navigation.status : COLORS.textSecondary;
-  const statusText = isConnected ? 'Active' : 'Offline';
+
+  const isLinked = status === 'connected' || status === 'provisioned';
+  // Use semantic color for success (emerald500 reference)
+  const statusColor = isLinked ? COLORS.components.navigation.status : COLORS.textSecondary;
+
+  let statusText = 'Offline';
+  if (status === 'scanning') statusText = 'Searching...';
+  if (status === 'found') statusText = 'Ready to Pair';
+  if (status === 'connected') statusText = 'BLE Linked';
+  if (status === 'provisioned') statusText = 'Wi-Fi Active';
 
   return (
     <View style={styles.glassContainer}>
       {/* Row 1: Header & Status */}
       <View style={[LAYOUT.flexRowBetween, styles.row]}>
         <View>
-          <Text style={styles.label}>Device</Text>
-          <Text style={styles.deviceName}>{deviceName}</Text>
+          <Text style={styles.label}>Integration Target</Text>
+          <Text style={styles.deviceName} numberOfLines={1}>{deviceName}</Text>
         </View>
-        <View style={styles.statusBadge}>
+        <View style={[styles.statusBadge, { borderColor: statusColor }]}>
           <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
           <Text style={[styles.statusText, { color: statusColor }]}>{statusText}</Text>
         </View>
       </View>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
-      {/* Row 2: Details (Model & Battery) */}
+      {/* Row 2: Details - Completed */}
       <View style={styles.detailsRow}>
         <View style={[LAYOUT.flexRowCenter, styles.detailItem]}>
-          <Ionicons name="hardware-chip-outline" size={18} color={COLORS.textSecondary} />
-          <Text style={styles.detailText}>{deviceModel}</Text>
-        </View>
-        <View style={[LAYOUT.flexRowCenter, styles.detailItem]}>
-          <Ionicons name={batteryLevel > 20 ? "battery-half-outline" : "battery-dead-outline"} size={18} color={COLORS.textSecondary} />
-          <Text style={styles.detailText}>{batteryLevel}% Battery</Text>
+          <Ionicons name="camera-outline" size={16} color={COLORS.textSecondary} />
+          <Text style={styles.detailText} numberOfLines={1}>IP: {deviceIP || 'Disconnected'}</Text>
         </View>
       </View>
     </View>
@@ -62,7 +62,6 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     backgroundColor: COLORS.backgroundNeutral,
     borderRadius: RADIUS.large,
     padding: SPACING.s20,
-    // Soft shadow for elevation
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -75,33 +74,37 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     marginBottom: SPACING.s12,
   },
   label: {
-    fontSize: 12,
+    fontSize: 10,
     color: COLORS.textSecondary,
     textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 1.5,
+    fontWeight: '600',
   },
   deviceName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     color: COLORS.textPrimary,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.backgroundNeutral,
+    backgroundColor: COLORS.backgroundLight,
     paddingHorizontal: SPACING.s12,
-    paddingVertical: SPACING.s4,
+    paddingVertical: SPACING.s8,
     borderRadius: RADIUS.full,
+    borderWidth: 1,
   },
   statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: SPACING.s8,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   divider: {
     height: 1,
@@ -114,9 +117,10 @@ const createStyles = (COLORS: any) => StyleSheet.create({
   },
   detailItem: {
     gap: SPACING.s8,
+    flex: 1,
   },
   detailText: {
-    fontSize: 14,
+    fontSize: 13,
     color: COLORS.textSecondary,
     fontWeight: '500',
   },
