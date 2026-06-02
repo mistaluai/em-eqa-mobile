@@ -12,7 +12,7 @@ export const PiNetworkService = {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-            const response = await fetch(`${getBaseUrl()}/alive`, {
+            const response = await fetch(`${getBaseUrl()}/alive?cb=${Date.now()}`, {
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
@@ -28,16 +28,16 @@ export const PiNetworkService = {
     },
 
     listSegments: async (skip = 0, limit = 100) => {
-        const response = await fetch(`${getBaseUrl()}/list?skip=${skip}&limit=${limit}`);
+        const response = await fetch(`${getBaseUrl()}/list?skip=${skip}&limit=${limit}&cb=${Date.now()}`);
         return response.json();
     },
 
     getNextSegmentUrl: () => {
-        return `${getBaseUrl()}/next`;
+        return `${getBaseUrl()}/next?cb=${Date.now()}`;
     },
 
     deleteSegment: async (segmentId: number) => {
-        const response = await fetch(`${getBaseUrl()}/deleted/${segmentId}`);
+        const response = await fetch(`${getBaseUrl()}/deleted/${segmentId}?cb=${Date.now()}`);
         return response.json();
     },
 

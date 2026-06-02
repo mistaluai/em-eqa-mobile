@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Modal, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { withObservables } from '@nozbe/watermelondb/react';
+import { Directory, File, Paths } from 'expo-file-system'; // <-- ADD THIS IMPORT
 import { useVideoPlayer, VideoView } from 'expo-video';
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing, withSequence } from 'react-native-reanimated';
+import React, { useState } from 'react';
+import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+
+import { RADIUS, SPACING, TYPOGRAPHY, useGlobalStyles } from '@/theme';
 import AppCard from '../../../components/AppCard';
 import Clip from '../../../services/databases/watermelondb/models/Clips';
-import { useGlobalStyles, SPACING, TYPOGRAPHY, RADIUS } from '@/theme';
-
-const PLACEHOLDER_VIDEO_URL = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 // A tiny helper for relative time "time-ago" without external deps
 const timeSince = (date: Date) => {
@@ -34,8 +34,13 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
   const { CARD, COLORS, SCREEN } = useGlobalStyles();
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Initialize placeholder video player
-  const player = useVideoPlayer(PLACEHOLDER_VIDEO_URL, player => {
+  // 1. RECONSTRUCT THE LOCAL PATH
+  // This exactly matches the path structure from your saveVideoBlob function
+  const clipDir = new Directory(Paths.cache, 'clips', clip.clipId);
+  const videoFile = new File(clipDir, 'clip.mp4');
+
+  // 2. PASS THE LOCAL URI TO THE PLAYER
+  const player = useVideoPlayer(videoFile.uri, player => {
     player.loop = true;
   });
 
@@ -78,49 +83,43 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
   let mainIcon = 'help-circle';
   let mainIconColor = COLORS.textSecondary;
 
-  /*
-   * State Mapping:
-   * 1. Unprocessed: clip is new and hasn't had inferences run yet
-   * 2. Dismissed: clip inference finished but determined not to be relevant
-   * 3. Pending Sync: clip is recorded but hasn't synced yet
-   * 4. Synced: clip is recorded AND synced to Supabase
-   */
-
   const isPendingSync = clip.recordingStatus === 'recorded' && clip.remoteSyncStatus === 'unsynced';
-  
+
   if (clip.remoteSyncStatus === 'synced') {
     mainPillColor = COLORS.primaryLight;
     mainPillText = 'Synced';
     mainIcon = 'cloud-done';
     mainIconColor = COLORS.primary;
   } else if (clip.recordingStatus === 'unprocessed') {
-    mainPillColor = 'rgba(16, 185, 129, 0.15)'; // Emerald/Green for processing alive
+    mainPillColor = 'rgba(16, 185, 129, 0.15)';
     mainPillText = 'AI Filtering';
     mainIcon = 'cog';
-    mainIconColor = COLORS.warning; // or any bright accent
+    mainIconColor = COLORS.warning;
   } else if (clip.recordingStatus === 'dismissed') {
     mainPillColor = COLORS.backgroundNeutral;
     mainPillText = 'Dismissed';
     mainIcon = 'trash-bin';
     mainIconColor = COLORS.textSecondary;
   } else if (isPendingSync) {
-    mainPillColor = 'rgba(223, 151, 17, 0.15)'; // Using secondary (desertSand) with opacity
+    mainPillColor = 'rgba(223, 151, 17, 0.15)';
     mainPillText = 'Ready to Upload';
     mainIcon = 'cloud-upload';
     mainIconColor = COLORS.secondary;
   }
 
-  // Lifecycle States
-  const isRecorded = true; // Implicitly true if it exists
   const isFiltered = clip.recordingStatus !== 'unprocessed';
   const isSyncedCompleted = clip.remoteSyncStatus === 'synced';
 
   return (
     <>
-      <Pressable onPress={() => setModalVisible(true)}>
+      <Pressable onPress={() => {
+        // Automatically start playing when the modal opens
+        setModalVisible(true);
+        player.play();
+      }}>
         <AppCard style={CARD.clip}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            
+
             {/* Placeholder Thumbnail */}
             <View style={[styles.thumbnailPlaceholder, { backgroundColor: COLORS.backgroundLight }]}>
               <Ionicons name="videocam-outline" size={24} color={COLORS.textSecondary} />
@@ -128,8 +127,8 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
 
             {/* Content Section */}
             <View style={styles.contentContainer}>
-              <Text 
-                style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, fontWeight: '600' }]} 
+              <Text
+                style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, fontWeight: '600' }]}
                 numberOfLines={1}
                 ellipsizeMode="middle"
               >
@@ -172,7 +171,7 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
             <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary }]} numberOfLines={1}>
               {clip.clipId}
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => {
                 player.pause();
                 setModalVisible(false);
@@ -182,7 +181,7 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
               <Ionicons name="close" size={28} color={COLORS.textPrimary} />
             </TouchableOpacity>
           </View>
-          
+
           <VideoView
             style={styles.videoPlayer}
             player={player}
@@ -193,7 +192,7 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
 
           {/* Modern Horizontal Lifecycle Stepper */}
           <View style={styles.modernTimelineContainer}>
-            
+
             {/* Step 1: Record */}
             <View style={styles.modernStep}>
               <View style={[styles.modernIconWrap, { backgroundColor: COLORS.primary }]}>
@@ -239,18 +238,18 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
             )}
 
           </View>
-          
+
           {/* Context Note based on current state */}
           <View style={styles.stateContextBox}>
-             <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>
-               {clip.recordingStatus === 'unprocessed' 
-                 ? "ExecuTorch is currently running top-k similarity checks."
-                 : clip.recordingStatus === 'dismissed' 
-                 ? "Clip was analyzed and determined to have no actionable semantic value. It was dismissed."
-                 : isPendingSync
-                 ? "Actionable trigger detected. Waiting for network connection to upload safely."
-                 : "Available remotely on all connected devices."}
-             </Text>
+            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textSecondary, textAlign: 'center' }]}>
+              {clip.recordingStatus === 'unprocessed'
+                ? "ExecuTorch is currently running top-k similarity checks."
+                : clip.recordingStatus === 'dismissed'
+                  ? "Clip was analyzed and determined to have no actionable semantic value. It was dismissed."
+                  : isPendingSync
+                    ? "Actionable trigger detected. Waiting for network connection to upload safely."
+                    : "Available remotely on all connected devices."}
+            </Text>
           </View>
 
         </View>
