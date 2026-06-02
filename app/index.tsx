@@ -135,6 +135,8 @@ const Index = () => {
           </Stack.Group>)
         )}
       </Stack.Navigator>
+      {/* < DatabaseInspector /> */}
+      {/* < CacheInspector /> */}
     </View>
   );
 };
