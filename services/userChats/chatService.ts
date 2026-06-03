@@ -47,7 +47,7 @@ export const chatService = {
           // A. Add AI message LOCALLY
           const aiContent = 'This is a simulated AI response orchestrated from the service layer.';
           const aiEvidence: EvidenceType = {
-            vide_url: "https://cngbqbgivklpaijkbexa.supabase.co/storage/v1/object/public/clips/...",
+            video_url: "https://cngbqbgivklpaijkbexa.supabase.co/storage/v1/object/public/clips/...",
             title: "Network Connectivity Test using Ping",
             summary: "request timing out, and three replies received...",
             timestamp: new Date(),

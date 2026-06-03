@@ -14,6 +14,7 @@ import TimelineEventsScreen from '@/screens/TimelineEvents';
 import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
 import { syncPendingMessages } from '@/services/databases/supabase/supabaseSyncChats';
 import { supabase } from '@/services/databases/supabase/supabase_client';
+import { StreamTester } from '@/testing/components/streamTester';
 import { useThemeColor } from "@/theme/useThemeColor";
 import { useThemeStyles } from "@/theme/useThemeStyles";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -137,6 +138,7 @@ const Index = () => {
       </Stack.Navigator>
       {/* < DatabaseInspector /> */}
       {/* < CacheInspector /> */}
+      <StreamTester />
     </View>
   );
 };

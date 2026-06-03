@@ -1,14 +1,14 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
+import { useThemeColor } from "@/theme/useThemeColor";
+import { useThemeStyles } from "@/theme/useThemeStyles";
 import { Ionicons } from '@expo/vector-icons';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import React, { useEffect } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import AppCard from '../../../components/AppCard';
 import AppModal from '../../../components/ModalComponent';
 import { EvidenceType } from '../../../shared/types/evidence';
-import { useVideoPlayer, VideoView } from 'expo-video';
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +23,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, evidenc
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
 
-  const player = useVideoPlayer(evidence?.vide_url || null, (player) => {
+  const player = useVideoPlayer(evidence?.video_url || null, (player) => {
     player.loop = true;
     player.muted = true;
     if (evidence) {
@@ -44,7 +44,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, evidenc
   if (!evidence) {
     return (
       <AppModal isVisible={isVisible} onClose={onClose} modalWidth={width * 0.95} position="center">
-         <View />
+        <View />
       </AppModal>
     );
   }
@@ -65,11 +65,11 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({ isVisible, evidenc
         {evidence.title || 'Evidence Clip'}
       </Text>
       <View style={styles.videoPlaceholder}>
-        <VideoView 
-          player={player} 
-          style={styles.absoluteVideo} 
-          allowsFullscreen 
-          allowsPictureInPicture 
+        <VideoView
+          player={player}
+          style={styles.absoluteVideo}
+          allowsFullscreen
+          allowsPictureInPicture
         />
       </View>
       <AppCard style={styles.cardSpacer}>
