@@ -3,7 +3,7 @@ const PALETTE = {
   ultraViolet: '#2F23C3',
   lightLavender: '#C5BAFF',
   desertSand: '#DF9711',
-  
+
   // Premium Dark Canvas
   midnight: '#0B0D11', // Deep, rich background
   slate900: '#111827', // Surface level 1
@@ -11,14 +11,14 @@ const PALETTE = {
   slate700: '#334155', // Borders/Separators
   slate400: '#94A3B8', // Muted text
   slate200: '#E2E8F0', // Light text
-  
+
   // Standard Grays
   white: '#FFFFFF',
   softGray: '#F2F2F7',
   gray800: '#1A1A1A',
   gray700: '#3A3A3A',
   gray200: '#EAEAEA',
-  
+
   // Accent & Status
   red500: '#EF4444',
   indigo600: '#4F46E5',
@@ -43,6 +43,7 @@ export const lightTheme = {
   borderLight: PALETTE.gray200,
   borderDark: PALETTE.gray700,
   warning: PALETTE.red500,
+  success: PALETTE.emerald500, // <-- Added success color here
 
   components: {
     navigation: {
@@ -72,6 +73,7 @@ export const darkTheme = {
   borderLight: 'rgba(255, 255, 255, 0.1)',
   borderDark: PALETTE.slate700,
   warning: PALETTE.red500,
+  success: PALETTE.emerald500, // <-- Added success color here
 
   components: {
     navigation: {

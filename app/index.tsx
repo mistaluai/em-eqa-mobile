@@ -19,8 +19,7 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Button, SafeAreaView } from 'react-native';
-import { useBLE } from '@/services/hardware/bluetooth/useBLE';
+import { StyleSheet, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -96,88 +95,49 @@ const Index = () => {
 
   return (
     <View style={{ flex: 1 }}>
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: COLORS.backgroundLight },
-        animation: 'fade',
-        gestureEnabled: true,
-      }}
-    >
-      {session ? (
-        // ---------------------------------------------------------
-        // APP STACK (Only visible if user IS logged in)
-        // ---------------------------------------------------------
-        // The user cannot go "back" to Login from here because Login isn't rendered.
-        (<Stack.Group>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="NavigationHubScreen" component={NavigationHubScreen} />
-          <Stack.Screen name="DeviceConnection" component={DeviceConnectionScreen} />
-          <Stack.Screen name="TimelineEvents" component={TimelineEventsScreen} />
-          <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
-          <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
-          <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
-          {/* Modals */}
-          <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
-            <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
-          </Stack.Group>
-        </Stack.Group>)
-      ) : (
-        // ---------------------------------------------------------
-        // AUTH STACK (Only visible if user is NOT logged in)
-        // ---------------------------------------------------------
-        (<Stack.Group>
-          {!onboardingDone && (
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          )}
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignUpScreen} />
-        </Stack.Group>)
-      )}
-    </Stack.Navigator>
-    <BLETestOverlay />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: COLORS.backgroundLight },
+          animation: 'fade',
+          gestureEnabled: true,
+        }}
+      >
+        {session ? (
+          // ---------------------------------------------------------
+          // APP STACK (Only visible if user IS logged in)
+          // ---------------------------------------------------------
+          // The user cannot go "back" to Login from here because Login isn't rendered.
+          (<Stack.Group>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="NavigationHubScreen" component={NavigationHubScreen} />
+            <Stack.Screen name="DeviceConnection" component={DeviceConnectionScreen} />
+            <Stack.Screen name="TimelineEvents" component={TimelineEventsScreen} />
+            <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
+            <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
+            <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
+            {/* Modals */}
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+              <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
+            </Stack.Group>
+          </Stack.Group>)
+        ) : (
+          // ---------------------------------------------------------
+          // AUTH STACK (Only visible if user is NOT logged in)
+          // ---------------------------------------------------------
+          (<Stack.Group>
+            {!onboardingDone && (
+              <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            )}
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignUpScreen} />
+          </Stack.Group>)
+        )}
+      </Stack.Navigator>
+      {/* < DatabaseInspector /> */}
+      {/* < CacheInspector /> */}
     </View>
-  );
-};
-
-const BLETestOverlay = () => {
-  const { requestPermissions, scanForDevices, connectToDevice, provisionWifi, piDevice, connectedDevice, provisioningStatus } = useBLE();
-  const COLORS = useThemeColor();
-  const styles = useThemeStyles(createStyles);
-
-  useEffect(() => {
-    if (piDevice) {
-      connectToDevice(piDevice);
-    }
-  }, [piDevice]);
-
-  useEffect(() => {
-    if (connectedDevice) {
-      provisionWifi('Test_SSID', 'Test_PASS').then((ip) => {
-        if (ip) {
-          console.log('Provisioning successful, got IP:', ip);
-        } else {
-          console.log('Provisioning finished but no IP returned.');
-        }
-      });
-    }
-  }, [connectedDevice]);
-
-  const startTest = async () => {
-    const perm = await requestPermissions();
-    if (perm) {
-      scanForDevices();
-    }
-  };
-
-  return (
-    <SafeAreaView style={styles.testOverlayContainer} pointerEvents="box-none">
-      <View style={styles.testOverlayBox}>
-        <Text style={styles.testOverlayText}>{provisioningStatus || "Ready to Test"}</Text>
-        <Button title="Start BLE Test" onPress={startTest} />
-      </View>
-    </SafeAreaView>
   );
 };
 

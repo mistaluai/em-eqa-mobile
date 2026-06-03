@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Modal, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { withObservables } from '@nozbe/watermelondb/react';
 import { Ionicons } from '@expo/vector-icons';
+import { withObservables } from '@nozbe/watermelondb/react';
+import React, { useMemo, useState } from 'react';
+import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { RADIUS, SPACING, TYPOGRAPHY, useGlobalStyles } from '@/theme';
 import { useThemeStyles } from '@/theme/useThemeStyles';
@@ -10,6 +10,7 @@ import AppHeader from '../../components/HeaderComponent';
 import { localDatabase } from '../../services/databases/watermelondb/database';
 import Clip from '../../services/databases/watermelondb/models/Clips';
 import { ClipItem } from './components/ClipItem';
+import { useClipUploadSyncLogic } from './hooks/useClipUploadSyncLogic'; // Adjust path
 
 interface ClipDashboardProps {
   clips: Clip[];
@@ -21,7 +22,9 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
   const [activeFilter, setActiveFilter] = useState<'All' | 'Ready to Upload' | 'AI Processing' | 'Synced' | 'Dismissed'>('All');
   const [filterDropdownVisible, setFilterDropdownVisible] = useState(false);
 
-  // Aggregate Metrics Calculations
+  // Integrate the Sync Logic
+  const { isSyncing, syncedCount, pullFromPi } = useClipUploadSyncLogic();
+
   const metrics = useMemo(() => {
     let synced = 0;
     let pending = 0;
@@ -38,7 +41,6 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
     return { total: clips.length, synced, pending, unprocessed, dismissed };
   }, [clips]);
 
-  // Sort and filter clips
   const displayClips = useMemo(() => {
     let filtered = clips;
     if (activeFilter === 'Ready to Upload') {
@@ -76,16 +78,16 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
         {/* Actionable Insights PROSE Card */}
         <View style={[CARD.default, styles.proseCard]}>
           <View style={styles.proseRow}>
-             <Ionicons name="cog" size={18} color={COLORS.warning} />
-             <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginLeft: 8 }]}>
-               <Text style={{fontWeight: '700', color: COLORS.warning}}>{metrics.unprocessed}</Text> clips left for the AI to filter.
-             </Text>
+            <Ionicons name="cog" size={18} color={COLORS.warning} />
+            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginLeft: 8 }]}>
+              <Text style={{ fontWeight: '700', color: COLORS.warning }}>{metrics.unprocessed}</Text> clips left for the AI to filter.
+            </Text>
           </View>
           <View style={styles.proseRow}>
-             <Ionicons name="cloud-upload" size={18} color={COLORS.secondary} />
-             <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginLeft: 8 }]}>
-               <Text style={{fontWeight: '700', color: COLORS.secondary}}>{metrics.pending}</Text> filtered clips ready to be successfully uploaded.
-             </Text>
+            <Ionicons name="cloud-upload" size={18} color={COLORS.secondary} />
+            <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginLeft: 8 }]}>
+              <Text style={{ fontWeight: '700', color: COLORS.secondary }}>{metrics.pending}</Text> filtered clips ready to be successfully uploaded.
+            </Text>
           </View>
         </View>
 
@@ -99,23 +101,43 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
 
         {/* Device Clips Card */}
         <View style={[CARD.default, styles.listCard]}>
-          
+
           {/* List Header and Dropdown */}
           <View style={styles.listHeaderRow}>
             <Text style={[TYPOGRAPHY.HeadlineM, { color: COLORS.textPrimary }]}>
               Device Clips
             </Text>
-            
-            <TouchableOpacity 
-              activeOpacity={0.7}
-              style={[styles.dropdownButton, { borderColor: COLORS.borderDark }]}
-              onPress={() => setFilterDropdownVisible(true)}
-            >
-              <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginRight: 8, fontWeight: '600' }]}>
-                {activeFilter}
-              </Text>
-              <Ionicons name="chevron-down" size={16} color={COLORS.textSecondary} />
-            </TouchableOpacity>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+              {/* NEW SYNC BUTTON */}
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[styles.syncButton, { backgroundColor: isSyncing ? COLORS.backgroundNeutral : COLORS.primaryLight }]}
+                onPress={pullFromPi}
+                disabled={isSyncing}
+              >
+                {isSyncing ? (
+                  <ActivityIndicator size="small" color={COLORS.primary} style={{ marginRight: 4 }} />
+                ) : (
+                  <Ionicons name="hardware-chip-outline" size={14} color={COLORS.primary} style={{ marginRight: 4 }} />
+                )}
+                <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.primary, fontWeight: '700' }]}>
+                  {isSyncing ? `Syncing` : 'Sync'}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[styles.dropdownButton, { borderColor: COLORS.borderDark }]}
+                onPress={() => setFilterDropdownVisible(true)}
+              >
+                <Text style={[TYPOGRAPHY.BodyM, { color: COLORS.textPrimary, marginRight: 8, fontWeight: '600' }]}>
+                  {activeFilter}
+                </Text>
+                <Ionicons name="chevron-down" size={16} color={COLORS.textSecondary} />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Clips List */}
@@ -145,8 +167,8 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
         animationType="fade"
         onRequestClose={() => setFilterDropdownVisible(false)}
       >
-        <Pressable 
-          style={styles.modalOverlay} 
+        <Pressable
+          style={styles.modalOverlay}
           onPress={() => setFilterDropdownVisible(false)}
         >
           <View style={[styles.actionSheet, { backgroundColor: COLORS.backgroundNeutral }]}>
@@ -156,10 +178,10 @@ const ClipDashboardComponent: React.FC<ClipDashboardProps> = ({ clips }) => {
             {filters.map(f => {
               const isActive = activeFilter === f;
               return (
-                <TouchableOpacity 
+                <TouchableOpacity
                   key={f}
                   style={[
-                    styles.actionSheetItem, 
+                    styles.actionSheetItem,
                     { borderBottomColor: COLORS.borderDark },
                     isActive && { backgroundColor: COLORS.primaryLight }
                   ]}
@@ -228,6 +250,14 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     alignItems: 'center',
     marginBottom: SPACING.s16,
     paddingHorizontal: SPACING.s4,
+  },
+  syncButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.s12,
+    paddingVertical: SPACING.s8,
+    borderRadius: RADIUS.full,
+    marginRight: SPACING.s12,
   },
   dropdownButton: {
     flexDirection: 'row',
