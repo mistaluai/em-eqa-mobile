@@ -11,20 +11,19 @@ import { InputBar } from './components/InputBar';
 import { SearchDrawer } from './components/SearchDrawer';
 import { useHomeLogic } from './hooks/useHomeLogic';
 
-/**
- * HomeScreen - Main screen component for chat interface
- * Handles composition and rendering using hooks and components
- */
 const HomeScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   const insets = useSafeAreaInsets();
+
   const {
     isSearchDrawerVisible,
     isEvidenceModalVisible,
-    isAiTyping,
     selectedEvidence,
     activeChat,
+    isAiTyping,           // <-- Extract these
+    aiStatusText,         // <-- Extract these
+    liveStreamedContent,  // <-- Extract these
     handleSendMessage,
     handleSelectChat,
     handleDeleteChat,
@@ -38,7 +37,6 @@ const HomeScreen: React.FC = () => {
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
-  // Detect keyboard open/close events for animation
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardOpen(true));
     const hideSub = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardOpen(false));
@@ -52,10 +50,12 @@ const HomeScreen: React.FC = () => {
   const renderChatContent = () => (
     <>
       <View style={styles.chatContainer}>
-        <ChatContainer 
-          chat={activeChat} 
-          onEvidencePress={handleEvidencePress} 
+        <ChatContainer
+          chat={activeChat}
+          onEvidencePress={handleEvidencePress}
           isTyping={isAiTyping}
+          aiStatusText={aiStatusText}               // <-- Pass them down
+          liveStreamedContent={liveStreamedContent} // <-- Pass them down
           onAiResponseReceived={handleAiResponseReceived}
         />
       </View>
@@ -77,7 +77,7 @@ const HomeScreen: React.FC = () => {
         leftIconName="menu-outline"
         onLeftIconPress={handleOpenSearchDrawer}
       />}
-      
+
       {Platform.OS === 'ios' ? (
         <KeyboardAvoidingView
           style={styles.keyboardAvoidingView}
@@ -92,7 +92,7 @@ const HomeScreen: React.FC = () => {
         </View>
       )}
 
-      <SearchDrawer 
+      <SearchDrawer
         visible={isSearchDrawerVisible}
         onClose={handleCloseSearchDrawer}
         onChatSelect={handleSelectChat}
