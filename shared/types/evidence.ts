@@ -1,5 +1,5 @@
 export interface EvidenceType {
-    vide_url: string,
+    video_url: string,
     title: string,
     summary: string,
     timestamp: Date,

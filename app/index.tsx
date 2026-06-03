@@ -137,6 +137,7 @@ const Index = () => {
       </Stack.Navigator>
       {/* < DatabaseInspector /> */}
       {/* < CacheInspector /> */}
+      {/* <StreamTester /> */}
     </View>
   );
 };

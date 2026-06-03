@@ -26,7 +26,7 @@ const EventDetailsScreen: React.FC = () => {
       <AppHeader title="Event Details" showBack={true} />
 
       <ScrollView contentContainerStyle={[SCREEN.container, { flex: undefined, flexGrow: 1 }]}>
-        <VideoPlaceholder url={evidence?.vide_url || null} />
+        <VideoPlaceholder url={evidence?.video_url || null} />
 
         <EventMetadata title={title} time={time} location={location} />
 

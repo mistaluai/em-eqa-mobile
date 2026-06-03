@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { withObservables } from '@nozbe/watermelondb/react';
-import { Directory, File, Paths } from 'expo-file-system'; // <-- ADD THIS IMPORT
+import { Directory, File, Paths } from 'expo-file-system';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -35,7 +35,6 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   // 1. RECONSTRUCT THE LOCAL PATH
-  // This exactly matches the path structure from your saveVideoBlob function
   const clipDir = new Directory(Paths.cache, 'clips', clip.clipId);
   const videoFile = new File(clipDir, 'clip.mp4');
 

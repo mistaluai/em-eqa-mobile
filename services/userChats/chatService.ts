@@ -9,7 +9,7 @@ type RemoteChatService = {
 
 export const chatService = {
   /**
-   * Processes a new message, creates a chat if none exists, syncs remotely, and invokes the AI.
+   * Processes a new user message, creates a chat if none exists, and syncs remotely.
    */
   async sendMessage(
     messageText: string,
@@ -41,29 +41,6 @@ export const chatService = {
       // 3. Sync User Message REMOTELY (Background task)
       this.syncMessageRemotely(chat, userMessage, remoteService);
 
-      // 4. Trigger the AI Response Process
-      setTimeout(async () => {
-        try {
-          // A. Add AI message LOCALLY
-          const aiContent = 'This is a simulated AI response orchestrated from the service layer.';
-          const aiEvidence: EvidenceType = {
-            vide_url: "https://cngbqbgivklpaijkbexa.supabase.co/storage/v1/object/public/clips/...",
-            title: "Network Connectivity Test using Ping",
-            summary: "request timing out, and three replies received...",
-            timestamp: new Date(),
-            location: "{lat: 37.7749,  long: -122.4194}"
-          };
-
-          const aiMessage = await chat!.createLocalMessage(false, aiContent, aiEvidence);
-
-          // B. Sync AI Message REMOTELY (Background task)
-          this.syncMessageRemotely(chat!, aiMessage, remoteService);
-
-        } catch (error) {
-          console.error('Failed to add simulated AI message:', error);
-        }
-      }, 1500);
-
       return chat;
     } catch (error) {
       console.error('Service Error - Failed to process message:', error);
@@ -72,10 +49,30 @@ export const chatService = {
   },
 
   /**
+   * Saves the final streamed AI response and evidence to the databases.
+   */
+  async saveAiMessage(
+    chat: Chat,
+    fullContent: string,
+    evidence: EvidenceType | undefined,
+    remoteService: RemoteChatService
+  ): Promise<void> {
+    try {
+      // A. Add AI message LOCALLY (false indicates it is not from the user)
+      const aiMessage = await chat.createLocalMessage(false, fullContent, evidence);
+
+      // B. Sync AI Message REMOTELY (Background task)
+      this.syncMessageRemotely(chat, aiMessage, remoteService);
+    } catch (error) {
+      console.error('Service Error - Failed to save AI message:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Helper function to handle the remote sync and local status update
    */
   async syncMessageRemotely(chat: Chat, localMessage: any, remoteService: RemoteChatService) {
-
     // 1. Build the clean payload
     const payload = {
       chat_id: chat.id,

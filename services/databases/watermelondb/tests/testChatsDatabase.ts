@@ -19,7 +19,7 @@ export const runChatsDatabaseTests = async () => {
         await newChat.createLocalMessage(true, 'Test message 1');
 
         const testEvidence: EvidenceType = {
-            vide_url: 'http://example.com/video.mp4',
+            video_url: 'http://example.com/video.mp4',
             title: 'Evidence 1',
             summary: 'Testing evidence summary',
             timestamp: new Date(),
