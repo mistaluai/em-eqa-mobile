@@ -2,11 +2,14 @@ import Clip from '@/services/databases/watermelondb/models/Clips';
 import { extractFramesFromVideo } from '@/shared/utils/clipsUtilities';
 import { Database } from '@nozbe/watermelondb';
 import { PiNetworkService } from './piNetworkService';
+import { DeviceEventEmitter } from 'react-native';
 
 // 1. Import modern classes for local disk management
 import { Directory, File, Paths } from 'expo-file-system';
 // 2. Import the legacy API specifically to capture HTTP headers during download
 import * as FileSystemLegacy from 'expo-file-system/legacy';
+
+let hasAlertedConnectionLost = false;
 
 export const ClipFetchingService = {
     processNextSegment: async (database: Database): Promise<{ status: 'success' | 'empty' | 'error', clipId?: string }> => {
@@ -26,6 +29,7 @@ export const ClipFetchingService = {
             // 204 indicates no more videos are available on the Pi
             if (downloadRes.status === 204) {
                 tempFile.delete();
+                hasAlertedConnectionLost = false;
                 return { status: 'empty' };
             }
 
@@ -68,10 +72,21 @@ export const ClipFetchingService = {
             // Acknowledge and delete the video from the Pi
             await PiNetworkService.deleteSegment(parseInt(segmentIdStr, 10));
 
+            hasAlertedConnectionLost = false;
             return { status: 'success', clipId };
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("[ClipFetchingService] Error processing segment:", error);
+            
+            const isConnectionError = 
+                error?.message === 'No IP address found' || 
+                error?.message?.includes('Failed to connect') || 
+                error?.message?.includes('Network request failed');
+
+            if (isConnectionError && !hasAlertedConnectionLost) {
+                hasAlertedConnectionLost = true;
+                DeviceEventEmitter.emit('showConnectionLostModal');
+            }
             return { status: 'error' };
         }
     },

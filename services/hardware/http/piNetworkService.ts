@@ -1,18 +1,18 @@
 import { PiStorageService } from '@/services/databases/mmkv/piStorage';
 
-const getBaseUrl = () => {
-    const details = PiStorageService.getDetails();
-    if (!details?.ip) throw new Error('No IP address found');
-    return `http://${details.ip}:8000/api/v1/segments`;
+const getBaseUrl = (ipOverride?: string) => {
+    const ip = ipOverride || PiStorageService.getDetails()?.ip;
+    if (!ip) throw new Error('No IP address found');
+    return `http://${ip}:8000/api/v1/segments`;
 };
 
 export const PiNetworkService = {
-    ping: async (): Promise<boolean> => {
+    ping: async (ip?: string): Promise<boolean> => {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-            const response = await fetch(`${getBaseUrl()}/alive?cb=${Date.now()}`, {
+            const response = await fetch(`${getBaseUrl(ip)}/alive?cb=${Date.now()}`, {
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
