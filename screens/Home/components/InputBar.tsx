@@ -3,7 +3,8 @@ import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
+import { useEdgeSTT } from '@/services/edge_ai/useEdgeSTT';
 
 interface InputBarProps {
   onSend: (message: string) => void;
@@ -11,9 +12,7 @@ interface InputBarProps {
   onVoiceInput?: () => void;
 }
 
-const MOCK_TRANSCRIPT = [
-  "I've", "identified", "a", "critical", "latency", "drop", "on", "the", "main", "server.", "Should", "I", "restart", "it", "now?"
-];
+
 
 export const InputBar: React.FC<InputBarProps> = ({
   onSend,
@@ -24,12 +23,20 @@ export const InputBar: React.FC<InputBarProps> = ({
   const inputRef = useRef<TextInput>(null);
 
   const [text, setText] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
+  
+  const { 
+    isRecording, 
+    isReady, 
+    downloadProgress, 
+    startRecording, 
+    stopRecording 
+  } = useEdgeSTT({
+    onTranscriptUpdate: (transcribedText) => setText(transcribedText),
+  });
   
   // Animation Values
   const modeAnim = useRef(new Animated.Value(0)).current; // 0 = Mic, 1 = Send/Stop
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const transcriptTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const isTextEmpty = text.trim().length === 0;
 
@@ -58,32 +65,12 @@ export const InputBar: React.FC<InputBarProps> = ({
     }
   }, [isRecording]);
 
-  const startMockRecording = () => {
-    setIsRecording(true);
-    setText("");
-    let index = 0;
-
-    transcriptTimer.current = setInterval(() => {
-      if (index < MOCK_TRANSCRIPT.length) {
-        const word = MOCK_TRANSCRIPT[index];
-        setText(prev => prev + (index === 0 ? '' : ' ') + word);
-        index++;
-      } else {
-        stopMockRecording();
-      }
-    }, 350); // Simulates live speech-to-text timing
-  };
-
-  const stopMockRecording = () => {
-    if (transcriptTimer.current) clearInterval(transcriptTimer.current);
-    setIsRecording(false);
-  };
-
   const handleActionPress = () => {
     if (isRecording) {
-      stopMockRecording();
+      stopRecording();
     } else if (isTextEmpty) {
-      startMockRecording();
+      if (!isReady) return; // Wait until model is downloaded
+      startRecording();
     } else {
       onSend(text.trim());
       setText('');
@@ -108,19 +95,27 @@ export const InputBar: React.FC<InputBarProps> = ({
           <Animated.View style={[styles.recordingDot, { transform: [{ scale: pulseAnim }] }]} />
         )}
         
-        <TextInput
-          ref={inputRef}
-          style={[styles.textInput, isRecording && { color: COLORS.primary, fontWeight: '500' }]}
-          value={text}
-          onChangeText={setText}
-          placeholder={isRecording ? "Listening..." : placeholder}
-          placeholderTextColor={isRecording ? COLORS.primary : COLORS.textSecondary}
-          multiline
-          editable={!isRecording}
-          onSubmitEditing={handleActionPress}
-          returnKeyType="send"
-          blurOnSubmit={false}
-        />
+        {!isReady ? (
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text style={{ color: COLORS.textSecondary, fontSize: 13 }}>
+              Downloading Speech AI... {Math.round(downloadProgress * 100)}%
+            </Text>
+          </View>
+        ) : (
+          <TextInput
+            ref={inputRef}
+            style={[styles.textInput, isRecording && { color: COLORS.primary, fontWeight: '500' }]}
+            value={text}
+            onChangeText={setText}
+            placeholder={isRecording ? "Listening..." : placeholder}
+            placeholderTextColor={isRecording ? COLORS.primary : COLORS.textSecondary}
+            multiline
+            editable={!isRecording}
+            onSubmitEditing={handleActionPress}
+            returnKeyType="send"
+            blurOnSubmit={false}
+          />
+        )}
       </View>
 
       {/* Dynamic Action Button */}
