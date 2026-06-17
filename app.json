@@ -31,11 +31,35 @@
     "expo-router",
     "expo-video",
     [
+      "react-native-audio-api",
+      {
+        "iosBackgroundMode": true,
+        "iosMicrophonePermission": "This app requires access to the microphone to record audio for transcription.",
+        "androidPermissions": [
+          "android.permission.MODIFY_AUDIO_SETTINGS",
+          "android.permission.FOREGROUND_SERVICE",
+          "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+        ],
+        "androidForegroundService": true,
+        "androidFSTypes": [
+          "mediaPlayback"
+        ]
+      }
+    ],
+    [
       "react-native-ble-plx",
       {
         "isBackgroundEnabled": false,
         "modes": ["central"],
         "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices for provisioning."
+      }
+    ],
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "deploymentTarget": "15.1"
+        }
       }
     ]
   ],

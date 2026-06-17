@@ -9,6 +9,13 @@ import { useAuthStore } from '../services/databases/supabase/supabaseAuth';
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
+import { initExecutorch } from 'react-native-executorch';
+import { ExpoResourceFetcher } from 'react-native-executorch-expo-resource-fetcher';
+
+initExecutorch({
+  resourceFetcher: ExpoResourceFetcher,
+});
+
 const RootLayout = () => {
   // 2. Get the initialize function and state
   const { initialize, initialized } = useAuthStore();
