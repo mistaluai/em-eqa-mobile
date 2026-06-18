@@ -10,10 +10,10 @@ export interface ClipEvaluatorConfig {
 
 export function useClipEvaluator(config?: ClipEvaluatorConfig) {
   const evaluator = useMemo(() => new ClipEvaluator(
-    config?.consistencyPercentage ?? 0.40,  // Lowered to 40% so we only average the peak action frames
-    config?.globalFloor ?? 0.258,           // Tighten the floor
-    config?.maxAllowedGap ?? 0.050,         // Loosened max gap to allow dynamic actions
-    config?.minAllowedGap ?? 0.012          // Rejects anything with gap < 0.012 (blurry/static videos)
+    config?.consistencyPercentage ?? 0.60,  // Increased to 60% for higher consistency requirement
+    config?.globalFloor ?? 0.275,           // Higher floor for stricter similarity matching
+    config?.maxAllowedGap ?? 0.040,         // Tighter max gap to ensure conceptual similarity
+    config?.minAllowedGap ?? 0.015          // Stricter minimum gap to better reject static clips
   ), [config?.consistencyPercentage, config?.globalFloor, config?.maxAllowedGap, config?.minAllowedGap]);
 
   return { evaluator };

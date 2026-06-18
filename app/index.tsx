@@ -11,6 +11,7 @@ import ProfileSettingsScreen from '@/screens/ProfileSettings';
 import SignUpScreen from '@/screens/Signup';
 import SystemStatusScreen from '@/screens/SystemStatus';
 import TimelineEventsScreen from '@/screens/TimelineEvents';
+import PiStorageScreen from '@/screens/PiStorage/PiStorageScreen';
 import { useAuthStore } from '@/services/databases/supabase/supabaseAuth';
 import { syncPendingMessages } from '@/services/databases/supabase/supabaseSyncChats';
 import { supabase } from '@/services/databases/supabase/supabase_client';
@@ -122,6 +123,7 @@ const Index = () => {
             <Stack.Screen name="PrivacyDataControl" component={DataPrivacyControlScreen} />
             <Stack.Screen name="ClipUploadSync" component={ClipUploadSyncScreen} />
             <Stack.Screen name="SystemStatus" component={SystemStatusScreen} />
+            <Stack.Screen name="PiStorage" component={PiStorageScreen} />
             {/* Modals */}
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
               <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />

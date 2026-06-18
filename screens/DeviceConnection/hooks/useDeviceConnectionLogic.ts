@@ -22,7 +22,7 @@ export const useDeviceConnectionLogic = () => {
   const [ssid, setSsid] = useState('');
   const [password, setPassword] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isRecording, setIsRecording] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
   const [ipAddress, setIpAddress] = useState<string | null>(() => {
     return PiStorageService.getDetails()?.ip || null;
   });
@@ -35,6 +35,16 @@ export const useDeviceConnectionLogic = () => {
     if (!isAlive) {
       PiStorageService.clearDetails();
       setIpAddress(null);
+    } else {
+      try {
+        const result = await PiNetworkService.getCameraConfig();
+        if (result?.status === 'success' && result.config) {
+          const isRec = result.config.recording;
+          setIsRecording(isRec === true || isRec === 'true' || isRec === 'True');
+        }
+      } catch (error) {
+        console.error('Failed to fetch camera config:', error);
+      }
     }
   }, [ipAddress]);
 
@@ -103,8 +113,13 @@ export const useDeviceConnectionLogic = () => {
 
   const handleToggleRecording = async (recording: boolean) => {
     try {
-      await PiNetworkService.updateCameraConfig({ recording });
-      setIsRecording(recording);
+      const result = await PiNetworkService.updateCameraConfig({ recording });
+      if (result?.status === 'success' && result.config) {
+        const isRec = result.config.recording;
+        setIsRecording(isRec === true || isRec === 'true' || isRec === 'True');
+      } else {
+        setIsRecording(recording);
+      }
     } catch (error) {
       console.error('Failed to toggle recording:', error);
     }
