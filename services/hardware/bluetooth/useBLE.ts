@@ -145,6 +145,24 @@ export function useBLE() {
     }
   };
 
+  const readDeviceIP = async (device: Device): Promise<string | null> => {
+    try {
+      const ipCharacteristic = await device.readCharacteristicForService(
+        SERVICE_UUID,
+        IP_CHAR_UUID,
+      );
+      if (ipCharacteristic.value) {
+        const ipString = base64.decode(ipCharacteristic.value).replace(/\0/g, '').trim();
+        if (ipString && ipString.length > 0) {
+          return ipString;
+        }
+      }
+    } catch (error) {
+      console.log("Failed to read device IP", error);
+    }
+    return null;
+  };
+
   const provisionWifi = async (
     ssid: string,
     pass: string,
@@ -179,11 +197,13 @@ export function useBLE() {
           IP_CHAR_UUID,
         );
 
-      const ipString = ipCharacteristic.value
+      const rawIpString = ipCharacteristic.value
         ? base64.decode(ipCharacteristic.value)
         : null;
-      setProvisioningStatus(`Provisioning successful. IP: ${ipString ?? 'None'}`);
-      return ipString;
+      const ipString = rawIpString ? rawIpString.replace(/\0/g, '').trim() : null;
+      const finalIpString = ipString && ipString.length > 0 ? ipString : null;
+      setProvisioningStatus(`Provisioning successful. IP: ${finalIpString ?? 'None'}`);
+      return finalIpString;
     } catch (error: any) {
       console.error("FAILED TO PROVISION", error);
       setProvisioningStatus(`Provisioning failed: ${error.message}`);
@@ -204,6 +224,7 @@ export function useBLE() {
     scanForDevices,
     connectToDevice,
     provisionWifi,
+    readDeviceIP,
     disconnectDevice,
     piDevice,
     connectedDevice,

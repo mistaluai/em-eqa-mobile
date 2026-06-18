@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { withObservables } from '@nozbe/watermelondb/react';
+import { useEvent } from 'expo';
 import { Directory, File, Paths } from 'expo-file-system';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import React, { useState } from 'react';
@@ -42,6 +43,16 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
   const player = useVideoPlayer(videoFile.uri, player => {
     player.loop = true;
   });
+
+  useEvent(player, 'statusChange', { status: player.status });
+
+  const formatDuration = (sec: number | undefined) => {
+    if (!sec || isNaN(sec)) return '00:00';
+    const totalSeconds = Math.floor(sec);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   // Relative Time Memo
   const timeAgo = React.useMemo(() => {
@@ -139,7 +150,7 @@ const ClipItemComponent: React.FC<ClipItemProps> = ({ clip }) => {
                 </Text>
                 <View style={styles.metaDot} />
                 <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>
-                  00:05
+                  {formatDuration(player.duration)}
                 </Text>
               </View>
             </View>

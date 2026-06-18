@@ -9,7 +9,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,6 +18,7 @@ import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
 // Import your Avatar component
 import { Avatar } from '../../components/Avatar';
+import AppCheckbox from '../../components/CheckboxComponent';
 
 // Theme
 
@@ -37,8 +37,9 @@ const ProfileSettingsScreen: React.FC = () => {
     age,
     avatarUri,
     isAvatarLoading,
-    naturalLanguageInput,
-    setNaturalLanguageInput,
+    categories,
+    selectedCategories,
+    handleToggleCategory,
     handleUpdateProfile,
     handleChangeAvatar,
     handleChangePassword,
@@ -151,21 +152,25 @@ const ProfileSettingsScreen: React.FC = () => {
 
           {/* 4. Tracking Preferences Group */}
           <Text style={styles.sectionLabel}>Tracking Preferences</Text>
-          <View
-            style={[
-              styles.settingsGroup,
-              styles.textAreaContainer,
-            ]}
-          >
-            <TextInput
-              multiline
-              placeholder="Tell the AI what to track..."
-              placeholderTextColor={COLORS.textSecondary}
-              style={styles.textAreaInput}
-              value={naturalLanguageInput}
-              onChangeText={setNaturalLanguageInput}
-              scrollEnabled={true}
-            />
+          <View style={styles.settingsGroup}>
+            {categories.map((category, index) => {
+              const isLast = index === categories.length - 1;
+              return (
+                <View
+                  key={category}
+                  style={[
+                    styles.checkboxRow,
+                    isLast && styles.lastRow,
+                  ]}
+                >
+                  <AppCheckbox
+                    label={category}
+                    checked={selectedCategories.includes(category)}
+                    onPress={() => handleToggleCategory(category)}
+                  />
+                </View>
+              );
+            })}
           </View>
 
           {/* 5. Save Button */}
@@ -312,17 +317,11 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     marginLeft: SPACING.s8,
     opacity: 0.3,
   },
-  // --- Text Area (FIXED HERE) ---
-  textAreaContainer: {
-    padding: SPACING.s16,
-    height: 120, // FIX: Enforce fixed height so it doesn't take full screen
-  },
-  textAreaInput: {
-    fontSize: 16,
-    color: COLORS.textPrimary,
-    lineHeight: 24,
-    textAlignVertical: 'top',
-    flex: 1, // Fill the fixed container
+  checkboxRow: {
+    paddingHorizontal: SPACING.s16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.borderLight,
+    backgroundColor: COLORS.backgroundLight,
   },
   actionButton: {
     marginTop: SPACING.s32,

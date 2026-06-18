@@ -5,6 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { useAuthStore } from '../services/databases/supabase/supabaseAuth';
+import { PipelineOrchestrator } from '@/services/edge_ai/semantic_trigger/PipelineOrchestrator';
+import { registerBackgroundPipelineTask } from '@/services/edge_ai/semantic_trigger/backgroundTaskManager';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -31,6 +33,7 @@ const RootLayout = () => {
   // 3. Trigger Auth Check immediately when app mounts
   useEffect(() => {
     initialize();
+    registerBackgroundPipelineTask();
   }, []);
 
   // 4. Hide Splash Screen only when BOTH Fonts and Auth are ready
@@ -48,6 +51,7 @@ const RootLayout = () => {
   return (
     <>
       <StatusBar style="dark" />
+      <PipelineOrchestrator />
       <Slot />
     </>
   );

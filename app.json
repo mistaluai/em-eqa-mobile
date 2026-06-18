@@ -50,7 +50,9 @@
       "react-native-ble-plx",
       {
         "isBackgroundEnabled": false,
-        "modes": ["central"],
+        "modes": [
+          "central"
+        ],
         "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices for provisioning."
       }
     ],
@@ -61,7 +63,8 @@
           "deploymentTarget": "15.1"
         }
       }
-    ]
+    ],
+    "expo-background-task"
   ],
   "experiments": {
     "typedRoutes": true,

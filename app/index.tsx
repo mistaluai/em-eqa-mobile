@@ -20,8 +20,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import GlobalConnectionLostModal from '@/components/GlobalConnectionLostModal';
 
 const Stack = createNativeStackNavigator();
+export let innerNavigation: any = null;
 
 const createStyles = (COLORS: any) => StyleSheet.create({
   loaderContainer: {
@@ -96,6 +98,10 @@ const Index = () => {
   return (
     <View style={{ flex: 1 }}>
       <Stack.Navigator
+        screenListeners={({ navigation }) => {
+          innerNavigation = navigation;
+          return {};
+        }}
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: COLORS.backgroundLight },
@@ -135,6 +141,7 @@ const Index = () => {
           </Stack.Group>)
         )}
       </Stack.Navigator>
+      <GlobalConnectionLostModal />
       {/* < DatabaseInspector /> */}
       {/* < CacheInspector /> */}
       {/* <StreamTester /> */}

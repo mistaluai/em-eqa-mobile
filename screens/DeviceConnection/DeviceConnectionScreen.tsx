@@ -67,6 +67,7 @@ const DeviceConnectionScreen: React.FC = () => {
     password,
     setPassword,
     ipAddress,
+    isConnecting,
     handleStartScan,
     handleConnect,
     handleProvision,
@@ -88,8 +89,9 @@ const DeviceConnectionScreen: React.FC = () => {
             <Text style={styles.statusTitle}>Device Located</Text>
             <Text style={styles.statusDescription}>A compatible PiCamera was found nearby.</Text>
             <AppButton
-              title="Establish Connection"
+              title={isConnecting ? "Connecting..." : "Establish Connection"}
               onPress={handleConnect}
+              disabled={isConnecting}
               style={{ marginTop: SPACING.s24 }}
               variant="primary"
             />

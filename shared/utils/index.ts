@@ -1,5 +1,8 @@
 // Shared utility functions
 
+export * from './SemanticPrompts';
+export * from './TextEmbeddingCache';
+
 /**
  * Snaps a numeric value to the closest value in an array of options
  */

@@ -11,6 +11,7 @@ export const useDeviceConnectionLogic = () => {
     scanForDevices,
     connectToDevice,
     provisionWifi,
+    readDeviceIP,
     disconnectDevice,
     piDevice,
     connectedDevice,
@@ -20,6 +21,7 @@ export const useDeviceConnectionLogic = () => {
 
   const [ssid, setSsid] = useState('');
   const [password, setPassword] = useState('');
+  const [isConnecting, setIsConnecting] = useState(false);
   const [ipAddress, setIpAddress] = useState<string | null>(() => {
     return PiStorageService.getDetails()?.ip || null;
   });
@@ -28,7 +30,7 @@ export const useDeviceConnectionLogic = () => {
   const checkConnection = useCallback(async () => {
     if (!ipAddress) return;
 
-    const isAlive = await PiNetworkService.ping();
+    const isAlive = await PiNetworkService.ping(ipAddress);
     if (!isAlive) {
       PiStorageService.clearDetails();
       setIpAddress(null);
@@ -54,8 +56,26 @@ export const useDeviceConnectionLogic = () => {
   };
 
   const handleConnect = async () => {
-    if (piDevice) {
-      await connectToDevice(piDevice);
+    if (piDevice && !isConnecting) {
+      setIsConnecting(true);
+      try {
+        const deviceConnection = await connectToDevice(piDevice);
+        if (deviceConnection) {
+          const existingIp = await readDeviceIP(deviceConnection);
+          if (existingIp) {
+            const isAlive = await PiNetworkService.ping(existingIp);
+            if (isAlive) {
+              setIpAddress(existingIp);
+              PiStorageService.saveDetails({
+                ip: existingIp,
+                name: deviceConnection.name || 'PiCamera',
+              });
+            }
+          }
+        }
+      } finally {
+        setIsConnecting(false);
+      }
     }
   };
 
@@ -91,6 +111,7 @@ export const useDeviceConnectionLogic = () => {
     password,
     setPassword,
     ipAddress,
+    isConnecting,
     checkConnection,
     handleStartScan,
     handleConnect,
