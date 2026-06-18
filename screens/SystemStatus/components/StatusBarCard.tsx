@@ -3,7 +3,7 @@ import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SHADOW, SPACING } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { PulsingDot } from './PulsingDot';
 
 interface StatusBarCardProps {
@@ -13,6 +13,7 @@ interface StatusBarCardProps {
   detailText: string;
   statusColor: string;
   isLoading?: boolean;
+  onPress?: () => void;
 }
 
 export const StatusBarCard: React.FC<StatusBarCardProps> = ({
@@ -22,11 +23,12 @@ export const StatusBarCard: React.FC<StatusBarCardProps> = ({
   detailText,
   statusColor,
   isLoading = false,
+  onPress,
 }) => {
   const styles = useThemeStyles(createStyles);
 
-  return (
-    <View style={styles.card}>
+  const CardContent = (
+    <>
       <View style={[styles.iconBox, { backgroundColor: `${statusColor}15` }]}>
         <Ionicons name={iconName as any} size={26} color={statusColor} />
       </View>
@@ -40,6 +42,28 @@ export const StatusBarCard: React.FC<StatusBarCardProps> = ({
         <PulsingDot color={statusColor} size={8} isPulsing={isLoading} />
         <Text style={[styles.badgeText, { color: statusColor }]}>{statusText}</Text>
       </View>
+      {onPress && (
+        <View style={styles.chevronBox}>
+          <Ionicons name="chevron-forward" size={20} color={styles.detail.color} />
+        </View>
+      )}
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <Pressable 
+        style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+        onPress={onPress}
+      >
+        {CardContent}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View style={styles.card}>
+      {CardContent}
     </View>
   );
 };
@@ -57,6 +81,10 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     ...SHADOW.medium,
     shadowColor: COLORS.primary,
     shadowOpacity: 0.05,
+  },
+  cardPressed: {
+    opacity: 0.7,
+    backgroundColor: COLORS.backgroundNeutral,
   },
   iconBox: {
     width: 52,
@@ -94,4 +122,9 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
+  chevronBox: {
+    marginLeft: SPACING.s8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });

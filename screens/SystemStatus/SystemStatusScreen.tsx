@@ -4,6 +4,7 @@ import { useThemeStyles } from "@/theme/useThemeStyles";
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import AppHeader from '../../components/HeaderComponent';
 import { StatusBarCard } from './components/StatusBarCard';
 import { StatusGridTile } from './components/StatusGridTile';
@@ -12,6 +13,7 @@ import { useSystemStatusLogic } from './hooks/useSystemStatusLogic';
 const SystemStatusScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
+  const navigation = useNavigation<any>();
   const { clipReady, ttsReady, vqaAlive, piAlive, isCheckingVqa, isCheckingPi } = useSystemStatusLogic();
 
   return (
@@ -63,6 +65,7 @@ const SystemStatusScreen: React.FC = () => {
           detailText={piAlive ? "Active on local network" : "Unable to reach hardware node"}
           statusColor={isCheckingPi ? COLORS.primary : (piAlive ? COLORS.components.navigation.sync : COLORS.warning)}
           isLoading={isCheckingPi}
+          onPress={() => navigation.navigate('PiStorage')}
         />
 
         {/* Extra spacer at the bottom */}
