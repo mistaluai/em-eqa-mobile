@@ -4,6 +4,7 @@ import { RADIUS, SHADOW, SPACING } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { PulsingDot } from './PulsingDot';
 
 interface StatusGridTileProps {
     title: string;
@@ -11,6 +12,7 @@ interface StatusGridTileProps {
     value: string;
     detail: string;
     color: string;
+    isLoading?: boolean;
 }
 
 export const StatusGridTile: React.FC<StatusGridTileProps> = ({
@@ -18,31 +20,27 @@ export const StatusGridTile: React.FC<StatusGridTileProps> = ({
     icon,
     value,
     detail,
-    color
+    color,
+    isLoading = false,
 }) => {
     const styles = useThemeStyles(createStyles);
     const COLORS = useThemeColor();
     return (
         <View style={styles.container}>
-            {/* Header Icon & Title */}
             <View style={styles.header}>
-                <Ionicons name={icon as any} size={20} color={COLORS.textSecondary} />
-                <Text style={styles.title}>{title}</Text>
-            </View>
-
-            {/* Circular Gauge Visualization */}
-            <View style={[styles.gaugeContainer, { borderColor: color + '30' }]}>
-                {/* Inner colored ring segment (simulated) */}
-                <View style={[styles.gaugeFill, { borderColor: color }]} />
-
-                {/* Central Data Value */}
-                <View style={styles.valueContainer}>
-                    <Text style={[styles.valueText, { color }]}>{value}</Text>
+                <View style={[styles.iconBox, { backgroundColor: `${color}15` }]}>
+                    <Ionicons name={icon as any} size={26} color={color} />
+                </View>
+                <View style={[styles.statusBadge, { borderColor: `${color}30`, backgroundColor: `${color}10` }]}>
+                    <PulsingDot color={color} size={8} isPulsing={isLoading} />
+                    <Text style={[styles.statusText, { color }]}>{value}</Text>
                 </View>
             </View>
 
-            {/* Footer Detail */}
-            <Text style={styles.detailText}>{detail}</Text>
+            <View style={styles.bottomContent}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.detailText}>{detail}</Text>
+            </View>
         </View>
     );
 };
@@ -50,57 +48,56 @@ export const StatusGridTile: React.FC<StatusGridTileProps> = ({
 const createStyles = (COLORS: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.backgroundNeutral,
+        backgroundColor: COLORS.backgroundLight,
         borderRadius: RADIUS.large,
-        padding: SPACING.s16,
-        alignItems: 'center',
+        padding: SPACING.s20,
+        marginHorizontal: SPACING.s8,
         justifyContent: 'space-between',
-        minHeight: 160,
-        // Add margin to separate grid items
-        marginHorizontal: SPACING.s4,
+        minHeight: 190,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
         ...SHADOW.default,
+        shadowColor: COLORS.primary,
+        shadowOpacity: 0.05,
     },
     header: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: SPACING.s16,
+    },
+    iconBox: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    statusBadge: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%',
-        marginBottom: SPACING.s12,
+        paddingHorizontal: SPACING.s10,
+        paddingVertical: SPACING.s8,
+        borderRadius: RADIUS.full,
+        borderWidth: 1,
+        gap: SPACING.s8,
+    },
+    statusText: {
+        fontSize: 11,
+        fontWeight: '800',
+        textTransform: 'uppercase',
+        letterSpacing: 0.8,
+    },
+    bottomContent: {
+        marginTop: SPACING.s24,
     },
     title: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: COLORS.textSecondary,
-        marginLeft: SPACING.s8,
-    },
-    // The Gauge Visualization
-    gaugeContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        borderWidth: 6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: SPACING.s12,
-    },
-    gaugeFill: {
-        position: 'absolute',
-        top: -6, left: -6, right: -6, bottom: -6,
-        borderWidth: 6,
-        borderRadius: 40,
-        borderLeftColor: 'transparent', // Create the "gap" or "progress" effect
-        borderBottomColor: 'transparent',
-        transform: [{ rotate: '-45deg' }], // Rotate to look like a gauge
-    },
-    valueContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    valueText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '800',
+        color: COLORS.textPrimary,
+        marginBottom: SPACING.s4,
     },
     detailText: {
-        fontSize: 12,
+        fontSize: 13,
         color: COLORS.textSecondary,
         fontWeight: '500',
     },

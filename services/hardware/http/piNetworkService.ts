@@ -1,18 +1,21 @@
 import { PiStorageService } from '@/services/databases/mmkv/piStorage';
 
-const getBaseUrl = (ipOverride?: string) => {
+const getBaseUrl = (ipOverride?: string): string | null => {
     const ip = ipOverride || PiStorageService.getDetails()?.ip;
-    if (!ip) throw new Error('No IP address found');
+    if (!ip) return null;
     return `http://${ip}:8080/api/v1/segments`;
 };
 
 export const PiNetworkService = {
     ping: async (ip?: string): Promise<boolean> => {
         try {
+            const baseUrl = getBaseUrl(ip);
+            if (!baseUrl) return false;
+
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-            const response = await fetch(`${getBaseUrl(ip)}/alive?cb=${Date.now()}`, {
+            const response = await fetch(`${baseUrl}/alive?cb=${Date.now()}`, {
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
@@ -28,16 +31,22 @@ export const PiNetworkService = {
     },
 
     listSegments: async (skip = 0, limit = 100) => {
-        const response = await fetch(`${getBaseUrl()}/list?skip=${skip}&limit=${limit}&cb=${Date.now()}`);
+        const baseUrl = getBaseUrl();
+        if (!baseUrl) return { status: 'error', message: 'No IP address found' };
+        const response = await fetch(`${baseUrl}/list?skip=${skip}&limit=${limit}&cb=${Date.now()}`);
         return response.json();
     },
 
-    getNextSegmentUrl: () => {
-        return `${getBaseUrl()}/next?cb=${Date.now()}`;
+    getNextSegmentUrl: (): string | null => {
+        const baseUrl = getBaseUrl();
+        if (!baseUrl) return null;
+        return `${baseUrl}/next?cb=${Date.now()}`;
     },
 
     deleteSegment: async (segmentId: number) => {
-        const response = await fetch(`${getBaseUrl()}/deleted/${segmentId}?cb=${Date.now()}`);
+        const baseUrl = getBaseUrl();
+        if (!baseUrl) return { status: 'error', message: 'No IP address found' };
+        const response = await fetch(`${baseUrl}/deleted/${segmentId}?cb=${Date.now()}`);
         return response.json();
     },
 
@@ -48,7 +57,9 @@ export const PiNetworkService = {
         segment_duration_ms?: number;
         recording?: boolean;
     }) => {
-        const response = await fetch(`${getBaseUrl()}/camera/config`, {
+        const baseUrl = getBaseUrl();
+        if (!baseUrl) return { status: 'error', message: 'No IP address found' };
+        const response = await fetch(`${baseUrl}/camera/config`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(config),

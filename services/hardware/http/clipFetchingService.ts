@@ -1,8 +1,8 @@
 import Clip from '@/services/databases/watermelondb/models/Clips';
 import { extractFramesFromVideo } from '@/shared/utils/clipsUtilities';
 import { Database } from '@nozbe/watermelondb';
-import { PiNetworkService } from './piNetworkService';
 import { DeviceEventEmitter } from 'react-native';
+import { PiNetworkService } from './piNetworkService';
 
 // 1. Import modern classes for local disk management
 import { Directory, File, Paths } from 'expo-file-system';
@@ -21,8 +21,18 @@ export const ClipFetchingService = {
 
             if (tempFile.exists) tempFile.delete();
 
+            const nextUrl = PiNetworkService.getNextSegmentUrl();
+            if (!nextUrl) {
+                console.log("[ClipFetchingService] No IP address found. Prompting reconnection.");
+                if (!hasAlertedConnectionLost) {
+                    hasAlertedConnectionLost = true;
+                    DeviceEventEmitter.emit('showConnectionLostModal');
+                }
+                return { status: 'error' };
+            }
+
             const downloadRes = await FileSystemLegacy.downloadAsync(
-                PiNetworkService.getNextSegmentUrl(),
+                nextUrl,
                 tempFile.uri
             );
 
@@ -82,17 +92,21 @@ export const ClipFetchingService = {
             return { status: 'success', clipId };
 
         } catch (error: any) {
-            console.error("[ClipFetchingService] Error processing segment:", error);
-            
-            const isConnectionError = 
-                error?.message === 'No IP address found' || 
-                error?.message?.includes('Failed to connect') || 
+            const isConnectionError =
+                error?.message === 'No IP address found' ||
+                error?.message?.includes('Failed to connect') ||
                 error?.message?.includes('Network request failed');
 
-            if (isConnectionError && !hasAlertedConnectionLost) {
-                hasAlertedConnectionLost = true;
-                DeviceEventEmitter.emit('showConnectionLostModal');
+            if (isConnectionError) {
+                console.log("[ClipFetchingService] Connection lost. Prompting user to reconnect. Detail:", error?.message);
+                if (!hasAlertedConnectionLost) {
+                    hasAlertedConnectionLost = true;
+                    DeviceEventEmitter.emit('showConnectionLostModal');
+                }
+            } else {
+                console.error("[ClipFetchingService] Error processing segment:", error);
             }
+
             return { status: 'error' };
         }
     },
