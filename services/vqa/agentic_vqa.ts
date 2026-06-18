@@ -14,7 +14,7 @@ export interface StreamCallbacks {
     onDone: (fullContent: string, finalEvidence?: EvidenceType) => void;
 }
 
-const API_URL = 'http://192.168.1.24:8080/api/v1/chat/query';
+const API_URL = 'https://em-eqa-vqa-service.onrender.com/api/v1/chat/query';
 
 /**
  * Streams the agent response from the episodic memory pipeline.

@@ -26,9 +26,14 @@ const HomeScreen: React.FC = () => {
     isAiTyping,
     aiStatusText,
     liveStreamedContent,
+    inputText,
+    setInputText,
     handleSendMessage,
     handleSelectChat,
     handleDeleteChat,
+    handleDeleteMessage,
+    handleEditMessage,
+    handleRetryMessage,
     handleEvidencePress,
     handleCloseEvidenceModal,
     handleGoToEventDetails,
@@ -71,12 +76,20 @@ const HomeScreen: React.FC = () => {
           aiStatusText={aiStatusText}
           liveStreamedContent={liveStreamedContent}
           onAiResponseReceived={handleAiResponseReceived}
+          onDeleteMessage={handleDeleteMessage}
+          onEditMessage={handleEditMessage}
+          onRetryMessage={handleRetryMessage}
         />
       </View>
 
       {/* Input area with dynamic marginBottom to push it above the keyboard */}
       <View style={[styles.inputBarContainer, { marginBottom: keyboardHeight }]}>
-        <InputBar onSend={handleSendMessage} onVoiceInput={() => { }} />
+        <InputBar 
+          onSend={handleSendMessage} 
+          onVoiceInput={() => { }} 
+          value={inputText}
+          onChangeText={setInputText}
+        />
       </View>
 
       <SearchDrawer

@@ -29,6 +29,16 @@ export default class Chat extends Model {
         });
     }
 
+    @writer async updateMessageContent(message: Message, newContent: string) {
+        await message.update((m) => {
+            m.content = newContent;
+        });
+    }
+
+    @writer async deleteMessage(message: Message) {
+        await message.destroyPermanently();
+    }
+
     @writer async markAsDeletedLocally(): Promise<void> {
         await this.messages.destroyAllPermanently();
         await super.markAsDeleted();

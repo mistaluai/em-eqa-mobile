@@ -5,6 +5,7 @@ import Chat from '../databases/watermelondb/models/Chat';
 type RemoteChatService = {
   addMessage: (message: any) => Promise<boolean>;
   deleteChat: (id: string) => Promise<void>;
+  syncAllMessages?: (chat_id: string, messages: any[]) => Promise<boolean>;
 };
 
 export const chatService = {
@@ -113,6 +114,65 @@ export const chatService = {
       await chat.markAsDeletedLocally();
     } catch (error) {
       console.error('Service Error - Failed to delete chat:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Deletes a specific message locally and remotely.
+   */
+  async deleteMessage(chat: Chat, message: any, remoteService: RemoteChatService): Promise<void> {
+    try {
+      // Delete locally
+      await chat.deleteMessage(message);
+
+      // Try remote deletion if syncAllMessages is available
+      if (remoteService.syncAllMessages) {
+        const remainingMessages = await chat.messages.fetch();
+        // sort by created_at
+        const sorted = remainingMessages.sort((a, b) => Number(a.createdAt) - Number(b.createdAt));
+        const payload = sorted.map(m => ({
+          chat_id: chat.id,
+          role: m.role,
+          content: m.content,
+          evidence: m.evidence,
+          created_at: m.createdAt.toISOString()
+        }));
+        await remoteService.syncAllMessages(chat.id, payload).catch(err =>
+          console.error('Failed remote sync for deleted message:', err)
+        );
+      }
+    } catch (error) {
+      console.error('Service Error - Failed to delete message:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Edits a specific message locally and remotely.
+   */
+  async editMessage(chat: Chat, message: any, newContent: string, remoteService: RemoteChatService): Promise<void> {
+    try {
+      // Edit locally
+      await chat.updateMessageContent(message, newContent);
+
+      // Try remote update if syncAllMessages is available
+      if (remoteService.syncAllMessages) {
+        const allMessages = await chat.messages.fetch();
+        const sorted = allMessages.sort((a, b) => Number(a.createdAt) - Number(b.createdAt));
+        const payload = sorted.map(m => ({
+          chat_id: chat.id,
+          role: m.role,
+          content: m.content,
+          evidence: m.evidence,
+          created_at: m.createdAt.toISOString()
+        }));
+        await remoteService.syncAllMessages(chat.id, payload).catch(err =>
+          console.error('Failed remote sync for edited message:', err)
+        );
+      }
+    } catch (error) {
+      console.error('Service Error - Failed to edit message:', error);
       throw error;
     }
   }

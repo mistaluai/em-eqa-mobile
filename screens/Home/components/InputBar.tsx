@@ -10,6 +10,8 @@ interface InputBarProps {
   onSend: (message: string) => void;
   placeholder?: string;
   onVoiceInput?: () => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
 }
 
 
@@ -17,12 +19,23 @@ interface InputBarProps {
 export const InputBar: React.FC<InputBarProps> = ({
   onSend,
   placeholder = 'Ask your assistant...',
+  value,
+  onChangeText,
 }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   const inputRef = useRef<TextInput>(null);
 
-  const [text, setText] = useState('');
+  const [localText, setLocalText] = useState('');
+  
+  const text = value !== undefined ? value : localText;
+  const handleTextChange = (newText: string) => {
+    if (onChangeText) {
+      onChangeText(newText);
+    } else {
+      setLocalText(newText);
+    }
+  };
   
   const { 
     isRecording, 
@@ -31,7 +44,7 @@ export const InputBar: React.FC<InputBarProps> = ({
     startRecording, 
     stopRecording 
   } = useEdgeSTT({
-    onTranscriptUpdate: (transcribedText) => setText(transcribedText),
+    onTranscriptUpdate: (transcribedText) => handleTextChange(transcribedText),
   });
   
   // Animation Values
@@ -73,7 +86,7 @@ export const InputBar: React.FC<InputBarProps> = ({
       startRecording();
     } else {
       onSend(text.trim());
-      setText('');
+      handleTextChange('');
     }
   };
 
@@ -106,7 +119,7 @@ export const InputBar: React.FC<InputBarProps> = ({
             ref={inputRef}
             style={[styles.textInput, isRecording && { color: COLORS.primary, fontWeight: '500' }]}
             value={text}
-            onChangeText={setText}
+            onChangeText={handleTextChange}
             placeholder={isRecording ? "Listening..." : placeholder}
             placeholderTextColor={isRecording ? COLORS.primary : COLORS.textSecondary}
             multiline
