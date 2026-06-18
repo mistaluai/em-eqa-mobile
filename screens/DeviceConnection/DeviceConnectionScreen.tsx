@@ -2,7 +2,7 @@ import { RADIUS, SPACING, useGlobalStyles } from '@/theme';
 import { useThemeStyles } from "@/theme/useThemeStyles";
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, Easing, StyleSheet, Text, TextInput, View, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../components/AppButton';
 import AppHeader from '../../components/HeaderComponent';
@@ -72,6 +72,8 @@ const DeviceConnectionScreen: React.FC = () => {
     handleConnect,
     handleProvision,
     handleDisconnect,
+    isRecording,
+    handleToggleRecording,
   } = useDeviceConnectionLogic();
 
   // Helper to render the primary visual area based on state
@@ -151,6 +153,17 @@ const DeviceConnectionScreen: React.FC = () => {
             </View>
             <Text style={styles.statusTitle}>Authentication Successful</Text>
             <Text style={styles.statusDescription}>Camera is online and accessible at:</Text>
+            <View style={styles.recordingToggleContainer}>
+              <Text style={styles.recordingToggleText}>
+                {isRecording ? 'Recording Active' : 'Recording Stopped'}
+              </Text>
+              <Switch
+                value={isRecording}
+                onValueChange={handleToggleRecording}
+                trackColor={{ false: COLORS.borderLight, true: COLORS.success || '#4CAF50' }}
+                thumbColor={isRecording ? COLORS.backgroundLight : COLORS.textSecondary}
+              />
+            </View>
           </View>
         );
 
@@ -374,6 +387,24 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.success || '#4CAF50',
     letterSpacing: 2,
+  },
+  // Recording Toggle
+  recordingToggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: SPACING.s24,
+    paddingHorizontal: SPACING.s16,
+    paddingVertical: SPACING.s12,
+    backgroundColor: COLORS.backgroundNeutral,
+    borderRadius: RADIUS.large,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+  },
+  recordingToggleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    marginRight: SPACING.s12,
   }
 });
 

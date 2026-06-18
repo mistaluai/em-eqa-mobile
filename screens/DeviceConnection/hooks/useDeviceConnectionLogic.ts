@@ -22,6 +22,7 @@ export const useDeviceConnectionLogic = () => {
   const [ssid, setSsid] = useState('');
   const [password, setPassword] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isRecording, setIsRecording] = useState(true);
   const [ipAddress, setIpAddress] = useState<string | null>(() => {
     return PiStorageService.getDetails()?.ip || null;
   });
@@ -100,6 +101,15 @@ export const useDeviceConnectionLogic = () => {
     PiStorageService.clearDetails();
   };
 
+  const handleToggleRecording = async (recording: boolean) => {
+    try {
+      await PiNetworkService.updateCameraConfig({ recording });
+      setIsRecording(recording);
+    } catch (error) {
+      console.error('Failed to toggle recording:', error);
+    }
+  };
+
   const getDeviceName = () => connectedDevice?.name || piDevice?.name || PiStorageService.getDetails()?.name || 'PiCamera';
 
   return {
@@ -117,5 +127,7 @@ export const useDeviceConnectionLogic = () => {
     handleConnect,
     handleProvision,
     handleDisconnect,
+    handleToggleRecording,
+    isRecording,
   };
 };
