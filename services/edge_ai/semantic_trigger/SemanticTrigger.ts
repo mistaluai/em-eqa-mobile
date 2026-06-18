@@ -9,7 +9,7 @@ export interface ActionStat {
   topKAvg: number;
   gap: number;
   passedMagnitude: boolean;
-  passedTightness: boolean;
+  passedVariance: boolean;
 }
 
 export class ClipEvaluator {
@@ -18,15 +18,18 @@ export class ClipEvaluator {
   private readonly consistencyPercentage: number;
   private readonly globalFloor: number;
   private readonly maxAllowedGap: number;
+  private readonly minAllowedGap: number;
 
   constructor(
     consistencyPercentage = 0.60,
     globalFloor = 0.250, // Hard floor cut-off relative to chosen model representation
-    maxAllowedGap = 0.020 // Ensures the Top-K frames actually look similar conceptually
+    maxAllowedGap = 0.050, // Ensures the Top-K frames actually look similar conceptually
+    minAllowedGap = 0.010 // Ensures the clip actually has motion/variation (filters out static garbage)
   ) {
     this.consistencyPercentage = consistencyPercentage;
     this.globalFloor = globalFloor;
     this.maxAllowedGap = maxAllowedGap;
+    this.minAllowedGap = minAllowedGap;
   }
 
   public setTargetEmbeddings(embeddings: Record<string, number[]>) {
@@ -68,12 +71,12 @@ export class ClipEvaluator {
       const topKAvg = topKScores.reduce((sum, val) => sum + val, 0) / K;
       const passedMagnitude = topKAvg >= this.globalFloor;
 
-      // 5. Calculate Tightness Test
+      // 5. Calculate Variance Test (Gap)
       const gap = topKScores[0] - topKScores[topKScores.length - 1];
-      const passedTightness = gap <= this.maxAllowedGap;
+      const passedVariance = gap >= this.minAllowedGap && gap <= this.maxAllowedGap;
 
       // 6. Action validation
-      if (passedMagnitude && passedTightness) {
+      if (passedMagnitude && passedVariance) {
         matchedActions.push(label);
       }
 
@@ -82,7 +85,7 @@ export class ClipEvaluator {
         topKAvg,
         gap,
         passedMagnitude,
-        passedTightness
+        passedVariance
       };
     }
 
