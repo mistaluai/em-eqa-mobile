@@ -8,7 +8,6 @@ export const PipelineOrchestrator = () => {
   const { imageModel, textModel, isReady } = useSemanticModels();
   const { evaluator } = useClipEvaluator();
 
-  const isRunningRef = useRef(false);
   const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
@@ -28,44 +27,22 @@ export const PipelineOrchestrator = () => {
     // We only want to run this loop if the models are ready and we are in the foreground
     if (!isReady || appState !== 'active') return;
 
-    const intervalId = setInterval(async () => {
-      if (isRunningRef.current) return;
+    const intervalId = setInterval(() => {
       if (AppState.currentState !== 'active') return;
 
-      isRunningRef.current = true;
       try {
-        console.log('--- [Orchestrator] Starting Pipeline Tick ---');
+        console.log('--- [Orchestrator] Starting Pipeline Nudge ---');
 
-        await BackgroundPipelineService.tickPhase1();
-        
-        if (AppState.currentState !== 'active') {
-          console.log('[Orchestrator] Yielding after Phase 1');
-          return;
-        }
+        // Fire and forget (No await)
+        BackgroundPipelineService.tickPhase1();
+        BackgroundPipelineService.tickPhase2(imageModel, textModel, evaluator);
+        BackgroundPipelineService.tickPhase3();
+        BackgroundPipelineService.tickPhase4();
 
-        await BackgroundPipelineService.tickPhase2(imageModel, textModel, evaluator);
-
-        if (AppState.currentState !== 'active') {
-          console.log('[Orchestrator] Yielding after Phase 2');
-          return;
-        }
-
-        await BackgroundPipelineService.tickPhase3();
-
-        if (AppState.currentState !== 'active') {
-          console.log('[Orchestrator] Yielding after Phase 3');
-          return;
-        }
-
-        await BackgroundPipelineService.tickPhase4();
-
-        console.log('--- [Orchestrator] Pipeline Tick Complete ---');
       } catch (error) {
         console.error('[Orchestrator] Tick error:', error);
-      } finally {
-        isRunningRef.current = false;
       }
-    }, 15000); // Tick every 15 seconds
+    }, 5000); // Tick every 5 seconds
 
     return () => {
       clearInterval(intervalId);

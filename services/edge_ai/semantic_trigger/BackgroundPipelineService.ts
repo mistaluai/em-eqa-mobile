@@ -9,16 +9,26 @@ import { ClipEvaluator } from './SemanticTrigger';
 import { Q } from '@nozbe/watermelondb';
 
 export class BackgroundPipelineService {
+  static isIngesting = false;
+  static activeEvaluations = 0;
+  static MAX_CONCURRENT_EVALUATIONS = 1;
+  static isUploading = false;
+  static isGCing = false;
+
   /**
    * Phase 1: Ingestion & Extraction
    */
   static async tickPhase1() {
+    if (this.isIngesting) return;
+    this.isIngesting = true;
     console.log('[Pipeline] Phase 1: Syncing segments from hardware...');
     try {
       const count = await ClipFetchingService.syncAllSegments(localDatabase);
       console.log(`[Pipeline] Phase 1 Completed. Synced ${count} segments.`);
     } catch (error) {
       console.error('[Pipeline] Phase 1 Error:', error);
+    } finally {
+      this.isIngesting = false;
     }
   }
 
@@ -26,7 +36,9 @@ export class BackgroundPipelineService {
    * Phase 2: Semantic Evaluation
    */
   static async tickPhase2(imageModel: any, textModel: any, evaluator: ClipEvaluator) {
-    console.log('[Pipeline] Phase 2: Starting Semantic Evaluation...');
+    if (this.activeEvaluations >= this.MAX_CONCURRENT_EVALUATIONS) return;
+    this.activeEvaluations++;
+    console.log(`[Pipeline] Phase 2: Starting Semantic Evaluation (Active: ${this.activeEvaluations})...`);
     try {
       const clip = await Clip.getNextUnprocessedClip(localDatabase);
       if (!clip) {
@@ -90,6 +102,8 @@ export class BackgroundPipelineService {
 
     } catch (error) {
       console.error('[Pipeline] Phase 2 Error:', error);
+    } finally {
+      this.activeEvaluations--;
     }
   }
 
@@ -97,6 +111,8 @@ export class BackgroundPipelineService {
    * Phase 3: The Upload Loop
    */
   static async tickPhase3() {
+    if (this.isUploading) return;
+    this.isUploading = true;
     console.log('[Pipeline] Phase 3: Starting Upload Loop...');
     try {
       const clip = await Clip.getOneUnsyncedClip(localDatabase);
@@ -148,6 +164,8 @@ export class BackgroundPipelineService {
 
     } catch (error) {
       console.error('[Pipeline] Phase 3 Error:', error);
+    } finally {
+      this.isUploading = false;
     }
   }
 
@@ -155,6 +173,8 @@ export class BackgroundPipelineService {
    * Phase 4: Garbage Collection
    */
   static async tickPhase4() {
+    if (this.isGCing) return;
+    this.isGCing = true;
     console.log('[Pipeline] Phase 4: Starting Garbage Collection...');
     try {
       const clipIds = await Clip.getSyncedOrDismissedClipIds(localDatabase);
@@ -181,6 +201,8 @@ export class BackgroundPipelineService {
 
     } catch (error) {
       console.error('[Pipeline] Phase 4 Error:', error);
+    } finally {
+      this.isGCing = false;
     }
   }
 }
