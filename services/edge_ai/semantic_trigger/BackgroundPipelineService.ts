@@ -6,6 +6,7 @@ import { useClipsStore } from '@/services/databases/supabase/supabaseClips';
 import { supabase } from '@/services/databases/supabase/supabase_client';
 import { Directory, File, Paths } from 'expo-file-system';
 import { ClipEvaluator } from './SemanticTrigger';
+import { usePipelineSettingsStore } from './usePipelineSettingsStore';
 import { Q } from '@nozbe/watermelondb';
 import { TextEmbeddingCache, SEMANTIC_CATEGORIES } from '@/shared/utils';
 
@@ -20,6 +21,7 @@ export class BackgroundPipelineService {
    * Phase 1: Ingestion & Extraction
    */
   static async tickPhase1() {
+    if (!usePipelineSettingsStore.getState().enableIngestion) return;
     if (this.isIngesting) return;
     this.isIngesting = true;
     console.log('[Pipeline] Phase 1: Syncing segments from hardware...');
@@ -37,6 +39,7 @@ export class BackgroundPipelineService {
    * Phase 2: Semantic Evaluation
    */
   static async tickPhase2(imageModel: any, textModel: any, evaluator: ClipEvaluator, activeCategories: string[]) {
+    if (!usePipelineSettingsStore.getState().enableEvaluation) return;
     if (this.activeEvaluations >= this.MAX_CONCURRENT_EVALUATIONS) return;
     this.activeEvaluations++;
     console.log(`[Pipeline] Phase 2: Starting Semantic Evaluation (Active: ${this.activeEvaluations})...`);
@@ -114,6 +117,7 @@ export class BackgroundPipelineService {
    * Phase 3: The Upload Loop
    */
   static async tickPhase3() {
+    if (!usePipelineSettingsStore.getState().enableUpload) return;
     if (this.isUploading) return;
     this.isUploading = true;
     console.log('[Pipeline] Phase 3: Starting Upload Loop...');
@@ -176,6 +180,7 @@ export class BackgroundPipelineService {
    * Phase 4: Garbage Collection
    */
   static async tickPhase4() {
+    if (!usePipelineSettingsStore.getState().enableGC) return;
     if (this.isGCing) return;
     this.isGCing = true;
     console.log('[Pipeline] Phase 4: Starting Garbage Collection...');
