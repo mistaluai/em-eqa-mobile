@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 import { useSemanticModels } from './useSemanticModels';
 import { useClipEvaluator } from './useSemanticTriggerState';
 import { BackgroundPipelineService } from './BackgroundPipelineService';
+import { CategoryPreferencesService } from '@/services/databases/mmkv/categoryPreferences';
 
 export const PipelineOrchestrator = () => {
   const { imageModel, textModel, isReady } = useSemanticModels();
@@ -36,8 +37,8 @@ export const PipelineOrchestrator = () => {
         // Fire and forget (No await)
         BackgroundPipelineService.tickPhase1();
         
-        // Placeholder categories. In the future this should be driven by UI/State
-        const activeCategories = ['Item displacement'];
+        // Retrieve dynamic active categories from MMKV database
+        const activeCategories = CategoryPreferencesService.getActiveCategories();
         BackgroundPipelineService.tickPhase2(imageModel, textModel, evaluator, activeCategories);
         
         BackgroundPipelineService.tickPhase3();

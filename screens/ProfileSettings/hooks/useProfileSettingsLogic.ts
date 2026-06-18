@@ -3,6 +3,8 @@ import { useAvatarStore } from '@/services/databases/supabase/supabaseAvatar';
 import { useAvatarMedia } from '@/shared/hooks/useAvatarMedia';
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import { CategoryPreferencesService } from '@/services/databases/mmkv/categoryPreferences';
+import { BASE_PROMPTS } from '@/shared/utils/SemanticPrompts';
 
 export const useProfileSettingsLogic = () => {
   // 1. Get Global Auth State (User Data)
@@ -25,8 +27,10 @@ export const useProfileSettingsLogic = () => {
   const { updateUserAvatarPath } = useAvatarStore();
 
   // 3. Local State
-  // REMOVED localEmail since email is now read-only [cite: 532, 544]
-  const [naturalLanguageInput, setNaturalLanguageInput] = useState('');
+  const categories = Object.keys(BASE_PROMPTS);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() =>
+    CategoryPreferencesService.getActiveCategories()
+  );
 
   // 4. Age Calculation
   const calculateAge = (dateOfBirth: Date | string | null) => {
@@ -55,14 +59,17 @@ export const useProfileSettingsLogic = () => {
     }
   };
 
+  const handleToggleCategory = (category: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
   const handleUpdateProfile = () => {
-    // Since Name/Email are read-only, this function now only handles the AI preferences logic
-    if (naturalLanguageInput.trim().length > 0) {
-      Alert.alert('AI Preferences Updated', 'The AI is now looking for: ' + naturalLanguageInput);
-      setNaturalLanguageInput('');
-    } else {
-      Alert.alert('Info', 'Personal information is read-only. No changes to save.');
-    }
+    CategoryPreferencesService.saveActiveCategories(selectedCategories);
+    Alert.alert('Success', 'AI tracking preferences updated.');
   };
 
   const handleChangePassword = () => {
@@ -77,9 +84,9 @@ export const useProfileSettingsLogic = () => {
     age,
     avatarUri,
     isAvatarLoading,
-    // setEmail: setLocalEmail, // REMOVED: No setter needed
-    naturalLanguageInput,
-    setNaturalLanguageInput,
+    categories,
+    selectedCategories,
+    handleToggleCategory,
     handleUpdateProfile,
     handleChangeAvatar,
     handleChangePassword,
