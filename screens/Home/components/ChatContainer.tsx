@@ -13,6 +13,9 @@ import { ChatGreeting } from './ChatGreeting';
 import { ChatMessage } from './ChatMessage';
 import { StreamMessage } from './StreamMessage';
 import { TypingIndicator } from './TypingIndicator';
+import { MessageActionSheet } from './MessageActionSheet';
+import * as Clipboard from 'expo-clipboard';
+import * as Haptics from 'expo-haptics';
 
 interface ChatContainerProps {
   chat?: Chat | null;
@@ -23,6 +26,10 @@ interface ChatContainerProps {
   aiStatusText?: string | null;
   liveStreamedContent?: string;
   onAiResponseReceived?: () => void;
+  // --- ACTION PROPS ---
+  onDeleteMessage?: (message: Message) => void;
+  onEditMessage?: (message: Message) => void;
+  onRetryMessage?: (message: Message) => void;
 }
 
 const ChatContainerComponent: React.FC<ChatContainerProps> = ({
@@ -31,11 +38,59 @@ const ChatContainerComponent: React.FC<ChatContainerProps> = ({
   isTyping,
   aiStatusText,
   liveStreamedContent,
-  onAiResponseReceived
+  onAiResponseReceived,
+  onDeleteMessage,
+  onEditMessage,
+  onRetryMessage
 }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   const { full_name } = useAuthStore();
+  
+  const [actionSheetVisible, setActionSheetVisible] = React.useState(false);
+  const [selectedMessage, setSelectedMessage] = React.useState<Message | null>(null);
+
+  const handleLongPress = (message: Message) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedMessage(message);
+    setActionSheetVisible(true);
+  };
+
+  const handleCopy = async (message: Message) => {
+    await Clipboard.setStringAsync(message.content);
+  };
+
+  const handleDelete = (message: Message) => {
+    onDeleteMessage?.(message);
+  };
+
+  const handleEdit = (message: Message) => {
+    onEditMessage?.(message);
+  };
+
+  const handleRetry = (message: Message) => {
+    onRetryMessage?.(message);
+  };
+
+  // Logic to determine if edit/retry is allowed
+  const isLastMessage = (message: Message) => {
+    if (messages.length === 0) return false;
+    // messages is sorted reverse (index 0 is the last message)
+    return messages[0].id === message.id;
+  };
+
+  const isLastUserMessage = (message: Message) => {
+    if (message.role !== 'user') return false;
+    if (!messages || messages.length === 0) return false;
+    // Check if it's the absolute last message
+    if (isLastMessage(message)) return true;
+    // Check if the only message after it is an AI message (which means we are editing the prompt)
+    if (messages[0]?.role === 'model' && messages[1]?.id === message.id) return true;
+    return false;
+  };
+
+  const canEdit = selectedMessage ? isLastUserMessage(selectedMessage) : false;
+  const canRetry = selectedMessage ? (selectedMessage.role === 'user' && isLastMessage(selectedMessage)) || (selectedMessage.role === 'model' && selectedMessage.status === 'error') : false;
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -81,6 +136,7 @@ const ChatContainerComponent: React.FC<ChatContainerProps> = ({
             onEvidencePress={() => {
               if (item.evidence) onEvidencePress?.(item.evidence);
             }}
+            onLongPress={handleLongPress}
           />
         )}
         keyExtractor={(item) => item.id.toString()}
@@ -89,6 +145,17 @@ const ChatContainerComponent: React.FC<ChatContainerProps> = ({
         // Replace the basic TypingIndicator with our new dynamic bubble
         ListHeaderComponent={renderLiveStreamBubble()}
         ListEmptyComponent={!isTyping ? <ChatGreeting userName={full_name} /> : null}
+      />
+      <MessageActionSheet
+        visible={actionSheetVisible}
+        message={selectedMessage}
+        onClose={() => setActionSheetVisible(false)}
+        onCopy={handleCopy}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        onRetry={handleRetry}
+        canEdit={canEdit}
+        canRetry={canRetry}
       />
     </View>
   );

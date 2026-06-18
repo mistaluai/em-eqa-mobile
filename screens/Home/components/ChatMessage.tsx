@@ -11,9 +11,10 @@ import Message from '../../../services/databases/watermelondb/models/Message';
 interface ChatMessageProps {
   message: Message;
   onEvidencePress?: () => void;
+  onLongPress?: (message: Message) => void;
 }
 
-const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message, onEvidencePress }) => {
+const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message, onEvidencePress, onLongPress }) => {
   // Pass the styles creator to the hook
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
@@ -37,7 +38,7 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message, onEvidenceP
   };
 
   return (
-    <View style={[styles.messageRow, isUser ? styles.messageRowUser : styles.messageRowAI]}>
+    <Pressable onLongPress={() => onLongPress?.(message)} delayLongPress={300} style={[styles.messageRow, isUser ? styles.messageRowUser : styles.messageRowAI]}>
       <View style={[
         styles.bubble,
         isUser ? styles.bubbleUser : styles.bubbleAI,
@@ -59,7 +60,7 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message, onEvidenceP
           </Pressable>
         )}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

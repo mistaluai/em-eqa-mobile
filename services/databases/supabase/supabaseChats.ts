@@ -59,6 +59,15 @@ export const useRemoteChats = () => {
                 return false;
             }
             return true;
+        },
+
+        syncAllMessages: async (chat_id: string, messages: RemoteMessagePayload[]): Promise<boolean> => {
+            // Note: The 'chats' table doesn't have a 'messages' JSONB column, 
+            // messages are likely stored in a separate table via the RPC.
+            // Until a dedicated RPC like 'update_chat_messages' or 'delete_chat_message'
+            // is added to the backend, we gracefully skip remote sync for edits/deletes.
+            console.warn("Remote sync for edits/deletes requires a dedicated Supabase RPC. Skipping for now to prevent schema errors.");
+            return false;
         }
     };
 };
