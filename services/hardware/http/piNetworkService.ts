@@ -3,7 +3,7 @@ import { PiStorageService } from '@/services/databases/mmkv/piStorage';
 const getBaseUrl = (ipOverride?: string) => {
     const ip = ipOverride || PiStorageService.getDetails()?.ip;
     if (!ip) throw new Error('No IP address found');
-    return `http://${ip}:8000/api/v1/segments`;
+    return `http://${ip}:8080/api/v1/segments`;
 };
 
 export const PiNetworkService = {
