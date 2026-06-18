@@ -7,6 +7,7 @@ import { supabase } from '@/services/databases/supabase/supabase_client';
 import { Directory, File, Paths } from 'expo-file-system';
 import { ClipEvaluator } from './SemanticTrigger';
 import { Q } from '@nozbe/watermelondb';
+import { TextEmbeddingCache, SEMANTIC_CATEGORIES } from '@/shared/utils';
 
 export class BackgroundPipelineService {
   static isIngesting = false;
@@ -35,7 +36,7 @@ export class BackgroundPipelineService {
   /**
    * Phase 2: Semantic Evaluation
    */
-  static async tickPhase2(imageModel: any, textModel: any, evaluator: ClipEvaluator) {
+  static async tickPhase2(imageModel: any, textModel: any, evaluator: ClipEvaluator, activeCategories: string[]) {
     if (this.activeEvaluations >= this.MAX_CONCURRENT_EVALUATIONS) return;
     this.activeEvaluations++;
     console.log(`[Pipeline] Phase 2: Starting Semantic Evaluation (Active: ${this.activeEvaluations})...`);
@@ -48,14 +49,16 @@ export class BackgroundPipelineService {
 
       console.log(`[Pipeline] Phase 2: Evaluating clip ${clip.clipId}`);
 
-      // Setup Target Embeddings dynamically (Using fixed array for now as requested)
-      const targetActions = ['goal', 'celebration'];
-      const textEmbeddings: Record<string, number[]> = {};
-
-      for (const action of targetActions) {
-        const arr = Array.from(await textModel.forward(action)) as number[];
-        textEmbeddings[action] = arr;
+      // Map active categories to their prompt variations
+      const promptsConfig: Record<string, string | string[]> = {};
+      for (const category of activeCategories) {
+        // Fallback to the category name as a single prompt if it's not defined in the map
+        promptsConfig[category] = SEMANTIC_CATEGORIES[category] || category;
       }
+
+      // Fetch ensembled embeddings using the cache
+      const textEmbeddings = await TextEmbeddingCache.getEnsembledEmbeddings(textModel, promptsConfig);
+      
       evaluator.setTargetEmbeddings(textEmbeddings);
 
       // Read extracted frames

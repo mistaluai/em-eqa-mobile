@@ -35,7 +35,11 @@ export const PipelineOrchestrator = () => {
 
         // Fire and forget (No await)
         BackgroundPipelineService.tickPhase1();
-        BackgroundPipelineService.tickPhase2(imageModel, textModel, evaluator);
+        
+        // Placeholder categories. In the future this should be driven by UI/State
+        const activeCategories = ['Item displacement'];
+        BackgroundPipelineService.tickPhase2(imageModel, textModel, evaluator, activeCategories);
+        
         BackgroundPipelineService.tickPhase3();
         BackgroundPipelineService.tickPhase4();
 
