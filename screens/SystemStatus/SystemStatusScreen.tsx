@@ -1,6 +1,6 @@
-import { useThemeStyles } from "@/theme/useThemeStyles";
-import { useThemeColor } from "@/theme/useThemeColor";
 import { SPACING, TYPOGRAPHY } from '@/theme';
+import { useThemeColor } from "@/theme/useThemeColor";
+import { useThemeStyles } from "@/theme/useThemeStyles";
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +12,7 @@ import { useSystemStatusLogic } from './hooks/useSystemStatusLogic';
 const SystemStatusScreen: React.FC = () => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
-  useSystemStatusLogic();
+  const { clipReady, ttsReady, vqaAlive, piAlive, isCheckingVqa, isCheckingPi } = useSystemStatusLogic();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -23,52 +23,46 @@ const SystemStatusScreen: React.FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-
-        {/* SECTION 1: Hardware HUD (Grid) */}
-        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitleNoTopMargin]}>Device Health</Text>
+        {/* SECTION 1: AI Models */}
+        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitleNoTopMargin]}>AI Edge Models</Text>
         <View style={styles.gridContainer}>
           <StatusGridTile
-            title="Camera Battery"
-            icon="battery-charging-outline"
-            value="82%"
-            detail="~4h Remaining"
-            color={COLORS.components.navigation.status}
+            title="CLIP Model"
+            icon="images-outline"
+            value={clipReady ? "Ready" : "Loading"}
+            detail="Vision-Language"
+            color={clipReady ? COLORS.components.navigation.sync : COLORS.components.navigation.status}
+            isLoading={!clipReady}
           />
           <StatusGridTile
-            title="Cloud Storage"
-            icon="server-outline"
-            value="72%"
-            detail="28GB Free"
-            color={COLORS.components.navigation.device}
+            title="STT Engine"
+            icon="mic-outline"
+            value={ttsReady ? "Ready" : "Loading"}
+            detail="Whisper Tiny"
+            color={ttsReady ? COLORS.components.navigation.sync : COLORS.components.navigation.status}
+            isLoading={!ttsReady}
           />
         </View>
 
-        {/* SECTION 2: Active Processes (List) */}
-        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Live Processes</Text>
+        {/* SECTION 2: Network Services */}
+        <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>Network Services</Text>
 
         <StatusBarCard
-          title="Audio Recording"
-          iconName="mic-outline"
-          statusText="Active"
-          detailText="Session: 00:12:20"
-          statusColor={COLORS.components.navigation.privacy}
+          title="VQA Cloud Service"
+          iconName="cloud-outline"
+          statusText={isCheckingVqa ? "Checking..." : (vqaAlive ? "Online" : "Unreachable")}
+          detailText={vqaAlive ? "Responding to queries" : "Service may be asleep or down"}
+          statusColor={isCheckingVqa ? COLORS.primary : (vqaAlive ? COLORS.components.navigation.sync : COLORS.warning)}
+          isLoading={isCheckingVqa}
         />
 
         <StatusBarCard
-          title="Cloud Sync"
-          iconName="cloud-upload-outline"
-          statusText="Syncing (3/10)"
-          detailText="7 clips queued"
-          statusColor={COLORS.components.navigation.sync}
-          progress={30}
-        />
-
-        <StatusBarCard
-          title="AI Analysis"
-          iconName="aperture-outline"
-          statusText="Processing"
-          detailText="Contextualizing events..."
-          statusColor={COLORS.primary}
+          title="Raspberry Pi Camera"
+          iconName="hardware-chip-outline"
+          statusText={isCheckingPi ? "Checking..." : (piAlive ? "Connected" : "Disconnected")}
+          detailText={piAlive ? "Active on local network" : "Unable to reach hardware node"}
+          statusColor={isCheckingPi ? COLORS.primary : (piAlive ? COLORS.components.navigation.sync : COLORS.warning)}
+          isLoading={isCheckingPi}
         />
 
         {/* Extra spacer at the bottom */}

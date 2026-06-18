@@ -1,10 +1,10 @@
 import { useThemeStyles } from "@/theme/useThemeStyles";
 import { useThemeColor } from "@/theme/useThemeColor";
-import { RADIUS, SPACING, TYPOGRAPHY } from '@/theme';
+import { RADIUS, SHADOW, SPACING } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import AppCard from '../../../components/AppCard';
+import { PulsingDot } from './PulsingDot';
 
 interface StatusBarCardProps {
   title: string;
@@ -12,87 +12,86 @@ interface StatusBarCardProps {
   statusText: string;
   detailText: string;
   statusColor: string;
-  progress?: number;
+  isLoading?: boolean;
 }
 
-export const StatusBarCard: React.FC<StatusBarCardProps> = (
-  {
-    title,
-    iconName,
-    statusText,
-    detailText,
-    statusColor,
-    progress,
-  }
-) => {
+export const StatusBarCard: React.FC<StatusBarCardProps> = ({
+  title,
+  iconName,
+  statusText,
+  detailText,
+  statusColor,
+  isLoading = false,
+}) => {
   const styles = useThemeStyles(createStyles);
-  const COLORS = useThemeColor();
 
   return (
-    <View>
-      <Text style={[TYPOGRAPHY.HeadlineM, styles.sectionTitle]}>{title}</Text>
-      <AppCard style={styles.statusCard}>
-        <View style={styles.cardContent}>
-          <Ionicons name={iconName as any} size={32} color={statusColor} style={styles.iconMargin} />
-          <View style={styles.textBlock}>
-            <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }]}>{statusText}</Text>
-            <Text style={[TYPOGRAPHY.Caption, { color: COLORS.textSecondary }]}>{detailText}</Text>
-          </View>
-          {progress !== undefined && (
-            <Text style={[TYPOGRAPHY.BodyL, { color: statusColor, fontWeight: '700' }, styles.progressText]}>
-              {progress}%
-            </Text>
-          )}
-        </View>
-        {progress !== undefined && (
-          <View style={styles.progressBarTrack}>
-            <View style={[styles.progressBarFill, { width: `${progress}%`, backgroundColor: statusColor }]} />
-          </View>
-        )}
-      </AppCard>
+    <View style={styles.card}>
+      <View style={[styles.iconBox, { backgroundColor: `${statusColor}15` }]}>
+        <Ionicons name={iconName as any} size={26} color={statusColor} />
+      </View>
+      
+      <View style={styles.textBlock}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.detail}>{detailText}</Text>
+      </View>
+
+      <View style={[styles.badge, { backgroundColor: `${statusColor}10`, borderColor: `${statusColor}30` }]}>
+        <PulsingDot color={statusColor} size={8} isPulsing={isLoading} />
+        <Text style={[styles.badgeText, { color: statusColor }]}>{statusText}</Text>
+      </View>
     </View>
   );
 };
 
 const createStyles = (COLORS: any) => StyleSheet.create({
-  sectionTitle: {
-    color: COLORS.textPrimary,
-    marginBottom: SPACING.s8, // Space between the small title and the card
-    fontWeight: '700',
-    fontSize: 14,
-    marginLeft: SPACING.s4,
-  },
-  statusCard: {
-    // Ensure background matches your HUD theme (Neutral or Light)
-    backgroundColor: COLORS.backgroundNeutral,
-    padding: SPACING.s16,
-    borderRadius: RADIUS.large,
-    // FIX: This adds the space between this card and the next item in the list
-    marginBottom: SPACING.s16,
-  },
-  cardContent: {
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 60,
+    backgroundColor: COLORS.backgroundLight,
+    padding: SPACING.s16,
+    borderRadius: RADIUS.large,
+    marginBottom: SPACING.s16,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    ...SHADOW.medium,
+    shadowColor: COLORS.primary,
+    shadowOpacity: 0.05,
+  },
+  iconBox: {
+    width: 52,
+    height: 52,
+    borderRadius: RADIUS.large,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: SPACING.s16,
   },
   textBlock: {
     flex: 1,
+    justifyContent: 'center',
   },
-  iconMargin: {
-    marginRight: SPACING.s20,
+  title: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    marginBottom: 4,
   },
-  progressText: {
-    marginLeft: 'auto',
+  detail: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    fontWeight: '500',
   },
-  progressBarTrack: {
-    height: SPACING.s4,
-    backgroundColor: `${COLORS.primaryLight}30`,
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.s12,
+    paddingVertical: SPACING.s8,
     borderRadius: RADIUS.full,
-    marginTop: SPACING.s12,
-    overflow: 'hidden',
+    borderWidth: 1,
+    gap: SPACING.s8,
   },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: RADIUS.full,
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
 });
