@@ -29,7 +29,10 @@ export const ClipFetchingService = {
             // 204 indicates no more videos are available on the Pi
             if (downloadRes.status === 204) {
                 tempFile.delete();
-                hasAlertedConnectionLost = false;
+                if (hasAlertedConnectionLost) {
+                    hasAlertedConnectionLost = false;
+                    DeviceEventEmitter.emit('hideConnectionLostModal');
+                }
                 return { status: 'empty' };
             }
 
@@ -72,7 +75,10 @@ export const ClipFetchingService = {
             // Acknowledge and delete the video from the Pi
             await PiNetworkService.deleteSegment(parseInt(segmentIdStr, 10));
 
-            hasAlertedConnectionLost = false;
+            if (hasAlertedConnectionLost) {
+                hasAlertedConnectionLost = false;
+                DeviceEventEmitter.emit('hideConnectionLostModal');
+            }
             return { status: 'success', clipId };
 
         } catch (error: any) {

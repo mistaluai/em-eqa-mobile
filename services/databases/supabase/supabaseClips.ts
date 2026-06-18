@@ -37,6 +37,7 @@ interface ClipsDatabaseManagement {
     getUserClips: (userId: string) => Promise<void>;
     getClipsByDate: (userId: string, range: DateRange) => Promise<Clip[]>;
     deleteClipsOlderThanDays: (userId: string, days: number) => Promise<void>;
+    deleteClip: (clipId: string | undefined, videoUrl: string) => Promise<void>;
 }
 
 
@@ -151,6 +152,47 @@ export const useClipsStore = create<ClipsDatabaseManagement>((set, get) => ({
             console.error('Error fetching by date:', error);
             set({ error: error.message });
             return [];
+        }
+    },
+
+    deleteClip: async (clipId: string | undefined, videoUrl: string) => {
+        set({ deleting: true, error: null });
+        try {
+            // 1. Extract file path from URL (e.g., https://.../clips/USER_ID/FILENAME.mp4 -> USER_ID/FILENAME.mp4)
+            const parts = videoUrl.split('/clips/');
+            const filePath = parts[1];
+
+            if (filePath) {
+                const cleanFilePath = filePath.split('?')[0];
+                // 2. Delete from Storage Bucket
+                const { error: storageError } = await supabase.storage
+                    .from('clips')
+                    .remove([cleanFilePath]);
+                if (storageError) console.error("Storage cleanup warning:", storageError);
+            }
+
+            // 3. Delete from Database Table
+            // Using video_url as the unique identifier since id might be undefined or named differently
+            const { data: deletedRows, error: deleteError } = await supabase
+                .from('clips')
+                .delete()
+                .eq('video_url', videoUrl)
+                .select();
+
+            if (deleteError) throw deleteError;
+            
+            if (!deletedRows || deletedRows.length === 0) {
+                throw new Error("Could not delete from database. The row might not exist or Row Level Security (RLS) is blocking the DELETE operation.");
+            }
+
+            // 4. Update local state
+            const remainingClips = get().clips.filter(clip => clip.video_url !== videoUrl);
+            set({ clips: remainingClips, deleting: false });
+
+        } catch (error: any) {
+            console.error('Failed to delete clip:', error);
+            set({ deleting: false, error: error.message });
+            throw error;
         }
     },
 

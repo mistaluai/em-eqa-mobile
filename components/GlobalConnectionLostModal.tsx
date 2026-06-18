@@ -14,11 +14,15 @@ const GlobalConnectionLostModal = () => {
   const COLORS = useThemeColor();
 
   useEffect(() => {
-    const subscription = DeviceEventEmitter.addListener('showConnectionLostModal', () => {
+    const showSub = DeviceEventEmitter.addListener('showConnectionLostModal', () => {
       setIsVisible(true);
     });
+    const hideSub = DeviceEventEmitter.addListener('hideConnectionLostModal', () => {
+      setIsVisible(false);
+    });
     return () => {
-      subscription.remove();
+      showSub.remove();
+      hideSub.remove();
     };
   }, []);
 

@@ -3,8 +3,10 @@ import { useThemeColor } from "@/theme/useThemeColor";
 import { RADIUS, SPACING } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useVideoPlayer, VideoView } from 'expo-video';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useClipsStore } from '../../../services/databases/supabase/supabaseClips';
 
 // 1. Define the Prop Type based on your Supabase Schema
 interface ClipData {
@@ -24,6 +26,40 @@ export const EventCard: React.FC<EventCardProps> = ({ clip, isLast }) => {
   const styles = useThemeStyles(createStyles);
   const COLORS = useThemeColor();
   const navigation = useNavigation<any>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isDeletingLocal, setIsDeletingLocal] = useState(false);
+  const deleteClip = useClipsStore((state) => state.deleteClip);
+
+  const player = useVideoPlayer(clip.video_url || null, player => {
+    player.loop = true;
+  });
+
+  const handleDelete = () => {
+    if (!clip.video_url) return;
+
+    Alert.alert(
+      "Delete Video",
+      "Are you sure you want to delete this video? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { 
+          text: "Delete", 
+          style: "destructive",
+          onPress: async () => {
+            setIsDeletingLocal(true);
+            try {
+              await deleteClip(clip.id, clip.video_url);
+              setModalVisible(false);
+            } catch (e) {
+              Alert.alert("Error", "Failed to delete video.");
+            } finally {
+              setIsDeletingLocal(false);
+            }
+          }
+        }
+      ]
+    );
+  };
 
   // 2. Helper to extract time from ISO string (e.g. "2023-10-01T14:30:00" -> "14:30")
   const formatTime = (isoString: string) => {
@@ -45,20 +81,29 @@ export const EventCard: React.FC<EventCardProps> = ({ clip, isLast }) => {
       {/* 2. RIGHT CONTENT CARD */}
       <Pressable
         onPress={() => {
-          // You can pass the video URL to the details screen later
-          console.log("Play video:", clip.video_url);
-          // navigation.navigate('EventDetails', { clipId: clip.id }); 
+          if (clip.video_url) {
+            setModalVisible(true);
+            player.play();
+          }
         }}
         style={({ pressed }) => [
           styles.cardContainer,
           pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }
         ]}
       >
-        {/* Hero Media Section - HIDDEN for now as requested, or placeholder */}
-        {/* If you want a placeholder icon since we have no thumbnails yet: */}
-        <View style={[styles.heroMediaContainer, { height: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#eee' }]}>
-          <Ionicons name="videocam-off-outline" size={24} color="#999" />
-        </View>
+        {/* Hero Media Section */}
+        {clip.video_url ? (
+          <VideoView 
+            player={player} 
+            style={[styles.heroMediaContainer, { height: 160 }]} 
+            nativeControls={false}
+            contentFit="cover"
+          />
+        ) : (
+          <View style={[styles.heroMediaContainer, { height: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#eee' }]}>
+            <Ionicons name="videocam-off-outline" size={24} color="#999" />
+          </View>
+        )}
 
         {/* Content Section */}
         <View style={styles.contentPadding}>
@@ -71,6 +116,77 @@ export const EventCard: React.FC<EventCardProps> = ({ clip, isLast }) => {
           </Text>
         </View>
       </Pressable>
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => {
+          player.pause();
+          setModalVisible(false);
+        }}
+      >
+        <View style={{ flex: 1, backgroundColor: COLORS.backgroundLight }}>
+          {/* Header */}
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={() => { player.pause(); setModalVisible(false); }} style={styles.closeButton}>
+              <Ionicons name="chevron-down" size={24} color={COLORS.textPrimary} />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.s32 }}>
+            {/* Edge-to-edge Video Player */}
+            <View style={styles.modalVideoContainer}>
+              <VideoView
+                style={styles.modalVideo}
+                player={player}
+                allowsFullscreen={true}
+                nativeControls={true}
+              />
+            </View>
+
+            {/* Content Area */}
+            <View style={styles.modalInfoContainer}>
+              <Text style={styles.modalTitle}>
+                {clip.title || "Video Clip"}
+              </Text>
+              
+              <View style={styles.modalMetaRow}>
+                <View style={[styles.modalMetaBadge, { backgroundColor: COLORS.borderLight }]}>
+                  <Ionicons name="videocam-outline" size={14} color={COLORS.primary} />
+                  <Text style={[styles.modalMetaText, { color: COLORS.primary }]}>Captured</Text>
+                </View>
+                <View style={styles.modalMetaDot} />
+                <Text style={styles.modalTimeText}>{formatTime(clip.recorded_at)}</Text>
+              </View>
+
+              <Text style={styles.modalSectionTitle}>Summary</Text>
+              <Text style={styles.modalDescription}>
+                {clip.summary || "AI is generating a summary for this video..."}
+              </Text>
+
+              {/* Actions Area */}
+              <View style={styles.modalActionsContainer}>
+                <TouchableOpacity 
+                  style={[styles.deleteButton, isDeletingLocal && { opacity: 0.7 }]}
+                  onPress={handleDelete}
+                  disabled={isDeletingLocal}
+                  activeOpacity={0.8}
+                >
+                  {isDeletingLocal ? (
+                    <ActivityIndicator size="small" color="#EF4444" />
+                  ) : (
+                    <>
+                      <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                      <Text style={styles.deleteButtonText}>Delete Video</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -169,5 +285,104 @@ const createStyles = (COLORS: any) => StyleSheet.create({
     fontSize: 14,
     color: COLORS.textSecondary,
     lineHeight: 20,
+  },
+
+  // --- Modal Styles ---
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: SPACING.s16,
+    paddingVertical: SPACING.s16,
+  },
+  closeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.borderLight, // Subtle background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalVideoContainer: {
+    width: '100%',
+    aspectRatio: 16 / 9,
+    backgroundColor: '#000',
+    marginBottom: SPACING.s24,
+  },
+  modalVideo: {
+    flex: 1,
+  },
+  modalInfoContainer: {
+    paddingHorizontal: SPACING.s24,
+  },
+  modalTitle: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s12,
+    lineHeight: 32,
+  },
+  modalMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SPACING.s24,
+  },
+  modalMetaBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.s8,
+    paddingVertical: 4,
+    borderRadius: RADIUS.default,
+  },
+  modalMetaText: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginLeft: 4,
+    textTransform: 'uppercase',
+  },
+  modalMetaDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#94A3B8',
+    marginHorizontal: SPACING.s12,
+  },
+  modalTimeText: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    fontWeight: '600',
+  },
+  modalSectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.s8,
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: COLORS.textSecondary,
+    lineHeight: 24,
+    marginBottom: SPACING.s32,
+  },
+  modalActionsContainer: {
+    marginTop: SPACING.s16,
+    paddingTop: SPACING.s24,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.borderLight,
+  },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FEF2F2', // Light red
+    paddingVertical: SPACING.s16,
+    borderRadius: RADIUS.large,
+    borderWidth: 1,
+    borderColor: '#FECACA', // Red border
+  },
+  deleteButtonText: {
+    color: '#EF4444',
+    fontSize: 16,
+    fontWeight: '700',
+    marginLeft: SPACING.s8,
   },
 });
